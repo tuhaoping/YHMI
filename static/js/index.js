@@ -43,3 +43,20 @@
     event.preventDefault();
   });
 })(jQuery); // End of use strict
+
+function calcCardBody_h(){
+  var filter_card_header_h = $("#filter-accordion .card-header:nth(0)").outerHeight();
+  var filter_card_body_h = $("#filter-accordion .card-body").outerHeight(500-6*filter_card_header_h-5);
+  var custom_card_header_h = $("#custom-setting-accordion .card-header:nth(0)").outerHeight();
+  var custom_card_body_h = $("#custom-setting-accordion .card-body").outerHeight(500-6*custom_card_header_h-5);
+
+}
+
+$(document).ready(function(){
+  calcCardBody_h();
+});
+
+
+$(window).resize(function(){
+  calcCardBody_h();
+});

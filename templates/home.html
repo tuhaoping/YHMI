@@ -4,12 +4,13 @@
   <meta charset="UTF-8">
   <title>YHMI</title>
   {% load static %}
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
   <link rel="stylesheet" href="{% static 'css/index.css' %}" style="text/css">
+  <link rel="stylesheet" href="{% static 'css/switch.css' %}" style="text/css">
   <link rel="stylesheet" href="{% static 'font-awesome/css/font-awesome.min.css' %}" style="text/css">
 </head>
 
-<body class="fixed-nav">
+<body class="fixed-nav" id='page-top'>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
     <a class="navbar-brand" href="index.html">YHMI : Yeast Histone Modification Identifier &#60;beta&#62;</a>
     <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,7 +61,7 @@
       </ul>
     </div>
   </nav>
-  <div class="content-wrapper">
+  <div class="content-wrapper" style="margin-bottom:70px;">
     <div class="container-fluid">
       <div class="mb-0 mt-4">
         <span class="input-option active"><i class="fa fa-file"></i> &nbsp;Gene Input &nbsp;&nbsp;</span>|&nbsp;
@@ -69,35 +70,194 @@
       </div>
       <hr class="mt-2">
 
-      <!-- Area Chart Example-->
-
-      <div class="row" id="div-input">
+      <!-- Gene Input-->
+      <div class="row row-input show" id="div-input">
+        <!-- Gene Input Set-->
         <div class="col-lg-3">
-          <!-- Example Bar Chart Card-->
           <div class="card mb-3">
             <div class="card-header">
-              <i class="fa fa-circle"></i> Input (e.g.)</div>
-            <div class="card-body">
-              <div class="row">
-                <div class="col-sm-12 my-auto">
-                  <textarea class="form-control" style="height:400px; resize:none; overflow-x:hidden;"></textarea>
-                  {# <canvas id="myBarChart" width="100" height="50"></canvas> #}
-                </div>
-              </div>
+              <i class="fa fa-search"></i> Input <a href="javascript:showExample(1);" title="Click to show iESR in first input text">(e.g.)</a></div>
+            <div class="card-body" style="height:500px;" id="div-genetext">
+              <textarea id="inputTextArea" class="form-control" style="height:100%; resize:none; overflow-x:hidden;"></textarea>
             </div>
-            <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
           </div>
         </div>
+        <!-- Gene Input Filter-->
         <div class="col-lg-9">
-          <!-- Example Pie Chart Card-->
+          <div class="card mb-3">
+            <div class="card-header" style="height:49px;">
+              <i class="fa fa-filter"></i> Gene Filter &nbsp;
+                <label class="switch m-0">
+                  <input type="checkbox" id="switch">
+                  <span class="slider round"></span>
+                </label>
+                <div class="text-right d-inline float-right">
+                  Composition Option:
+                  <select id="Composition-select" disabled>
+                    <option value="Intersection">Intersection</option>
+                    <option value="Union">Union</option>
+                  </select>
+                </div>
+            </div>
+            <div class="card-body p-0 div-disabled" style="height:500px;" id="div-filter">
+              <div id="filter-accordion" role="tablist">
+                {% for Paper,Feature in filter_data.items %}
+                  <div class="card">
+                    <div class="card-header" role="tab" id="{{Paper}}">
+                      <h6 class="mb-0">
+                        <a data-toggle="collapse" href="#{{Paper}}-collapse" role="button" aria-expanded="true" aria-controls="{{Paper}}-collapse">
+                        {{ Paper }}
+                        </a>
+                      </h6>
+                    </div>
+
+                    <div id="{{Paper}}-collapse" class="collapse" role="tabpanel" aria-labelledby="{{Paper}}" data-parent="#filter-accordion" >
+                      <div class="card-body" style="height:234.4px; overflow-y:scroll;">
+                        <table class="table">
+                          <thead>
+                            <tr>
+                              <th></th>
+                              <th colspan="2">Promoter</th>
+                              <th colspan="2">Coding Region</th>
+                            </tr>
+                            <tr>
+                              <th></th>
+                              <th>&#62;=</th>
+                              <th>&#60;=</th>
+                              <th>&#62;=</th>
+                              <th>&#60;=</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                          {% for f in Feature %}
+                            <tr>
+                              <td>{{ f }}</td>
+                              <td>
+                                <div>
+                                  <input type="checkbox" class="check-feature greater">
+                                  <input type="text" value="1.0" disabled style="width:35px;">
+                                </div>
+                              </td>
+                              <td>
+                                <div>
+                                  <input type="checkbox" class="check-feature less">
+                                  <input type="text" value="-1.0" disabled style="width:35px;">
+                                </div>
+                              </td>
+                              <td>
+                                <div>
+                                  <input type="checkbox" class="check-feature greater">
+                                  <input type="text" value="1.0" disabled style="width:35px;">
+                                </div>
+                              </td>
+                              <td>
+                                <div>
+                                  <input type="checkbox" class="check-feature less">
+                                  <input type="text" value="-1.0" disabled style="width:35px;">
+                                </div>
+                              </td>
+                            </tr>
+                          {% endfor %}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>  
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- ./Gene Input-->
+
+      <!-- Custom Setting-->
+      <div class="row row-input hide" id="div-custom">
+        <div class="col-lg-12">
           <div class="card mb-3">
             <div class="card-header">
-              <i class="fa fa-pie-chart"></i> Pie Chart Example</div>
-            <div class="card-body">
-              <canvas id="myPieChart" width="100%" height="100"></canvas>
+              <i class="fa fa-wrench"></i> Custom Setting &nbsp;
             </div>
-            <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+            <div class="card-body p-0" style="height:500px;">
+              <div id="custom-setting-accordion" role="tablist">
+                {% for Paper,Feature in filter_data.items %}
+                  <div class="card">
+                    <div class="card-header" role="tab" id="{{Paper}}-setting">
+                      <h6 class="mb-0">
+                        <a data-toggle="collapse" href="#{{Paper}}-setting-collapse" role="button" aria-expanded="true" aria-controls="{{Paper}}-setting-collapse">
+                        {{ Paper }}
+                        </a>
+                      </h6>
+                    </div>
+
+                    <div id="{{Paper}}-setting-collapse" class="collapse" role="tabpanel" aria-labelledby="{{Paper}}-setting" data-parent="#custom-setting-accordion" >
+                      <div class="card-body" style="height:234.4px; overflow-y:scroll;">
+                        <table class="table">
+                          <thead>
+                            <tr>
+                              <th></th>
+                              <th colspan="2">Promoter</th>
+                              <th colspan="2">Coding Region</th>
+                            </tr>
+                            <tr>
+                              <th></th>
+                              <th>&#62;=</th>
+                              <th>&#60;=</th>
+                              <th>&#62;=</th>
+                              <th>&#60;=</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                          {% for f in Feature %}
+                            <tr>
+                              <td>{{ f }}</td>
+                              <td>
+                                <div>
+                                  <input type="checkbox" class="check-feature greater">
+                                  <input type="text" value="1.0" disabled style="width:35px;">
+                                </div>
+                              </td>
+                              <td>
+                                <div>
+                                  <input type="checkbox" class="check-feature less">
+                                  <input type="text" value="-1.0" disabled style="width:35px;">
+                                </div>
+                              </td>
+                              <td>
+                                <div>
+                                  <input type="checkbox" class="check-feature greater">
+                                  <input type="text" value="1.0" disabled style="width:35px;">
+                                </div>
+                              </td>
+                              <td>
+                                <div>
+                                  <input type="checkbox" class="check-feature less">
+                                  <input type="text" value="-1.0" disabled style="width:35px;">
+                                </div>
+                              </td>
+                            </tr>
+                          {% endfor %}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>  
+                {% endfor %}
+              </div>
+            </div>
           </div>
+        </div>
+      </div>
+      <!-- ./Custom Setting-->
+
+      <div class="row">
+        <div class="col-lg-12 text-right">
+          <div class="btn btn-primary w-10" id="btn-prev">
+            <i class="fa fa-fw fa-arrow-circle-o-left"></i> Prev</div>
+          <div class="btn btn-primary w-10" id="btn-next">
+            Next <i class="fa fa-fw fa-arrow-circle-o-right"></i></div>
+          <div class="btn btn-primary w-10" id="btn-send" style="display:none;">
+            Submit <i class="fa fa-fw fa-paper-plane"></i></div>
         </div>
       </div>
     </div>
@@ -106,7 +266,7 @@
     <footer class="sticky-footer">
       <div class="container">
         <div class="text-center">
-          <small>Copyright © Your Website 2017</small>
+          <small>Copyright © Computational System Biology Lab, EE, NCKU 2017</small>
         </div>
       </div>
     </footer>
@@ -114,29 +274,13 @@
     <a class="scroll-to-top rounded" href="#page-top">
       <i class="fa fa-angle-up"></i>
     </a>
-    <!-- Logout Modal-->
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">×</span>
-            </button>
-          </div>
-          <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-          <div class="modal-footer">
-            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-            <a class="btn btn-primary" href="login.html">Logout</a>
-          </div>
-        </div>
-      </div>
-    </div>
 
-    <script src="{% static 'js/jquery.min.js' %}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+    <script src="{% static 'jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'bootstrap/popper/popper.min.js' %}"></script>
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'jquery/jquery.easing.min.js' %}"></script>
     <script src="{% static 'js/index.js' %}"></script>
+    <script src="{% static 'js/action.js' %}"></script>
   </div>
 </body>
 </html>
