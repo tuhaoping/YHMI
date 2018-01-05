@@ -531,10 +531,16 @@ footer.sticky-footer {
   width: 30%;
 }
 
+
+.content-wrapper .row-input {
+  display: none;
+}
+
 .content-wrapper .row-input.show {
   display: flex;
 }
 
-.content-wrapper .row-input.hide {
-  display: none;
+#leftAccordion a.nav-link.active {
+  color: #adb5bd!important;
+  background-color: #1e2225;
 }

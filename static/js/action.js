@@ -18,28 +18,30 @@ $(document).ready(function(){
 		if(inputLocat == 2)
 			return 0;
 		
-		$(".row-input").eq(inputLocat).removeClass('show').addClass('hide');
+		$(".row-input").eq(inputLocat).removeClass('show');
 		$(".input-option").eq(inputLocat).removeClass('active');
 		inputLocat += 1;
-		$(".row-input").eq(inputLocat).removeClass('hide').addClass('show');
+		$(".row-input").eq(inputLocat).addClass('show');
 		$(".input-option").eq(inputLocat).addClass('active')
 		calcCardBody_h();
 		
 		if(inputLocat == 2){
 			$("#btn-next").hide();
 			$("#btn-send").show();
-
 		}
+		else if(inputLocat == 1)
+			$("#btn-prev").show();
+
 	});
 
 	$("#btn-prev").click(function(){
 		if(inputLocat == 0)
 			return 0;
 		
-		$(".row-input").eq(inputLocat).removeClass('show').addClass('hide');
+		$(".row-input").eq(inputLocat).removeClass('show');
 		$(".input-option").eq(inputLocat).removeClass('active');
 		inputLocat -= 1;
-		$(".row-input").eq(inputLocat).removeClass('hide').addClass('show');
+		$(".row-input").eq(inputLocat).addClass('show');
 		$(".input-option").eq(inputLocat).addClass('active');
 		calcCardBody_h();
 
@@ -47,17 +49,22 @@ $(document).ready(function(){
 			$("#btn-send").hide();
 			$("#btn-next").show();
 		}
+		else if(inputLocat == 0)
+			$("#btn-prev").hide();
+
 	});
 
 	$("#switch").click(function(){
 		if($("#switch").prop("checked")){
 			$("#div-filter").removeClass("div-disabled");
 			$("#div-genetext").addClass("div-disabled");
+			$("#a-eg").addClass("div-disabled");
 			$("#Composition-select").prop('disabled', false);
 		}
 		else {
 			$("#div-filter").addClass("div-disabled");
 			$("#div-genetext").removeClass("div-disabled");
+			$("#a-eg").removeClass("div-disabled");
 			$("#Composition-select").prop('disabled', true);
 		}
 	});

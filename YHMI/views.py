@@ -7,19 +7,19 @@ import MySQLdb
 def HomePage(request):
 
 	
-	######## get Papers and Features ########
+	######## get Papers and Features #########
 	db = MySQLdb.connect('localhost', 'haoping', 'a012345', 'yhmi_database')
 	cursor = db.cursor()
-	SqlCmd = "SELECT `Paper`,`Feature` FROM `yhmi_comparison_feature`"
+	SqlCmd = "SELECT `ID`,`Paper`,`Feature` FROM `yhmi_comparison_feature`"
 	cursor.execute(SqlCmd)
 
 	filter_item = {}
-	for Paper, Feature in cursor.fetchall():
+	for ID, Paper, Feature in cursor.fetchall():
 		if Paper in filter_item:
-			filter_item[Paper].append(Feature)
+			filter_item[Paper].append((ID,Feature))
 		else:
-			filter_item[Paper] = [Feature]
-	######## /get Papers and Features ########
+			filter_item[Paper] = [(ID,Feature)]
+	######## ./get Papers and Features ########
 
 	# print(filter_item)
 	render_dict = {
