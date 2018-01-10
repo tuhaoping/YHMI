@@ -16,9 +16,12 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from .views import HomePage
+from YHMI_results.views import InputGeneSet, showEnrich
 
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^home/$', HomePage),
+
+    url(r'^result$', showEnrich),
 ]

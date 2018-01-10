@@ -64,8 +64,15 @@
   </nav>
   
   <div class="content-wrapper" style="margin-bottom:70px;">
-    <div class="container-fluid">
+    <div class="container-fluid container-input">
       {% block content %}{% endblock content %}
+    </div>
+    <div class="container-fluid container-results">
+      <div class="row">
+        <div class="col-lg-12">
+          <div id="result"></div>
+        </div>
+      </div>
     </div>
     <!-- /.container-fluid-->
     <!-- /.content-wrapper-->
@@ -88,6 +95,8 @@
     <script src="{% static 'js/index.js' %}"></script>
     <script src="{% static 'js/action.js' %}"></script>
     <script src="{% static 'js/ajax.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'DataTables/datatables.min.css' %}">
+    <script type="text/javascript" charset="utf8" src="{% static 'DataTables/datatables.min.js' %}"></script>
   </div>
 </body>
 </html>

@@ -16,75 +16,96 @@ $.ajaxSetup({
 });
 
 $(document).ready(function(){
+	var rootURL = '';
 	// $.ajax({
-	// 	url:"/enrich/init/",
+	// 	url:"/result/init/",
 	// 	type:"GET",
 	// 	success:function(d){
 	// 		console.log(d);
 	// 	}
 	// });
 
+	$("#btn-send").click(function(){
+		console.log("click!");
+		$.ajax({
+			url: rootURL + '/result',
+			type: 'POST',
+			data: {'InputGene': $('#inputTextArea').val()},
+			success:function(d){
+				$(".container-fluid.container-input").hide();
+				$("#result").html(d);
+				$("#enrich_table").DataTable({
+		    			// 'order': [[3, "asc"]]
+		    			'order': [[3, "asc"], [0, 'desc']]
+		    		});
+				$("#enrich_table_wrapper").css('padding', '10');
+
+				console.log('success');
+			}
+		});
+
+	});
 
 
 	// Submit YNA filter set value to backend
-	$("#btn-send").click(function(){
-		let jdata = {};
+	// $("#btn-send").click(function(){
+	// 	let jdata = {};
 
-		jdata['filter'] = $("tr.tr-feature input[type=checkbox]:checked").map(function(){
-					id = $(this).closest('tr').prop('id');
-					textbox = $(this).siblings('input');
-					return id + "_" + textbox.prop('class') + "_" + textbox.val();
-				});
-		console.log(jdata);
+	// 	jdata['filter'] = $("tr.tr-feature input[type=checkbox]:checked").map(function(){
+	// 				id = $(this).closest('tr').prop('id');
+	// 				textbox = $(this).siblings('input');
+	// 				return id + "_" + textbox.prop('class') + "_" + textbox.val();
+	// 			});
+	// 	console.log(jdata);
 	
-		// if($("#switch").prop("checked")){
-		// 	$.ajax({
-		//     	url:"/result/",
-		//     	data:{
-		//     		jdata: JSON.stringify(jdata),
-		//     		composition: $("#Composition").val(),
-		//     	},
-		//     	type:"POST",
-		//     	success:function(d){
-		//     		$("#resultDiv").html(d);
-		//     		$("#result_table").DataTable();
-		//     		// console.log(d);
+	// 	// if($("#switch").prop("checked")){
+	// 	// 	$.ajax({
+	// 	//     	url:"/result/",
+	// 	//     	data:{
+	// 	//     		jdata: JSON.stringify(jdata),
+	// 	//     		composition: $("#Composition").val(),
+	// 	//     	},
+	// 	//     	type:"POST",
+	// 	//     	success:function(d){
+	// 	//     		$("#resultDiv").html(d);
+	// 	//     		$("#result_table").DataTable();
+	// 	//     		// console.log(d);
 
-		//     		$.ajax({
-		//     			url:"/enrich/",
-		//     			type:"GET",
-		//     			success:function(d){
-		// 					$("#EnrichmentDiv").html(d);
-		// 		    		$("#enrich_table").DataTable({
-		// 		    			// 'order': [[3, "asc"]]
-		// 		    			'order': [[3, "asc"], [0, 'desc']]
-		// 		    		});
-		//     			}
-		//     		});
-		//     	},
-		//     });
-		// }
-		// else{
-		// 	$.ajax({
-  //   			url:"/enrich/",
-  //   			data:{
-  //   				gene:$("#genetextarea").val()
-  //   			},
-  //   			type:"POST",
-  //   			success:function(d){
-  //   				$("#resultDiv").html('')
-		// 			$("#EnrichmentDiv").html(d);
-		//     		$("#enrich_table").DataTable({
-		//     			// 'order': [[3, "asc"]]
-		//     			'order': [[3, "asc"], [0, 'desc']]
-		//     		});
-  //   			}
-  //   		});
+	// 	//     		$.ajax({
+	// 	//     			url:"/enrich/",
+	// 	//     			type:"GET",
+	// 	//     			success:function(d){
+	// 	// 					$("#EnrichmentDiv").html(d);
+	// 	// 		    		$("#enrich_table").DataTable({
+	// 	// 		    			// 'order': [[3, "asc"]]
+	// 	// 		    			'order': [[3, "asc"], [0, 'desc']]
+	// 	// 		    		});
+	// 	//     			}
+	// 	//     		});
+	// 	//     	},
+	// 	//     });
+	// 	// }
+	// 	// else{
+	// 	// 	$.ajax({
+ //  //   			url:"/enrich/",
+ //  //   			data:{
+ //  //   				gene:$("#genetextarea").val()
+ //  //   			},
+ //  //   			type:"POST",
+ //  //   			success:function(d){
+ //  //   				$("#resultDiv").html('')
+	// 	// 			$("#EnrichmentDiv").html(d);
+	// 	//     		$("#enrich_table").DataTable({
+	// 	//     			// 'order': [[3, "asc"]]
+	// 	//     			'order': [[3, "asc"], [0, 'desc']]
+	// 	//     		});
+ //  //   			}
+ //  //   		});
 
-		// }
+	// 	// }
 
 
-	});
+	// });
 
 
 
