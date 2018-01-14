@@ -26,13 +26,37 @@ $(document).ready(function(){
 	// });
 
 	$("#btn-send").click(function(){
-		console.log("click!");
+		let jdata
+		let composition
+
+		if($("#switch").prop('checked')){
+			jdata = $("tr.tr-feature input[type=checkbox]:checked").map(function(){
+						id = $(this).closest('tr').prop('id');
+						textbox = $(this).siblings('input');
+						return id + "_" + textbox.prop('class') + "_" + textbox.val();
+					});
+			jdata = JSON.stringify(jdata.get());
+			composition = $("#Composition-select").val();
+		}
+		else{
+			jdata = JSON.stringify($('#inputTextArea').val().split("\n"));
+			composition = null;
+		}
+
+		console.log(composition);
 		$.ajax({
 			url: rootURL + '/result',
 			type: 'POST',
-			data: {'InputGene': $('#inputTextArea').val()},
+			data: {
+				'InputGene': jdata,
+				'composition': composition,
+			},
 			success:function(d){
 				$(".container-fluid.container-input").hide();
+				$(".container-fluid.container-results").show();
+				$("#leftAccordion .nav-link").removeClass("active");
+				$("#leftAccordion .nav-link").eq(2).addClass("active");
+
 				$("#result").html(d);
 				$("#enrich_table").DataTable({
 		    			// 'order': [[3, "asc"]]

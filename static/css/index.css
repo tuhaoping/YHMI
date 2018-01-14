@@ -24,9 +24,20 @@ body.fixed-nav {
   padding-top: 1rem;
 }
 
+
+.content-wrapper .input-option {
+  cursor: pointer;
+}
+
 .content-wrapper .input-option.active {
 	color: #0069d9;
 }
+
+.content-wrapper .input-option:hover {
+  color: #0069d9;
+  text-decoration: underline;
+}
+
 
 .scroll-to-top {
   position: fixed;
@@ -543,4 +554,8 @@ footer.sticky-footer {
 #leftAccordion a.nav-link.active {
   color: #adb5bd!important;
   background-color: #1e2225;
+}
+
+#div-custom .card {
+  border-radius: 0;
 }

@@ -5,6 +5,25 @@ import MySQLdb
 
 class FilterResult(object):
 
+	@staticmethod
+	def getGeneSet(yhmi_filter, composition='Intersection'):
+		yhmi_filter = [f.split("_") for f in yhmi_filter]
+		feature_ID = [f.pop(0)[1:] for f in yhmi_filter]
+		sqlCmd = "SELECT * FROM `yhmi_comparison_feature` WHERE `ID` IN({})".format(",".join(feature_ID))
+		print(sqlCmd)
+		print(yhmi_filter)
+
+		try:
+			db = MySQLdb.connect('localhost', 'haoping', 'a012345', 'yhmi_database')
+			cursor = db.cursor()
+			cursor.execute(sqlCmd)
+			print(list(cursor.fetchall()))
+		except:
+			pass
+		finally:
+			db.close()
+		return 0;
+
 	def enrichment_pvalue(self):
 		try:
 			db = MySQLdb.connect('localhost', 'haoping', 'a012345', 'yhmi_database')

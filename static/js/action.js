@@ -7,6 +7,12 @@ function showExample(i){
         return 0;
 }
 
+function changePage(i){
+	// if(i==1)
+	$(".content-wrapper .container-fluid").hide();
+	$(".content-wrapper .container-fluid").eq(i).fadeIn();
+}
+
 $(document).ready(function(){
 	$("#Pokholok2005-collapse").collapse('show');
 	$("#Pokholok2005-setting-collapse").collapse('show');
@@ -72,4 +78,9 @@ $(document).ready(function(){
 	$(".check-feature").click(function(){
 		$(this).siblings('input[type=text]').prop('disabled', !$(this).prop('checked'));
 	});
+
+	$("#leftAccordion .nav-link").click(function(){
+		$("#leftAccordion .nav-link").removeClass("active");
+		$(this).addClass("active")
+	})
 });

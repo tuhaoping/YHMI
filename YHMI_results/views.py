@@ -1,6 +1,7 @@
 from django.shortcuts import render
-from YHMI_results.models import YhmiEnrichment
+from YHMI_results.models import YhmiEnrichment, FilterResult
 
+import json
 import scipy.stats
 
 # Create your views here.
@@ -12,8 +13,16 @@ def InputGeneSet(request):
 
 
 def showEnrich(request):
+	if request.POST['composition']:
+		yhmi_filter = list(filter(None, json.loads(request.POST['InputGene'])))
+		print(yhmi_filter)
+		FilterResult.getGeneSet(yhmi_filter)
+		geneset = set(yhmi_filter)
+
+	else:
+		geneset = set(filter(None, json.loads(request.POST['InputGene'])))
+	
 	data = YhmiEnrichment.objects.all()
-	geneset = set(filter(None,request.POST['InputGene'].strip().split("\n")))
 	# if 'gene' in request.POST:
 	# 	geneset = set(filter(None,request.POST['gene'].split('\n')))
 	# else:

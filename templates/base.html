@@ -21,19 +21,19 @@
     <div class="collapse navbar-collapse" id="navbarResponsive">
       <ul class="navbar-nav navbar-sidenav" id="leftAccordion">
         <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Input Gene">
-          <a class="nav-link active" href="index.html">
+          <a class="nav-link active" href="javascript:changePage(0);">
             <i class="fa fa-fw fa-file"></i>
             <span class="nav-link-text">Input Gene</span>
           </a>
         </li>
         <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Charts">
-          <a class="nav-link" href="charts.html">
+          <a class="nav-link" href="javascript:changePage(1);">
             <i class="fa fa-fw fa-area-chart"></i>
             <span class="nav-link-text">Charts</span>
           </a>
         </li>
         <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Results">
-          <a class="nav-link" href="tables.html">
+          <a class="nav-link" href="javascript:changePage(2);">
             <i class="fa fa-fw fa-table"></i>
             <span class="nav-link-text">Results</span>
           </a>
@@ -67,6 +67,8 @@
     <div class="container-fluid container-input">
       {% block content %}{% endblock content %}
     </div>
+    <div class="container-fluid container-chart">
+    </div>
     <div class="container-fluid container-results">
       <div class="row">
         <div class="col-lg-12">
@@ -96,7 +98,9 @@
     <script src="{% static 'js/action.js' %}"></script>
     <script src="{% static 'js/ajax.js' %}"></script>
     <link rel="stylesheet" type="text/css" href="{% static 'DataTables/datatables.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/customRadio.css' %}">
     <script type="text/javascript" charset="utf8" src="{% static 'DataTables/datatables.min.js' %}"></script>
   </div>
+  {% block customModal %}{% endblock customModal %}
 </body>
 </html>

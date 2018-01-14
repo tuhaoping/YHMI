@@ -2,9 +2,13 @@
 
 {% block content %}
   <div class="mb-0 mt-4">
-    <span class="input-option active"><i class="fa fa-file"></i> &nbsp;Gene Input &nbsp;&nbsp;</span>|&nbsp;
-    <span class="input-option"><i class="fa fa-wrench"></i> custom setting &nbsp;&nbsp;</span>|&nbsp;
-    <span class="input-option"><i class="fa fa-cog"></i> cutoff setting</span>
+    <span class="input-option active"><i class="fa fa-file"></i> Gene Input </span>&nbsp;&nbsp;|&nbsp;
+    <span class="input-option">
+      <a data-toggle="modal" data-target="#div-custom">
+        <i class="fa fa-wrench"></i> custom setting 
+      </a>
+    </span>
+    {# <span class="input-option"><i class="fa fa-cog"></i> cutoff setting</span> #}
   </div>
   <hr class="mt-2">
 
@@ -73,25 +77,25 @@
                           <td>
                             <div>
                               <input type="checkbox" class="check-feature">
-                              <input type="text" class="greater" value="1.0" disabled style="width:35px;">
+                              <input type="text" class="greater_pro" value="1.0" disabled style="width:35px;">
                             </div>
                           </td>
                           <td>
                             <div>
                               <input type="checkbox" class="check-feature">
-                              <input type="text" class="less" value="-1.0" disabled style="width:35px;">
+                              <input type="text" class="less_pro" value="-1.0" disabled style="width:35px;">
                             </div>
                           </td>
                           <td>
                             <div>
                               <input type="checkbox" class="check-feature">
-                              <input type="text" class="greater" value="1.0" disabled style="width:35px;">
+                              <input type="text" class="greater_cod" value="1.0" disabled style="width:35px;">
                             </div>
                           </td>
                           <td>
                             <div>
                               <input type="checkbox" class="check-feature">
-                              <input type="text" class="less" value="-1.0" disabled style="width:35px;">
+                              <input type="text" class="less_cod" value="-1.0" disabled style="width:35px;">
                             </div>
                           </td>
                         </tr>
@@ -109,93 +113,26 @@
   </div>
   <!-- ./Gene Input-->
 
-  <!-- Custom Setting-->
-  <div class="row row-input" id="div-custom">
-    <div class="col-lg-12">
-      <div class="card mb-3">
-        <div class="card-header">
-          <i class="fa fa-wrench"></i> Custom Setting &nbsp;
-        </div>
-        <div class="card-body p-0" style="height:500px;">
-          <div id="custom-setting-accordion" role="tablist">
-            {% for Paper,Feature in filter_data.items %}
-              <div class="card">
-                <div class="card-header" role="tab" id="{{Paper}}-setting">
-                  <h6 class="mb-0">
-                    <a data-toggle="collapse" href="#{{Paper}}-setting-collapse" role="button" aria-expanded="true" aria-controls="{{Paper}}-setting-collapse">
-                    {{ Paper }}
-                    </a>
-                  </h6>
-                </div>
 
-                <div id="{{Paper}}-setting-collapse" class="collapse" role="tabpanel" aria-labelledby="{{Paper}}-setting" data-parent="#custom-setting-accordion" >
-                  <div class="card-body" style="height:234.4px; overflow-y:scroll;">
-                    <table class="table">
-                      <thead>
-                        <tr>
-                          <th></th>
-                          <th colspan="2">Promoter</th>
-                          <th colspan="2">Coding Region</th>
-                        </tr>
-                        <tr>
-                          <th></th>
-                          <th>&#62;=</th>
-                          <th>&#60;=</th>
-                          <th>&#62;=</th>
-                          <th>&#60;=</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                      {% for id,f in Feature %}
-                        <tr class="tr-custom-setting" id="fs{{ id }}">
-                          <td>{{ f }}</td>
-                          <td>
-                            <div>
-                              <input type="checkbox" class="check-feature greater">
-                              <input type="text" value="1.0" disabled style="width:35px;">
-                            </div>
-                          </td>
-                          <td>
-                            <div>
-                              <input type="checkbox" class="check-feature less">
-                              <input type="text" value="-1.0" disabled style="width:35px;">
-                            </div>
-                          </td>
-                          <td>
-                            <div>
-                              <input type="checkbox" class="check-feature greater">
-                              <input type="text" value="1.0" disabled style="width:35px;">
-                            </div>
-                          </td>
-                          <td>
-                            <div>
-                              <input type="checkbox" class="check-feature less">
-                              <input type="text" value="-1.0" disabled style="width:35px;">
-                            </div>
-                          </td>
-                        </tr>
-                      {% endfor %}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>  
-            {% endfor %}
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- ./Custom Setting-->
 
   <div class="row">
-    <div class="col-lg-12 text-right">
-      <div class="btn btn-primary w-10" id="btn-prev" style="display:none;">
-        <i class="fa fa-fw fa-arrow-circle-o-left"></i> Prev</div>
-      <div class="btn btn-primary w-10" id="btn-next">
-        Next <i class="fa fa-fw fa-arrow-circle-o-right"></i></div>
-      <div class="btn btn-primary w-10" id="btn-send" style="display:none;">
+    <div class="col-lg-4">
+      <label class="container">Bonferroni-corrected p-value
+        <input type="radio" checked="checked" name="corrected">
+        <span class="checkmark"></span>
+      </label>
+      <label class="container">FDR (False Discovery Rate)
+        <input type="radio" name="corrected">
+        <span class="checkmark"></span>
+      </label>
+    </div>
+    <div class="col-lg-8 text-right">
+      <div class="btn btn-primary w-10 mt-4" id="btn-send">
         Submit <i class="fa fa-fw fa-paper-plane"></i></div>
     </div>
   </div>
 {% endblock content %}
+
+{% block customModal %}
+  {% include "custom-setting.html" %}
+{% endblock customModal %}

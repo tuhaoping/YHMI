@@ -47,13 +47,23 @@
 function calcCardBody_h(){
   var filter_card_header_h = $("#filter-accordion .card-header:nth(0)").outerHeight();
   var filter_card_body_h = $("#filter-accordion .card-body").outerHeight(500-6*filter_card_header_h-5);
-  var custom_card_header_h = $("#custom-setting-accordion .card-header:nth(0)").outerHeight();
-  var custom_card_body_h = $("#custom-setting-accordion .card-body").outerHeight(500-6*custom_card_header_h-5);
+  
 
+}
+
+function calcCustomCardBody_h(){
+  var custom_card_header_h = $("#custom-setting-accordion .card-header:nth(0)").height();
+  var custom_card_body_h = $("#custom-setting-accordion .card-body").outerHeight(
+      $("#custom-setting-modal").height()-6*custom_card_header_h-5);
+  // var custom_card_body_h = $("#custom-setting-accordion .card-body").outerHeight('275px');
 }
 
 $(document).ready(function(){
   calcCardBody_h();
+
+  // $("#div-custom").on('shown.bs.modal', function(){
+  //   calcCustomCardBody_h();
+  // })
 });
 
 
