@@ -1,28 +1,81 @@
 from __future__ import unicode_literals
 from django.db import models
 
+from collections import Counter
 import MySQLdb
+
+
+# def executeSQL(sqlCmd):
+# 	print(sqlCmd)
 
 class FilterResult(object):
 
 	@staticmethod
-	def getGeneSet(yhmi_filter, composition='Intersection'):
+	def getGeneSet(yhmi_filter, composition=' AND '):
 		yhmi_filter = [f.split("_") for f in yhmi_filter]
-		feature_ID = [f.pop(0)[1:] for f in yhmi_filter]
-		sqlCmd = "SELECT * FROM `yhmi_comparison_feature` WHERE `ID` IN({})".format(",".join(feature_ID))
-		print(sqlCmd)
-		print(yhmi_filter)
+
+		feature_ID = {}
+		for f in yhmi_filter:
+			if f[0][1:] in feature_ID:
+				feature_ID[f.pop(0)[1:]].append(f)
+			else:
+				feature_ID[f.pop(0)[1:]] = [f]
+		yhmi_filter = feature_ID
+
+		# print(feature_ID)
+		sqlCmd = "SELECT * FROM `yhmi_comparison_feature` WHERE `ID` IN({})".format(",".join(yhmi_filter.keys()))
+		# print(sqlCmd)
+		# print(yhmi_filter)
 
 		try:
 			db = MySQLdb.connect('localhost', 'haoping', 'a012345', 'yhmi_database')
 			cursor = db.cursor()
 			cursor.execute(sqlCmd)
-			print(list(cursor.fetchall()))
+			res = list(cursor.fetchall())
 		except:
 			pass
 		finally:
 			db.close()
-		return 0;
+
+
+		tableDict = {}
+		for r in res:
+			for f in yhmi_filter[str(r[0])]:
+				if r[1] in tableDict:
+					tableDict[r[1]+r[4]].append("`Data{}_{}` {} {}".format(r[2], f[0], f[1], f[2]))
+				else:
+					tableDict[r[1]+r[4]] = ["`Data{}_{}` {} {}".format(r[2], f[0], f[1], f[2])]
+			
+		sqlCmd = []
+		for table,condiction in tableDict.items():
+			condiction = composition.join(condiction).replace("greater", '>=').replace('less', '<=')
+			sqlCmd.append("SELECT `ORF` FROM `yhmi_filter_{}` WHERE {}".format(table.lower(), condiction))
+
+
+		try:
+			db = MySQLdb.connect('localhost', 'haoping', 'a012345', 'yhmi_database')
+			cursor = db.cursor()
+
+			if composition == " AND ":
+				sqlCmd = " INTERSECT ".join(sqlCmd)
+			else:
+				sqlCmd = " UNION ".join(sqlCmd)
+				print(sqlCmd)
+
+				cursor.execute(sqlCmd)
+				res = [r[0] for r in cursor.fetchall()]
+				print(res)
+
+		except MySQLdb.Error as e:
+			print(e)
+		finally:
+			db.close()
+
+
+
+		# print(sqlCmd)
+
+		return res;
 
 	def enrichment_pvalue(self):
 		try:

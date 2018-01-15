@@ -559,3 +559,17 @@ footer.sticky-footer {
 #div-custom .card {
   border-radius: 0;
 }
+
+
+
+@media (min-width: 576px){
+  #div-custom .modal-dialog {
+    max-width: 700px;
+  }
+}
+
+@media (min-width: 992px){
+  #div-custom .modal-dialog {
+    max-width: 1000px;
+  }
+}

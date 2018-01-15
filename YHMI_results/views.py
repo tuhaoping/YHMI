@@ -16,9 +16,7 @@ def showEnrich(request):
 	if request.POST['composition']:
 		yhmi_filter = list(filter(None, json.loads(request.POST['InputGene'])))
 		print(yhmi_filter)
-		FilterResult.getGeneSet(yhmi_filter)
-		geneset = set(yhmi_filter)
-
+		geneset = set(FilterResult.getGeneSet(yhmi_filter, request.POST['composition']))
 	else:
 		geneset = set(filter(None, json.loads(request.POST['InputGene'])))
 	
