@@ -14,51 +14,18 @@ function changePage(i){
 }
 
 $(document).ready(function(){
+	$("#switch").prop('checked',false);
 	$("#Pokholok2005-collapse").collapse('show');
 	$("#Pokholok2005-setting-collapse").collapse('show');
 
-	// $("#btn-prev")
-
-	var inputLocat = 0
-	$("#btn-next").click(function(){
-		if(inputLocat == 2)
-			return 0;
-		
-		$(".row-input").eq(inputLocat).removeClass('show');
-		$(".input-option").eq(inputLocat).removeClass('active');
-		inputLocat += 1;
-		$(".row-input").eq(inputLocat).addClass('show');
-		$(".input-option").eq(inputLocat).addClass('active')
-		calcCardBody_h();
-		
-		if(inputLocat == 2){
-			$("#btn-next").hide();
-			$("#btn-send").show();
-		}
-		else if(inputLocat == 1)
-			$("#btn-prev").show();
+	$("#btn-refresh").click(function(){
+		if($("#switch").prop("checked"))
+			$("#switch").trigger('click');
+		$("#Pokholok2005-collapse").collapse('show');
+		document.getElementById("inputForm").reset();
 
 	});
 
-	$("#btn-prev").click(function(){
-		if(inputLocat == 0)
-			return 0;
-		
-		$(".row-input").eq(inputLocat).removeClass('show');
-		$(".input-option").eq(inputLocat).removeClass('active');
-		inputLocat -= 1;
-		$(".row-input").eq(inputLocat).addClass('show');
-		$(".input-option").eq(inputLocat).addClass('active');
-		calcCardBody_h();
-
-		if(inputLocat == 1){
-			$("#btn-send").hide();
-			$("#btn-next").show();
-		}
-		else if(inputLocat == 0)
-			$("#btn-prev").hide();
-
-	});
 
 	$("#switch").click(function(){
 		if($("#switch").prop("checked")){
@@ -75,12 +42,25 @@ $(document).ready(function(){
 		}
 	});
 
+	//gene filter checkbox & text
 	$(".check-feature").click(function(){
 		$(this).siblings('input[type=text]').prop('disabled', !$(this).prop('checked'));
 	});
 
+	//left Accordion set active
 	$("#leftAccordion .nav-link").click(function(){
 		$("#leftAccordion .nav-link").removeClass("active");
 		$(this).addClass("active")
-	})
+	});
+
+	//corrected radio
+	$("#div-corrected input[name=corrected]").click(function(){
+		$(this).siblings('input[type=text]').prop('disabled', !$(this).prop('checked'));
+		$(this).closest('label').siblings('label').find('input[type=text]').prop('disabled', $(this).prop('checked'));
+	});
+
+	$("#div-corrected input[type=text]").focusout(function(){
+		if (!$(this).val())
+			$(this).val(2);
+	});
 });

@@ -13,6 +13,7 @@
   <hr class="mt-2">
 
   <!-- Gene Input-->
+  <form id="inputForm">
   <div class="row row-input show" id="div-input">
     <!-- Gene Input Set-->
     <div class="col-lg-3">
@@ -77,25 +78,29 @@
                           <td>
                             <div>
                               <input type="checkbox" class="check-feature">
-                              <input type="text" class="pro_greater" value="1.0" disabled style="width:35px;">
+                              <input type="text" class="form-control d-inline" value="1.0" disabled style="width:40px;">
+                              <span class="fclass">pro_greater</span>
                             </div>
                           </td>
                           <td>
                             <div>
                               <input type="checkbox" class="check-feature">
-                              <input type="text" class="pro_less" value="-1.0" disabled style="width:35px;">
+                              <input type="text" class="form-control d-inline" value="-1.0" disabled style="width:40px;">
+                              <span class="fclass">cds_less</span>
                             </div>
                           </td>
                           <td>
                             <div>
                               <input type="checkbox" class="check-feature">
-                              <input type="text" class="cds_greater" value="1.0" disabled style="width:35px;">
+                              <input type="text" class="form-control d-inline" value="1.0" disabled style="width:40px;">
+                              <span class="fclass">cds_greater</span>
                             </div>
                           </td>
                           <td>
                             <div>
                               <input type="checkbox" class="check-feature">
-                              <input type="text" class="cds_less" value="-1.0" disabled style="width:35px;">
+                              <input type="text" class="form-control d-inline" value="-1.0" disabled style="width:40px;">
+                              <span class="fclass">cds_less</span>
                             </div>
                           </td>
                         </tr>
@@ -113,24 +118,29 @@
   </div>
   <!-- ./Gene Input-->
 
-
-
-  <div class="row">
-    <div class="col-lg-4">
-      <label class="container">Bonferroni-corrected p-value
-        <input type="radio" checked="checked" name="corrected">
+  <div class="row" id="div-corrected">
+    <div class="col-lg-5">
+      <label class="container">Bonferroni-corrected p-value: cutoff=10<sup>-</sup>
+        <input type="radio" checked="checked" name="corrected" value="1">
         <span class="checkmark"></span>
+        <input type="text" class="form-control d-inline" style="width:30px;" value="2">
       </label>
-      <label class="container">FDR (False Discovery Rate)
-        <input type="radio" name="corrected">
+      <label class="container">FDR (False Discovery Rate): &alpha;=10<sup>-</sup>
+        <input type="radio" name="corrected" value="2">
         <span class="checkmark"></span>
+        <input type="text" class="form-control d-inline" disabled style="width:30px;" value="2">
       </label>
     </div>
-    <div class="col-lg-8 text-right">
+    <div class="col-lg-7 text-right">
+      <div class="btn btn-primary w-10 mt-4" id="btn-refresh">
+        Reset <i class="fa fa-fw fa-refresh"></i></div>
       <div class="btn btn-primary w-10 mt-4" id="btn-send">
         Submit <i class="fa fa-fw fa-paper-plane"></i></div>
     </div>
   </div>
+  </form>
+
+
 {% endblock content %}
 
 {% block customModal %}

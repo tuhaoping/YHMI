@@ -1,4 +1,3 @@
-var csrftoken = Cookies.get('csrftoken');
 function csrfSafeMethod(method) {
     // these HTTP methods do not require CSRF protection
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
@@ -33,7 +32,9 @@ $(document).ready(function(){
 			jdata = $("tr.tr-feature input[type=checkbox]:checked").map(function(){
 						id = $(this).closest('tr').prop('id');
 						textbox = $(this).siblings('input');
-						return id + "_" + textbox.prop('class') + "_" + textbox.val();
+						fClass = $(this).siblings('span').text();
+						console.log(id + "_" + fClass + "_" + textbox.val());
+						return id + "_" + fClass + "_" + textbox.val();
 					});
 			jdata = JSON.stringify(jdata.get());
 			composition = $("#Composition-select").val();
@@ -43,13 +44,14 @@ $(document).ready(function(){
 			composition = null;
 		}
 
-		console.log(composition);
 		$.ajax({
 			url: rootURL + '/result',
 			type: 'POST',
 			data: {
 				'InputGene': jdata,
 				'composition': composition,
+				'corrected': $("#div-corrected input[name=corrected]:checked").val(),
+				'cutoff': $("#div-corrected input[type=text]:enabled").val(),
 			},
 			success:function(d){
 				$(".container-fluid.container-input").hide();
@@ -63,74 +65,9 @@ $(document).ready(function(){
 		    			'order': [[3, "asc"], [0, 'desc']]
 		    		});
 				$("#enrich_table_wrapper").css('padding', '10');
-
-				console.log('success');
 			}
 		});
-
 	});
-
-
-	// Submit YNA filter set value to backend
-	// $("#btn-send").click(function(){
-	// 	let jdata = {};
-
-	// 	jdata['filter'] = $("tr.tr-feature input[type=checkbox]:checked").map(function(){
-	// 				id = $(this).closest('tr').prop('id');
-	// 				textbox = $(this).siblings('input');
-	// 				return id + "_" + textbox.prop('class') + "_" + textbox.val();
-	// 			});
-	// 	console.log(jdata);
-	
-	// 	// if($("#switch").prop("checked")){
-	// 	// 	$.ajax({
-	// 	//     	url:"/result/",
-	// 	//     	data:{
-	// 	//     		jdata: JSON.stringify(jdata),
-	// 	//     		composition: $("#Composition").val(),
-	// 	//     	},
-	// 	//     	type:"POST",
-	// 	//     	success:function(d){
-	// 	//     		$("#resultDiv").html(d);
-	// 	//     		$("#result_table").DataTable();
-	// 	//     		// console.log(d);
-
-	// 	//     		$.ajax({
-	// 	//     			url:"/enrich/",
-	// 	//     			type:"GET",
-	// 	//     			success:function(d){
-	// 	// 					$("#EnrichmentDiv").html(d);
-	// 	// 		    		$("#enrich_table").DataTable({
-	// 	// 		    			// 'order': [[3, "asc"]]
-	// 	// 		    			'order': [[3, "asc"], [0, 'desc']]
-	// 	// 		    		});
-	// 	//     			}
-	// 	//     		});
-	// 	//     	},
-	// 	//     });
-	// 	// }
-	// 	// else{
-	// 	// 	$.ajax({
- //  //   			url:"/enrich/",
- //  //   			data:{
- //  //   				gene:$("#genetextarea").val()
- //  //   			},
- //  //   			type:"POST",
- //  //   			success:function(d){
- //  //   				$("#resultDiv").html('')
-	// 	// 			$("#EnrichmentDiv").html(d);
-	// 	//     		$("#enrich_table").DataTable({
-	// 	//     			// 'order': [[3, "asc"]]
-	// 	//     			'order': [[3, "asc"], [0, 'desc']]
-	// 	//     		});
- //  //   			}
- //  //   		});
-
-	// 	// }
-
-
-	// });
-
 
 
 // 	// ajax to update SQL Views when custom setting

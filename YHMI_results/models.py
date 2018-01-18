@@ -11,7 +11,22 @@ import MySQLdb
 class FilterResult(object):
 
 	@staticmethod
-	def getGeneSet(yhmi_filter, composition=' AND '):
+	def geneInfo(geneset):
+		
+		try:
+			db = MySQLdb.connect('localhost', 'haoping', 'a012345', 'YHMI_database')
+			cursor = db.cursor()
+			cursor.execute(sqlCmd)
+			res = list(cursor.fetchall())
+		except:
+			pass
+		finally:
+			db.close()
+
+		return 0
+
+	@staticmethod
+	def filterGene(yhmi_filter, composition=' AND '):
 		yhmi_filter = [f.split("_") for f in yhmi_filter]
 
 		feature_ID = {}
@@ -21,14 +36,10 @@ class FilterResult(object):
 			else:
 				feature_ID[f.pop(0)[1:]] = [f]
 		yhmi_filter = feature_ID
-
-		# print(feature_ID)
 		sqlCmd = "SELECT * FROM `yhmi_comparison_feature` WHERE `ID` IN({})".format(",".join(yhmi_filter.keys()))
-		# print(sqlCmd)
-		# print(yhmi_filter)
 
 		try:
-			db = MySQLdb.connect('localhost', 'haoping', 'a012345', 'yhmi_database')
+			db = MySQLdb.connect('localhost', 'haoping', 'a012345', 'YHMI_database')
 			cursor = db.cursor()
 			cursor.execute(sqlCmd)
 			res = list(cursor.fetchall())
@@ -53,27 +64,25 @@ class FilterResult(object):
 
 
 		try:
-			db = MySQLdb.connect('localhost', 'haoping', 'a012345', 'yhmi_database')
+			db = MySQLdb.connect('localhost', 'haoping', 'a012345', 'YHMI_database')
 			cursor = db.cursor()
 
 			if composition == " AND ":
-				sqlCmd = " INTERSECT ".join(sqlCmd)
+				data = []
+				for sql in sqlCmd:
+					cursor.execute(sql)
+					data.append({r[0] for r in cursor.fetchall()})
+				res = set.intersection(*data)
+					
 			else:
 				sqlCmd = " UNION ".join(sqlCmd)
-				print(sqlCmd)
-
 				cursor.execute(sqlCmd)
 				res = [r[0] for r in cursor.fetchall()]
-				print(res)
 
 		except MySQLdb.Error as e:
 			print(e)
 		finally:
 			db.close()
-
-
-
-		# print(sqlCmd)
 
 		return res;
 

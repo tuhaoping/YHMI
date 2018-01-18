@@ -560,7 +560,18 @@ footer.sticky-footer {
   border-radius: 0;
 }
 
+#div-filter input[type=text].form-control {
+  padding: .15rem .3rem;
+}
 
+#div-filter span.fclass {
+  display: none;
+}
+
+#div-corrected input[type=text].form-control {
+  height: 28px;
+  padding: .2rem .3rem;
+}
 
 @media (min-width: 576px){
   #div-custom .modal-dialog {
