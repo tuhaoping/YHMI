@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
+from django.views.decorators.csrf import csrf_exempt
 import MySQLdb
 
 # @ensure_csrf_cookie
