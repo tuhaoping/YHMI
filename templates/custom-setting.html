@@ -22,58 +22,80 @@
 
               <div id="{{Paper}}-setting-collapse" class="collapse" role="tabpanel" aria-labelledby="{{Paper}}-setting" data-parent="#custom-setting-accordion" >
                 <div class="card-body" style="height:234.4px; overflow-y:scroll;">
-                  <table class="table">
-                    <thead>
-                      <tr>
-                        <th></th>
-                        <th colspan="2">Promoter</th>
-                        <th colspan="2">Coding Region</th>
-                      </tr>
-                      <tr>
-                        <th></th>
-                        <th>&#62;=</th>
-                        <th>&#60;=</th>
-                        <th>&#62;=</th>
-                        <th>&#60;=</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                    {% for id,f in Feature %}
-                      <tr class="tr-custom-setting" id="fs{{ id }}">
-                        <td>{{ f }}</td>
-                        <td>
-                          <div>
-                            <input type="checkbox" class="check-feature greater">
-                            <input type="text" value="1.0" disabled style="width:35px;">
-                          </div>
-                        </td>
-                        <td>
-                          <div>
-                            <input type="checkbox" class="check-feature less">
-                            <input type="text" value="-1.0" disabled style="width:35px;">
-                          </div>
-                        </td>
-                        <td>
-                          <div>
-                            <input type="checkbox" class="check-feature greater">
-                            <input type="text" value="1.0" disabled style="width:35px;">
-                          </div>
-                        </td>
-                        <td>
-                          <div>
-                            <input type="checkbox" class="check-feature less">
-                            <input type="text" value="-1.0" disabled style="width:35px;">
-                          </div>
-                        </td>
-                      </tr>
-                    {% endfor %}
-                    </tbody>
-                  </table>
+                  {% if Paper == 'Venter2011'%}
+                    <table class="table">
+                      <tbody>
+                      {% for id,f in Feature %}
+                        <tr>
+                          <td>
+                            <div>
+                              <input type="checkbox" class="check-feature">
+                              {{ f }}
+                            </div>
+                          </td>
+                        </tr>
+                      {% endfor %}
+                      </tbody>
+                    </table>
+                  {% else %}
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th></th>
+                          <th colspan="2">Promoter</th>
+                          <th colspan="2">Coding Region</th>
+                        </tr>
+                        <tr>
+                          <th></th>
+                          <th>&#62;=</th>
+                          <th>&#60;=</th>
+                          <th>&#62;=</th>
+                          <th>&#60;=</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      {% for id,f in Feature %}
+                        <tr class="tr-custom-setting" id="fs{{ id }}">
+                          <td>{{ f }}</td>
+                          <td>
+                            <div>
+                              <input type="checkbox" class="check-feature greater">
+                              <input type="text" value="1.0" disabled style="width:35px;">
+                            </div>
+                          </td>
+                          <td>
+                            <div>
+                              <input type="checkbox" class="check-feature less">
+                              <input type="text" value="-1.0" disabled style="width:35px;">
+                            </div>
+                          </td>
+                          <td>
+                            <div>
+                              <input type="checkbox" class="check-feature greater">
+                              <input type="text" value="1.0" disabled style="width:35px;">
+                            </div>
+                          </td>
+                          <td>
+                            <div>
+                              <input type="checkbox" class="check-feature less">
+                              <input type="text" value="-1.0" disabled style="width:35px;">
+                            </div>
+                          </td>
+                        </tr>
+                      {% endfor %}
+                      </tbody>
+                    </table>
+                  {% endif %}
+                  
                 </div>
               </div>
             </div>  
           {% endfor %}
         </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>

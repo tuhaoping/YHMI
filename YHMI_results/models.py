@@ -116,3 +116,12 @@ class YhmiEnrichment(models.Model):
     class Meta:
         managed = False
         db_table = 'yhmi_enrichment'
+
+class YhmiEnrichmentTf(models.Model):
+    feature = models.CharField(db_column='Feature', primary_key=True, max_length=50)  # Field name made lowercase.
+    pro = models.TextField(db_column='Pro', blank=True, null=True)  # Field name made lowercase.
+    cod = models.TextField(db_column='Cod', blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'yhmi_enrichment_tf'
