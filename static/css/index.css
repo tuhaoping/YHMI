@@ -542,11 +542,6 @@ footer.sticky-footer {
   width: 30%;
 }
 
-
-.content-wrapper .row-input {
-  display: none;
-}
-
 .content-wrapper .row-input.show {
   display: flex;
 }
@@ -564,7 +559,13 @@ footer.sticky-footer {
   padding: .15rem .3rem;
 }
 
-#div-filter span.fclass {
+#div-filter .card-header:hover,
+#div-custom .card-header:hover {
+  cursor: pointer;
+}
+
+.content-wrapper .row-input,
+#div-filter span.fclass, #div-custom span.fclass {
   display: none;
 }
 

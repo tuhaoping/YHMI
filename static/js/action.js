@@ -63,4 +63,13 @@ $(document).ready(function(){
 		if (!$(this).val())
 			$(this).val(2);
 	});
+
+	$("#div-filter .card-header, #div-custom .card-header").hover(
+		function(){
+			$(this).find('h6').css({'color':'#0056b3', 'text-decoration':'underline'});
+		},
+		function(){
+			$(this).find('h6').css({'color':'#007bff', 'text-decoration':'none'});
+		}
+	);
 });

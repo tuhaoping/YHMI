@@ -46,67 +46,95 @@
           <div id="filter-accordion" role="tablist">
             {% for Paper,Feature in filter_data.items %}
               <div class="card">
-                <div class="card-header" role="tab" id="{{Paper}}">
-                  <h6 class="mb-0">
-                    <a data-toggle="collapse" href="#{{Paper}}-collapse" role="button" aria-expanded="true" aria-controls="{{Paper}}-collapse">
-                    {{ Paper }}
-                    </a>
-                  </h6>
+                <div class="card-header" role="tab" id="{{Paper}}" data-target="#{{Paper}}-collapse" data-toggle="collapse">
+                  <h6 class="mb-0" style="color:#007bff">{{ Paper }}</h6>
                 </div>
 
                 <div id="{{Paper}}-collapse" class="collapse" role="tabpanel" aria-labelledby="{{Paper}}" data-parent="#filter-accordion" >
                   <div class="card-body" style="height:234.4px; overflow-y:scroll;">
-                    <table class="table">
-                      <thead>
-                        <tr>
-                          <th></th>
-                          <th colspan="2">Promoter</th>
-                          <th colspan="2">Coding Region</th>
-                        </tr>
-                        <tr>
-                          <th></th>
-                          <th>&#62;=</th>
-                          <th>&#60;=</th>
-                          <th>&#62;=</th>
-                          <th>&#60;=</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                      {% for id,f in Feature %}
-                        <tr class="tr-feature" id="f{{ id }}">
-                          <td>{{ f }}</td>
-                          <td>
-                            <div>
-                              <input type="checkbox" class="check-feature">
-                              <input type="text" class="form-control d-inline" value="1.0" disabled style="width:40px;">
-                              <span class="fclass">pro_greater</span>
-                            </div>
-                          </td>
-                          <td>
-                            <div>
-                              <input type="checkbox" class="check-feature">
-                              <input type="text" class="form-control d-inline" value="-1.0" disabled style="width:40px;">
-                              <span class="fclass">pro_less</span>
-                            </div>
-                          </td>
-                          <td>
-                            <div>
-                              <input type="checkbox" class="check-feature">
-                              <input type="text" class="form-control d-inline" value="1.0" disabled style="width:40px;">
-                              <span class="fclass">cds_greater</span>
-                            </div>
-                          </td>
-                          <td>
-                            <div>
-                              <input type="checkbox" class="check-feature">
-                              <input type="text" class="form-control d-inline" value="-1.0" disabled style="width:40px;">
-                              <span class="fclass">cds_less</span>
-                            </div>
-                          </td>
-                        </tr>
-                      {% endfor %}
-                      </tbody>
-                    </table>
+                    {% if Paper == 'Venters2011'%}
+                      <table class="table">
+                        <tbody>
+                        {% for id,f in Feature %}
+                          <tr class="tr-feature" id="f{{ id }}">
+                            <td>
+                              <div>
+                                <label>
+                                  <input type="checkbox" class="check-feature">
+                                  <input type="text" class="form-control" value="1.0" style="display:none;">
+                                  {{ f }}
+                                  <span class="fclass">pro_greater</span>
+                                </label>
+                              </div>
+                            </td>
+                          </tr>
+                        {% endfor %}
+                        </tbody>
+                      </table>
+                    {% else %}
+                      <table class="table">
+                        <thead>
+                          <tr>
+                            <th></th>
+                            <th colspan="2">Promoter</th>
+                            <th colspan="2">Coding Region</th>
+                          </tr>
+                          <tr>
+                            <th></th>
+                            <th>&#62;=</th>
+                            <th>&#60;=</th>
+                            <th>&#62;=</th>
+                            <th>&#60;=</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        {% for id,f in Feature %}
+                          <tr class="tr-feature" id="f{{ id }}">
+                            <td>{{ f }}</td>
+                            <td>
+                              <!--
+                              <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                  <div class="input-group-text">
+                                    <input type="checkbox" class="check-feature">
+                                  </div>
+                                </div>
+                                <input type="text" class="form-control" value="1.0" style="width:20px;">
+                                <span class="fclass">pro_greater</span>
+                              </div>
+                              .-->
+                              <div>
+                                <input type="checkbox" class="check-feature">
+                                <input type="text" class="form-control d-inline" value="1.0" disabled style="width:40px;">
+                                <span class="fclass">pro_greater</span>
+                              </div>
+                            </td>
+                            <td>
+                              <div>
+                                <input type="checkbox" class="check-feature">
+                                <input type="text" class="form-control d-inline" value="-1.0" disabled style="width:40px;">
+                                <span class="fclass">pro_less</span>
+                              </div>
+                            </td>
+                            <td>
+                              <div>
+                                <input type="checkbox" class="check-feature">
+                                <input type="text" class="form-control d-inline" value="1.0" disabled style="width:40px;">
+                                <span class="fclass">cds_greater</span>
+                              </div>
+                            </td>
+                            <td>
+                              <div>
+                                <input type="checkbox" class="check-feature">
+                                <input type="text" class="form-control d-inline" value="-1.0" disabled style="width:40px;">
+                                <span class="fclass">cds_less</span>
+                              </div>
+                            </td>
+                          </tr>
+                        {% endfor %}
+                        </tbody>
+                      </table>
+                    {% endif %}
                   </div>
                 </div>
               </div>  

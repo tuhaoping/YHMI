@@ -56,13 +56,14 @@ class FilterResult(object):
 					tableDict[r[1]+r[4]].append("`Data{}_{}` {} {}".format(r[2], f[0], f[1], f[2]))
 				else:
 					tableDict[r[1]+r[4]] = ["`Data{}_{}` {} {}".format(r[2], f[0], f[1], f[2])]
-			
+		
+		# print(tableDict)
 		sqlCmd = []
 		for table,condiction in tableDict.items():
 			condiction = composition.join(condiction).replace("greater", '>=').replace('less', '<=')
 			sqlCmd.append("SELECT `ORF` FROM `yhmi_filter_{}` WHERE {}".format(table.lower(), condiction))
 
-
+		print(sqlCmd)
 		try:
 			db = MySQLdb.connect('localhost', 'haoping', 'a012345', 'YHMI_database')
 			cursor = db.cursor()

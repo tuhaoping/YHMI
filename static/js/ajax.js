@@ -69,7 +69,19 @@ $(document).ready(function(){
 		});
 	});
 
+	var setting_data = []
+	$("#btn-save-custom").click(function(){
+		// let setting_data;
+		setting_data = $("tr.tr-custom-setting input[type=checkbox]:checked").map(function(){
+					id = $(this).closest('tr').prop('id');
+					textbox = $(this).siblings('input');
+					fClass = $(this).siblings('span').text();
+					console.log(id + "_" + fClass + "_" + textbox.val());
+					return id + "_" + fClass + "_" + textbox.val();
+				});
+		// console.log(setting_data);
 
+	});
 // 	// ajax to update SQL Views when custom setting
 // 	$("#enrich-table tbody input[type=text]").focusout(function(){
 
