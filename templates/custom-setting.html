@@ -1,4 +1,5 @@
 <!-- Custom Setting-->
+<form id="settingForm">
 <div class="modal fade" id="div-custom" tabindex="-1" role="dialog" aria-labelledby="CustomSetting" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
@@ -40,30 +41,30 @@
                           <td>{{ f }}</td>
                           <td>
                             <div>
-                              <input type="checkbox" class="check-feature greater">
-                              <input type="text" value="1.0" disabled style="width:35px;">
-                              <span class="fclass">pro_greater</span>
+                              <input type="checkbox" class="check-feature enriched">
+                              <input type="text" class="pro en" value="1.0" disabled style="width:35px;">
+                              <span class="fclass">pro_en</span>
                             </div>
                           </td>
                           <td>
                             <div>
-                              <input type="checkbox" class="check-feature less">
-                              <input type="text" value="-1.0" disabled style="width:35px;">
-                              <span class="fclass">pro_less</span>
+                              <input type="checkbox" class="check-feature depleted">
+                              <input type="text" class="pro de" value="-1.0" disabled style="width:35px;">
+                              <span class="fclass">pro_de</span>
                             </div>
                           </td>
                           <td>
                             <div>
-                              <input type="checkbox" class="check-feature greater">
-                              <input type="text" value="1.0" disabled style="width:35px;">
-                              <span class="fclass">cds_greater</span>
+                              <input type="checkbox" class="check-feature enriched">
+                              <input type="text" class="cds en" value="1.0" disabled style="width:35px;">
+                              <span class="fclass">cds_en</span>
                             </div>
                           </td>
                           <td>
                             <div>
-                              <input type="checkbox" class="check-feature less">
-                              <input type="text" value="-1.0" disabled style="width:35px;">
-                              <span class="fclass">cds_less</span>
+                              <input type="checkbox" class="check-feature depleted">
+                              <input type="text" class="cds de" value="-1.0" disabled style="width:35px;">
+                              <span class="fclass">cds_de</span>
                             </div>
                           </td>
                         </tr>
@@ -78,10 +79,11 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" id="btn-save-custom">Save changes</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="btn-save-custom" data-dismiss="modal">Save changes</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="cancel">Close</button>
       </div>
     </div>
   </div>
 </div>
+</form>
 <!-- ./Custom Setting-->

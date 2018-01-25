@@ -22,7 +22,9 @@ $(document).ready(function(){
 		if($("#switch").prop("checked"))
 			$("#switch").trigger('click');
 		$("#Pokholok2005-collapse").collapse('show');
+		$("#div-filter input[type=text], #div-custom input[type=text]").prop('disabled', true);
 		document.getElementById("inputForm").reset();
+		document.getElementById("settingForm").reset();
 
 	});
 
@@ -72,4 +74,24 @@ $(document).ready(function(){
 			$(this).find('h6').css({'color':'#007bff', 'text-decoration':'none'});
 		}
 	);
+
+
+	$('#div-custom').on('hidden.bs.modal', function (e) {
+		if(custom_save)
+			e.preventDefault();
+		else{
+			$("#div-custom input[type=checkbox]").prop('checked', false);
+			$("#div-custom input[type=text].en").attr({'disabled':true, 'value':'1.0'});
+			$("#div-custom input[type=text].de").attr({'disabled':true, 'value':'-1.0'});
+			setting_data.forEach((val)=>{
+				val = val.split("_");
+				target = "#"+val[0] + " input." + val[1] + "." + val[2];
+				// console.log(target);
+				$(target).attr({'disabled':false, 'value':val[3]});
+				$(target).siblings('input').prop('checked',true)
+				// console.log(val);
+			});
+		}
+		custom_save = false;
+	})
 });

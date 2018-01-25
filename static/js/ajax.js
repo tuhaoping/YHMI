@@ -14,8 +14,13 @@ $.ajaxSetup({
 
 });
 
+var tableID = '';
+// console.log(tableID)
+var rootURL = '';
+var setting_data = [];
+var custom_save = false;
+
 $(document).ready(function(){
-	var rootURL = '';
 	// $.ajax({
 	// 	url:"/result/init/",
 	// 	type:"GET",
@@ -48,6 +53,7 @@ $(document).ready(function(){
 			url: rootURL + '/result',
 			type: 'POST',
 			data: {
+				'tableID':tableID,
 				'InputGene': jdata,
 				'composition': composition,
 				'corrected': $("#div-corrected input[name=corrected]:checked").val(),
@@ -64,12 +70,29 @@ $(document).ready(function(){
 		    			// 'order': [[3, "asc"]]
 		    			'order': [[3, "asc"], [0, 'desc']]
 		    		});
+
+				$("#input_gene_table").DataTable();
 				$("#enrich_table_wrapper").css('padding', '10');
 			}
 		});
 	});
 
-	var setting_data = []
+});
+
+
+
+$(document).ready(function(){
+	$.ajax({
+		url:rootURL + '/setting/init',
+		type: 'GET',
+		dataType: 'json',
+
+		success:function(d){
+			tableID = d['tableID'];
+		}
+	});
+
+	
 	$("#btn-save-custom").click(function(){
 		// let setting_data;
 		setting_data = $("tr.tr-custom-setting input[type=checkbox]:checked").map(function(){
@@ -78,51 +101,33 @@ $(document).ready(function(){
 					fClass = $(this).siblings('span').text();
 					console.log(id + "_" + fClass + "_" + textbox.val());
 					return id + "_" + fClass + "_" + textbox.val();
-				});
-		// console.log(setting_data);
+				}).get();
+		console.log(setting_data);
+		$.ajax({
+			url:rootURL + '/setting/update',
+			type: 'POST',
+			data: {
+				'tableID':tableID,
+				'setting_data': JSON.stringify(setting_data),
+			}
 
+		});
+		custom_save = true
 	});
-// 	// ajax to update SQL Views when custom setting
-// 	$("#enrich-table tbody input[type=text]").focusout(function(){
 
-// 		let text = $(this);
-// 		let clss = text.closest('td').attr('class');
-
-// 		if (text.val() < 2 && clss.includes("enriched")){
-// 			text.addClass('err');
-// 			text.val('2.0');
-// 			setTimeout(function(){text.removeClass('err');}, 2000)
-// 			return 0;
-// 		}
-// 		else if (text.val() > 0.5 && clss.includes("depleted")){
-// 			text.addClass('err');
-// 			text.val('0.5');
-// 			setTimeout(function(){text.removeClass('err');}, 2000)
-// 			return 0;
-// 		}
-
-
-// 		let feature = text.closest('tr').find('td').first().text();
-// 		// console.log(feature + '/' + clss + '/' + text.val());
-// 		setTimeout(function(){
-// 			console.log(text.parent().find('input[type=checkbox]').prop('checked'));
-// 			if(text.parent().find('input[type=checkbox]').prop('checked')){
-// 				$.ajax({
-// 					url:"/enrich/update/",
-// 					type:"GET",
-// 					data:{f:feature + '/' + clss + '/' + text.val()}
-// 				});
-// 			}
-// 		},1000)
-// 	});
-
-// });
-
-// window.onbeforeunload = function() {
-// 	// console.log("leave!");
-// 	$.ajax({
-// 		async:false,
-// 		url:"/enrich/close/",
-// 		type:"GET",
-// 	});
+	$("#btn-refresh").click(function(){
+		$.ajax({
+			url:rootURL + '/setting/default'
+		});
+	});
 });
+
+window.onbeforeunload = function() {
+	// console.log("leave!");
+	$.ajax({
+		async:false,
+		url:rootURL + "/setting/drop",
+		type:"POST",
+		data:{'tableID':tableID,}
+	});
+};

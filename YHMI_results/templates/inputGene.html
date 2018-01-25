@@ -1,0 +1,21 @@
+<div class="card mb-3">
+	<div class="card-header">
+	  <i class="fa fa-fw fa-table"></i> Input Gene
+	</div>
+	<table class='table p-1' id="input_gene_table">
+		<thead>
+			<th class="text-left" style="width:40%;">ORF</th>
+			<th class="text-left" style="width:40%;">GENE NAME</th>
+			<th class="text-left" style="width:40%;">ALIAS</th>
+		</thead>
+		<tbody>
+			{% for g in inputGene %}
+				<tr>
+					<td class="text-left">{{ g }}</td>
+					<td class="text-left">X</td>
+					<td class="text-left">X</td>
+				</tr>		
+			{% endfor %}
+		</tbody>
+	</table>
+</div>

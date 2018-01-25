@@ -9,9 +9,11 @@
   {% csrf_token %}
   <script type="text/javascript">
     var csrftoken = $("[name=csrfmiddlewaretoken]").val();
+    // console.log(csrftoken);
   </script>
   
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
+  {# <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous"> #}
+  <link rel="stylesheet" href="{% static 'bootstrap-v4/css/bootstrap.min.css' %}" style="text/css">
   <link rel="stylesheet" href="{% static 'css/index.css' %}" style="text/css">
   <link rel="stylesheet" href="{% static 'css/switch.css' %}" style="text/css">
   <link rel="stylesheet" href="{% static 'font-awesome/css/font-awesome.min.css' %}" style="text/css">
@@ -96,12 +98,12 @@
       <i class="fa fa-angle-up"></i>
     </a>
 
-    <script src="{% static 'bootstrap/popper/popper.min.js' %}"></script>
-    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'bootstrap-v4/popper/popper.min.js' %}"></script>
+    <script src="{% static 'bootstrap-v4/js/bootstrap.min.js' %}"></script>
     <script src="{% static 'jquery/jquery.easing.min.js' %}"></script>
     <script src="{% static 'js/index.js' %}"></script>
-    <script src="{% static 'js/action.js' %}"></script>
     <script src="{% static 'js/ajax.js' %}"></script>
+    <script src="{% static 'js/action.js' %}"></script>
     <link rel="stylesheet" type="text/css" href="{% static 'css/customRadio.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'DataTables/datatables.min.css' %}">
     <script type="text/javascript" charset="utf8" src="{% static 'DataTables/datatables.min.js' %}"></script>
