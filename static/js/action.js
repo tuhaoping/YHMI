@@ -15,16 +15,16 @@ function changePage(i){
 
 $(document).ready(function(){
 	$("#switch").prop('checked',false);
-	$("#Pokholok2005-collapse").collapse('show');
-	$("#Pokholok2005-setting-collapse").collapse('show');
+	$("#H3_or_H4_Acetylation-collapse").collapse('show');
+	$("#H3_or_H4_Acetylation-setting-collapse").collapse('show');
 
 	$("#btn-refresh").click(function(){
 		if($("#switch").prop("checked"))
 			$("#switch").trigger('click');
-		$("#Pokholok2005-collapse").collapse('show');
+		$("#H3_or_H4_Acetylation-collapse").collapse('show');
 		$("#div-filter input[type=text], #div-custom input[type=text]").prop('disabled', true);
 		document.getElementById("inputForm").reset();
-		document.getElementById("settingForm").reset();
+		// document.getElementById("settingForm").reset();
 
 	});
 

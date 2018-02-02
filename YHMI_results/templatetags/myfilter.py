@@ -7,7 +7,7 @@ def now_type(count):
 
 @register.filter
 def pvalue_type(pType):
-	p = ["(Over)", "(Under)"]
+	p = ["Over", "Under", '']
 	return p[pType]
 
 @register.filter

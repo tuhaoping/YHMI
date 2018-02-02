@@ -10,15 +10,23 @@ def HomePage(request):
 	######## get Papers and Features #########
 	db = MySQLdb.connect('localhost', 'haoping', 'a012345', 'yhmi_database')
 	cursor = db.cursor()
-	SqlCmd = "SELECT `ID`,`Paper`,`Feature` FROM `yhmi_comparison_feature`"
+	SqlCmd = "SELECT `ID`,`Feature`,`MainClass`,`SubClass` FROM `const_comparison_feature`"
 	cursor.execute(SqlCmd)
 
 	filter_item = {}
-	for ID, Paper, Feature in cursor.fetchall():
-		if Paper in filter_item:
-			filter_item[Paper].append((ID,Feature))
+	for ID, Feature, mC, sC in cursor.fetchall():
+		if mC in filter_item:
+			if mC == 'TF':
+				filter_item[mC].append((ID,Feature))
+			elif sC in filter_item[mC]:
+				filter_item[mC][sC].append((ID,Feature))
+			else:
+				filter_item[mC][sC] = [(ID,Feature)]
 		else:
-			filter_item[Paper] = [(ID,Feature)]
+			if mC == 'TF':
+				filter_item[mC] = [(ID,Feature)]
+			else:
+				filter_item[mC] = {sC:[(ID,Feature)]}
 	######## ./get Papers and Features ########
 
 	# print(filter_item)

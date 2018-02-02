@@ -11,66 +11,71 @@
       </div>
       <div class="modal-body p-0" id="custom-setting-modal">
         <div id="custom-setting-accordion" role="tablist">
-          {% for Paper,Feature in filter_data.items %}
-            {% if Paper != 'Venters2011'%}
+          {% for MainClass,Data in filter_data.items %}
+            {% if MainClass != 'TF'%}
               <div class="card">
-                <div class="card-header" role="tab" id="{{Paper}}-setting" data-toggle="collapse" data-target="#{{Paper}}-setting-collapse">
-                  <h6 class="mb-0" style="color:#007bff">{{ Paper }}</h6>
+                <div class="card-header" role="tab" id="{{MainClass}}-setting" data-toggle="collapse" data-target="#{{MainClass}}-setting-collapse">
+                  <h6 class="mb-0" style="color:#007bff">{{ MainClass }}</h6>
                 </div>
 
-                <div id="{{Paper}}-setting-collapse" class="collapse" role="tabpanel" aria-labelledby="{{Paper}}-setting" data-parent="#custom-setting-accordion" >
-                  <div class="card-body" style="height:234.4px; overflow-y:scroll;">
-                    <table class="table">
-                      <thead>
-                        <tr>
-                          <th></th>
-                          <th colspan="2">Promoter</th>
-                          <th colspan="2">Coding Region</th>
-                        </tr>
-                        <tr>
-                          <th></th>
-                          <th>enriched(&#62;=)</th>
-                          <th>depleted(&#60;=)</th>
-                          <th>enriched(&#62;=)</th>
-                          <th>depleted(&#60;=)</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                      {% for id,f in Feature %}
-                        <tr class="tr-custom-setting" id="fs{{ id }}">
-                          <td>{{ f }}</td>
-                          <td>
-                            <div>
-                              <input type="checkbox" class="check-feature enriched">
-                              <input type="text" class="pro en" value="1.0" disabled style="width:35px;">
-                              <span class="fclass">pro_en</span>
-                            </div>
-                          </td>
-                          <td>
-                            <div>
-                              <input type="checkbox" class="check-feature depleted">
-                              <input type="text" class="pro de" value="-1.0" disabled style="width:35px;">
-                              <span class="fclass">pro_de</span>
-                            </div>
-                          </td>
-                          <td>
-                            <div>
-                              <input type="checkbox" class="check-feature enriched">
-                              <input type="text" class="cds en" value="1.0" disabled style="width:35px;">
-                              <span class="fclass">cds_en</span>
-                            </div>
-                          </td>
-                          <td>
-                            <div>
-                              <input type="checkbox" class="check-feature depleted">
-                              <input type="text" class="cds de" value="-1.0" disabled style="width:35px;">
-                              <span class="fclass">cds_de</span>
-                            </div>
-                          </td>
-                        </tr>
-                      {% endfor %}
-                      </tbody>
-                    </table>
+                <div id="{{MainClass}}-setting-collapse" class="collapse" role="tabpanel" aria-labelledby="{{MainClass}}-setting" data-parent="#custom-setting-accordion" >
+                  <div class="card-body p-0" style="height:495px; overflow-y:scroll;">
+                    {% for SubClass,Feature in Data.items %}
+                      <div class="subtitle">{{ SubClass }}</div>
+                      <div class="pl-3 pr-3">
+                        <table class="table">
+                          <thead>
+                            <tr>
+                              <th></th>
+                              <th colspan="2">Promoter</th>
+                              <th colspan="2">Coding Region</th>
+                            </tr>
+                            <tr>
+                              <th></th>
+                              <th>enriched(&#62;=)</th>
+                              <th>depleted(&#60;=)</th>
+                              <th>enriched(&#62;=)</th>
+                              <th>depleted(&#60;=)</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                          {% for id,f in Feature %}
+                            <tr class="tr-custom-setting" id="fs{{ id }}">
+                              <td>{{ f }}</td>
+                              <td>
+                                <div>
+                                  <input type="checkbox" class="check-feature enriched">
+                                  <input type="text" class="pro en" value="1.0" disabled style="width:35px;">
+                                  <span class="fclass">pro_en</span>
+                                </div>
+                              </td>
+                              <td>
+                                <div>
+                                  <input type="checkbox" class="check-feature depleted">
+                                  <input type="text" class="pro de" value="-1.0" disabled style="width:35px;">
+                                  <span class="fclass">pro_de</span>
+                                </div>
+                              </td>
+                              <td>
+                                <div>
+                                  <input type="checkbox" class="check-feature enriched">
+                                  <input type="text" class="cds en" value="1.0" disabled style="width:35px;">
+                                  <span class="fclass">cds_en</span>
+                                </div>
+                              </td>
+                              <td>
+                                <div>
+                                  <input type="checkbox" class="check-feature depleted">
+                                  <input type="text" class="cds de" value="-1.0" disabled style="width:35px;">
+                                  <span class="fclass">cds_de</span>
+                                </div>
+                              </td>
+                            </tr>
+                          {% endfor %}
+                          </tbody>
+                        </table>
+                      </div>
+                    {% endfor %}
                   </div>
                 </div>
               </div>  

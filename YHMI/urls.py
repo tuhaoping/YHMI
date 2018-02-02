@@ -16,7 +16,8 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from .views import HomePage
-from YHMI_results.views import showEnrich, enrichJSON, customSetting
+from YHMI_results.views import showEnrich, customSetting
+from yhmi_api.views import enrichJSON
 
 
 urlpatterns = [
@@ -24,6 +25,7 @@ urlpatterns = [
     url(r'^home/$', HomePage),
 
     url(r'^result$', showEnrich),
-    url(r'^api/enrich$', enrichJSON),
     url(r'^setting/(init|update|drop|default)$', customSetting),
+
+    url(r'^api/enrich$', enrichJSON),
 ]

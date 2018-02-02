@@ -66,13 +66,17 @@ $(document).ready(function(){
 				$("#leftAccordion .nav-link").eq(2).addClass("active");
 
 				$("#result").html(d);
-				$("#enrich_table").DataTable({
+				$("#histone_enrich_table").DataTable({
 		    			// 'order': [[3, "asc"]]
-		    			'order': [[3, "asc"], [0, 'desc']]
+		    			'order': [[4, "asc"], [0, 'asc']]
+		    		});
+				$("#TF_enrich_table").DataTable({
+		    			// 'order': [[3, "asc"]]
+		    			'order': [[4, "asc"], [0, 'asc']]
 		    		});
 
 				$("#input_gene_table").DataTable();
-				$("#enrich_table_wrapper").css('padding', '10');
+				$("#histone_enrich_table_wrapper, #TF_enrich_table_wrapper").css('padding', '10');
 			}
 		});
 	});

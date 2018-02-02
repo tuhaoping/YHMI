@@ -39,7 +39,9 @@ class FilterResult(object):
 			else:
 				feature_ID[f.pop(0)[1:]] = [f]
 		yhmi_filter = feature_ID
-		sqlCmd = "SELECT * FROM `yhmi_comparison_feature` WHERE `ID` IN({})".format(",".join(yhmi_filter.keys()))
+		sqlCmd = """SELECT `ID`,`TableName`,`TableID`,`Data`
+					FROM `const_comparison_feature` 
+					WHERE `ID` IN({})""".format(",".join(yhmi_filter.keys()))
 
 		try:
 			db = MySQLdb.connect('localhost', 'haoping', 'a012345', 'YHMI_database')
@@ -53,12 +55,16 @@ class FilterResult(object):
 
 
 		tableDict = {}
+		# print(yhmi_filter)
 		for r in res:
+			TableID = "_"+r[2] if r[2] else ""
+
 			for f in yhmi_filter[str(r[0])]:
-				if r[1] in tableDict:
-					tableDict[r[1]+r[4]].append("`Data{}_{}` {} {}".format(r[2], f[0], f[1], f[2]))
+				table_name = r[1]+TableID
+				if table_name in tableDict:
+					tableDict[table_name].append("`Data{}_{}` {} {}".format(r[3], f[0], f[1], f[2]))
 				else:
-					tableDict[r[1]+r[4]] = ["`Data{}_{}` {} {}".format(r[2], f[0], f[1], f[2])]
+					tableDict[table_name] = ["`Data{}_{}` {} {}".format(r[3], f[0], f[1], f[2])]
 		
 		# print(tableDict)
 		sqlCmd = []
@@ -66,7 +72,7 @@ class FilterResult(object):
 			condiction = composition.join(condiction).replace("greater", '>=').replace('less', '<=')
 			sqlCmd.append("SELECT `ORF` FROM `yhmi_filter_{}` WHERE {}".format(table.lower(), condiction))
 
-		print(sqlCmd)
+		# print(sqlCmd)
 		try:
 			db = MySQLdb.connect('localhost', 'haoping', 'a012345', 'YHMI_database')
 			cursor = db.cursor()
@@ -88,6 +94,7 @@ class FilterResult(object):
 		finally:
 			db.close()
 
+		# print(res)
 		return res;
 
 	def enrichment_pvalue(self):
@@ -168,8 +175,10 @@ class YhmiEnrichmentTempTable():
 			else:
 				feature_ID[d.pop(0)[2:]] = [d]
 
-		sqlCmd = "SELECT * FROM `yhmi_comparison_feature` WHERE `ID` IN({})".format(",".join(feature_ID.keys()))
-
+		sqlCmd = "SELECT * FROM `const_comparison_feature` WHERE `ID` IN({})".format(",".join(feature_ID.keys()))
+		sqlCmd = """SELECT `ID`,`Feature`,`TableName`,`TableID`,`Data`
+					FROM `const_comparison_feature` 
+					WHERE `ID` IN({})""".format(",".join(feature_ID.keys()))
 		try:
 			con = MySQLdb.connect(*self.__db)
 			cursor = con.cursor()
@@ -180,14 +189,16 @@ class YhmiEnrichmentTempTable():
 			print(sqlCmd)
 			print(e)
 
-
 		tableDict = {}
+		# {'H3_or_H4_Acetylation_mutant': [('`Data0_pro` en 1.0', 'pro_en', 'H3K4ac_set1D_on_WT_exp2')]
 		for r in res:
+			TableID = "_"+r[3] if r[3] else ""
 			for f in feature_ID[str(r[0])]:
-				if r[1] in tableDict:
-					tableDict[r[1]+r[4]].append(("`Data{}_{}` {} {}".format(r[2], f[0], f[1], f[2]), f[0]+"_"+f[1], r[3]))
+				table_name = r[2]+TableID
+				if table_name in tableDict:
+					tableDict[table_name].append(("`Data{}_{}` {} {}".format(r[4], f[0], f[1], f[2]), f[0]+"_"+f[1], r[1]))
 				else:
-					tableDict[r[1]+r[4]] = [("`Data{}_{}` {} {}".format(r[2], f[0], f[1], f[2]), f[0]+"_"+f[1], r[3])]
+					tableDict[table_name] = [("`Data{}_{}` {} {}".format(r[4], f[0], f[1], f[2]), f[0]+"_"+f[1], r[1])]
 
 		try:
 			for table, condiction in tableDict.items():
@@ -206,16 +217,12 @@ class YhmiEnrichmentTempTable():
 			print(e)
 		finally:
 			con.close()
-		# print(cursor.fetchall())
-		# for d in data:
 
-		# print(data)
 	def dropTable(self):
 
 		try:
 			con = MySQLdb.connect(*self.__db)
 			cursor = con.cursor()
-		# sqlCmd = 'select * into `{}` '
 			sqlCmd = "DELETE FROM `yhmi_temporary_table` WHERE `tableID` LIKE '{}'".format(self.__tableID)
 			cursor.execute(sqlCmd)
 			sqlCmd = 'DROP TABLE `{}`'.format(self.__temp_table + self.__tableID)
@@ -231,20 +238,21 @@ class YhmiEnrichmentTempTable():
 		try:
 			con = MySQLdb.connect(*self.__db)
 			cursor = con.cursor()
-			cursor.execute("SELECT * FROM `{}`".format(self.__temp_table + self.__tableID))
+			sqlCmd = '''SELECT `{temp}`.*,`const_comparison_feature`.`Paper`
+						FROM `{temp}`
+						LEFT JOIN `const_comparison_feature`
+						ON `const_comparison_feature`.`Feature`=`{temp}`.`Feature`'''.format(
+						temp=self.__temp_table + self.__tableID)
+
+			cursor.execute(sqlCmd)
 			res = cursor.fetchall()
-			# cursor.execute("SELECT `Pro_de` FROM `temp_enrichment_{}` WHERE `Feature` LIKE 'WT_H3K4ac_on_H3_exp2'".format(tableID))
-			# res = [r for r in cursor.fetchall()]
 		except MySQLdb.Error as e:
 			print(e)
 		finally:
 			con.close()
 
 		for r in res:
-			yield {'feature':r[0], 'pro_en':r[1], 'pro_de':r[2], 'cds_en':r[3], 'cds_de':r[4]}
-		
-
-		# return res
+			yield {'feature':r[0], 'pro_en':r[1], 'pro_de':r[2], 'cds_en':r[3], 'cds_de':r[4], 'paper':r[5]}
 		
 
 
