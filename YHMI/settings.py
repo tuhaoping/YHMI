@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'YHMI_results',
+    'YHMI_api',
 ]
 
 MIDDLEWARE = [
@@ -126,3 +127,4 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = ( os.path.join(BASE_DIR, 'static'), )
 # SESSION_COOKIE_AGE = 3600
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+CSRF_USE_SESSIONS = True

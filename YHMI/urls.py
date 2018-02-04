@@ -17,7 +17,7 @@ from django.conf.urls import url
 from django.contrib import admin
 from .views import HomePage
 from YHMI_results.views import showEnrich, customSetting
-from yhmi_api.views import enrichJSON
+from YHMI_api.views import enrichJSON
 
 
 urlpatterns = [
