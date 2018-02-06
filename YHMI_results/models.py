@@ -252,7 +252,7 @@ class YhmiEnrichmentTempTable():
 			con.close()
 
 		for r in res:
-			yield {'feature':r[0], 'pro_en':r[1], 'pro_de':r[2], 'cds_en':r[3], 'cds_de':r[4], 'paper':r[5]}
+			yield {'feature':r[0], 'pro_en':r[1], 'pro_de':r[2], 'cds_en':r[3], 'cds_de':r[4], 'histoneType':r[5],'paper':r[6]}
 		
 
 

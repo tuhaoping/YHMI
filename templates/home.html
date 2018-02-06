@@ -18,9 +18,21 @@
     <!-- Gene Input Set-->
     <div class="col-lg-3 col-md-3 col-12">
       <div class="card mb-3">
-        <div class="card-header">
-          <i class="fa fa-search"></i> Input <a id="a-eg" href="javascript:showExample(1);" title="Click to show iESR in first input text">(e.g.)</a></div>
-        <div class="card-body" style="height:500px;" id="div-genetext">
+        <div class="card-header" style="height:49px;">
+          <i class="fa fa-search"></i> Input 
+          <a id="a-eg" data-toggle="collapse" data-target="#example-btn-div" href="#">(e.g.)</a>
+        </div>
+        
+        <div class="card-body" style="height:500px; position:relative;" id="div-genetext">
+          <div class="collapse" id="example-btn-div">
+            <div class="card card-body">
+              <div class="btn btn-sm" onclick="showExample(1)">0-1</div>
+              <div class="btn btn-sm" onclick="showExample(2)">1-4</div>
+              <div class="btn btn-sm" onclick="showExample(3)">4-16</div>
+              <div class="btn btn-sm" onclick="showExample(4)">16-50</div>
+              <div class="btn btn-sm" onclick="showExample(5)">50+</div>
+            </div>
+          </div>
           <textarea id="inputTextArea" class="form-control" style="height:100%; resize:none; overflow-x:hidden;"></textarea>
         </div>
       </div>

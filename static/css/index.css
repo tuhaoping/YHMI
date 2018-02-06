@@ -575,7 +575,8 @@ footer.sticky-footer {
 }
 
 #div-filter .subtitle,
-#div-custom .subtitle {
+#div-custom .subtitle,
+#result .subtitle {
   padding: 4px 24px 0px 24px;
   margin-bottom: 6px;
   background-color: #e9ecef;
@@ -591,4 +592,33 @@ footer.sticky-footer {
   #div-custom .modal-dialog {
     max-width: 1000px;
   }
+}
+
+#example-btn-div {
+  border:0px;
+  border-radius: 0px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+#example-btn-div .card{
+  width: 100%;
+  border: 0px;
+  border-bottom: solid 1px #e9ecef;
+  border-radius: 0px;
+  display: inline-block;
+  padding: 2px 0px;
+}
+
+#example-btn-div div.btn{
+  width: 18%;
+  padding: 4px 1px;
+  /*margin: 1px;*/
+  font-size: 15px;
+  /*float: left;*/
+  /*color:white;*/
+  background-color: buttonface;
+
 }

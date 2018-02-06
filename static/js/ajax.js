@@ -66,17 +66,18 @@ $(document).ready(function(){
 				$("#leftAccordion .nav-link").eq(2).addClass("active");
 
 				$("#result").html(d);
-				$("#histone_enrich_table").DataTable({
-		    			// 'order': [[3, "asc"]]
-		    			'order': [[4, "asc"], [0, 'asc']]
+				$("#Acetylation_enrich_table, \
+				   #Methylation_enrich_table, \
+				   #H2A_Variant_enrich_table, \
+				   #H2BK123_Ubiquitination_enrich_table").DataTable({
+		    			'order': [[4, "asc"], [0, 'asc']],
 		    		});
 				$("#TF_enrich_table").DataTable({
-		    			// 'order': [[3, "asc"]]
-		    			'order': [[4, "asc"], [0, 'asc']]
+		    			'order': [[4, "asc"], [0, 'asc']],
 		    		});
 
 				$("#input_gene_table").DataTable();
-				$("#histone_enrich_table_wrapper, #TF_enrich_table_wrapper").css('padding', '10');
+				// $("#Acetylation_enrich_table_wrapper, #Methylation_enrich_table_wrapper, #others_enrich_table_wrapper, #TF_enrich_table_wrapper").css('padding', '10');
 			}
 		});
 	});
