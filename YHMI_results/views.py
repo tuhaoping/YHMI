@@ -87,7 +87,8 @@ def customSetting(request, method):
 
 	elif method == 'drop':
 		enrich_db.dropTable()
-	elif method == 'drop':
+		
+	elif method == 'default':
 		enrich_db.defaultTable()
 
 	return HttpResponse(status=200)

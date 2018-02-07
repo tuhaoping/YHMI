@@ -152,11 +152,12 @@ class YhmiEnrichmentTempTable():
 	def defaultTable(self):
 		try:
 			con = MySQLdb.connect(*self.__db)
-			cursor = con.cursor
+			cursor = con.cursor()
 			sqlCmd = "TRUNCATE TABLE `{}`".format(self.__temp_table + self.__tableID)
 			cursor.execute(sqlCmd)
 			sqlCmd = "INSERT INTO `{}` SELECT * FROM `{}`".format(
 				self.__temp_table + self.__tableID, self.__main_table)
+			cursor.execute(sqlCmd)
 			con.commit()
 		except MySQLdb.Error as e:
 			print(e)
@@ -165,8 +166,11 @@ class YhmiEnrichmentTempTable():
 
 
 	def updateTable(self, data):
-		data = json.loads(data)
-		setting_data = [d.split("_") for d in data]
+		if "[" in data:
+			data = json.loads(data)
+			setting_data = [d.split("_") for d in data]
+		else:
+			setting_data = [data.split("_")]
 		feature_ID = {}
 		
 		for d in setting_data:
@@ -175,7 +179,7 @@ class YhmiEnrichmentTempTable():
 			else:
 				feature_ID[d.pop(0)[2:]] = [d]
 
-		sqlCmd = "SELECT * FROM `const_comparison_feature` WHERE `ID` IN({})".format(",".join(feature_ID.keys()))
+		# sqlCmd = "SELECT * FROM `const_comparison_feature` WHERE `ID` IN({})".format(",".join(feature_ID.keys()))
 		sqlCmd = """SELECT `ID`,`Feature`,`TableName`,`TableID`,`Data`
 					FROM `const_comparison_feature` 
 					WHERE `ID` IN({})""".format(",".join(feature_ID.keys()))

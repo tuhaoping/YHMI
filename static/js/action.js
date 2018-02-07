@@ -57,6 +57,9 @@ $(document).ready(function(){
 			$("#switch").trigger('click');
 		$("#H3_or_H4_Acetylation-collapse").collapse('show');
 		$("#div-setting input[type=text]").prop('disabled', true);
+		$("#div-setting input[type=text]").prop('disabled', true);
+		$("#div-setting .tr-custom-setting input[type=text]:odd").data('prevalue', '-1.0');
+		$("#div-setting .tr-custom-setting input[type=text]:even").data('prevalue', '1.0');
 		document.getElementById("inputForm").reset();
 		// document.getElementById("settingForm").reset();
 

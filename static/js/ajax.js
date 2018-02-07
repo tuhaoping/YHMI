@@ -96,7 +96,32 @@ $(document).ready(function(){
 		}
 	});
 
-	
+	$("tr.tr-custom-setting input[type=text]").change(function(){
+
+		fClass = $(this).siblings('span').text();
+		value = parseFloat($(this).val());
+		if (/^-?[0-9]+(.[0-9]*)?$/.test($(this).val()) && value){
+			$(this).data('prevalue', value);
+			$(this).val(value);
+			let id = $(this).closest('tr').prop('id');
+			let setting_data = id + "_" + fClass + "_" + value;
+			$.ajax({
+				url:rootURL + '/setting/update',
+				type:'POST',
+				data: {
+					'tableID':tableID,
+					'setting_data': setting_data,
+				}
+
+			});
+		}
+		else{
+			console.log('type err')
+			$(this).val($(this).data('prevalue'));
+		}
+		// console.log($(this).defaultValue);
+	});
+
 	$("#btn-save-custom").click(function(){
 		// let setting_data;
 		setting_data = $("tr.tr-custom-setting input[type=checkbox]:checked").map(function(){
@@ -121,7 +146,9 @@ $(document).ready(function(){
 
 	$("#btn-reset").click(function(){
 		$.ajax({
-			url:rootURL + '/setting/default'
+			url:rootURL + '/setting/default',
+			type:"POST",
+			data:{'tableID':tableID,}
 		});
 	});
 });
