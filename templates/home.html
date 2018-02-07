@@ -2,12 +2,15 @@
 
 {% block content %}
   <div class="mb-0 mt-4">
-    <span class="input-option active"><i class="fa fa-file"></i> Gene Input </span>&nbsp;&nbsp;|&nbsp;
+    <span class="input-option active"><i class="fa fa-file"></i> Gene Input </span>
+    <!--
+    &nbsp;&nbsp;|&nbsp;
     <span class="input-option">
       <a data-toggle="modal" data-target="#div-custom">
         <i class="fa fa-wrench"></i> custom setting 
       </a>
     </span>
+    -->
     {# <span class="input-option"><i class="fa fa-cog"></i> cutoff setting</span> #}
   </div>
   <hr class="mt-2">
@@ -41,11 +44,12 @@
     <div class="col-lg-9 col-md-9 col-12">
       <div class="card mb-3">
         <div class="card-header" style="height:49px;">
-          <i class="fa fa-filter"></i> Gene Filter &nbsp;
+          <i class="fa fa-wrench"></i> Setting &nbsp;
             <label class="switch m-0">
               <input type="checkbox" id="switch">
               <span class="slider round"></span>
             </label>
+            <!--
             <div class="text-right d-inline float-right">
               Composition Option:
               <select id="Composition-select" disabled>
@@ -53,39 +57,21 @@
                 <option value=" OR ">Union</option>
               </select>
             </div>
+            -->
         </div>
-        <div class="card-body p-0 div-disabled" style="height:500px;" id="div-filter">
-          <div id="filter-accordion" role="tablist">
+        <div class="card-body p-0 div-disabled" style="height:500px;" id="div-setting">
+          <div id="custom-setting-accordion" role="tablist">
             {% for MainClass,Data in filter_data.items %}
-              <div class="card">
-                <div class="card-header" role="tab" id="{{MainClass}}" data-target="#{{MainClass}}-collapse" data-toggle="collapse">
-                  <h6 class="mb-0" style="color:#007bff">{{ MainClass }}</h6>
-                </div>
+              {% if MainClass != 'TF'%}
+                <div class="card">
+                  <div class="card-header" role="tab" id="{{MainClass}}-setting" data-toggle="collapse" data-target="#{{MainClass}}-setting-collapse">
+                    <h6 class="mb-0" style="color:#007bff">{{ MainClass }}</h6>
+                  </div>
 
-                <div id="{{MainClass}}-collapse" class="collapse" role="tabpanel" aria-labelledby="{{MainClass}}" data-parent="#filter-accordion" >
-                  <div class="card-body p-0" style="height:234.4px; overflow-y:scroll;">
-                    {% if MainClass == 'TF'%}
-                      <table class="table">
-                        <tbody>
-                        {% for id,f in Data %}
-                          <tr class="tr-feature" id="f{{ id }}">
-                            <td>
-                              <div>
-                                <label>
-                                  <input type="checkbox" class="check-feature">
-                                  <input type="text" class="form-control" value="1.0" style="display:none;">
-                                  {{ f }}
-                                  <span class="fclass">pro_greater</span>
-                                </label>
-                              </div>
-                            </td>
-                          </tr>
-                        {% endfor %}
-                        </tbody>
-                      </table>
-                    {% else %}
+                  <div id="{{MainClass}}-setting-collapse" class="collapse" role="tabpanel" aria-labelledby="{{MainClass}}-setting" data-parent="#custom-setting-accordion" >
+                    <div class="card-body p-0" style="height:300px; overflow-y:scroll;">
                       {% for SubClass,Feature in Data.items %}
-                        <div class="subtitle">{{SubClass}}</div>
+                        <div class="subtitle">{{ SubClass }}</div>
                         <div class="pl-3 pr-3">
                           <table class="table">
                             <thead>
@@ -96,42 +82,42 @@
                               </tr>
                               <tr>
                                 <th></th>
-                                <th>&#62;=</th>
-                                <th>&#60;=</th>
-                                <th>&#62;=</th>
-                                <th>&#60;=</th>
+                                <th>enriched(&#62;=)</th>
+                                <th>depleted(&#60;=)</th>
+                                <th>enriched(&#62;=)</th>
+                                <th>depleted(&#60;=)</th>
                               </tr>
                             </thead>
                             <tbody>
                             {% for id,f in Feature %}
-                              <tr class="tr-feature" id="f{{ id }}">
+                              <tr class="tr-custom-setting" id="fs{{ id }}">
                                 <td>{{ f }}</td>
                                 <td>
                                   <div>
-                                    <input type="checkbox" class="check-feature">
-                                    <input type="text" class="form-control d-inline" value="1.0" disabled style="width:40px;">
-                                    <span class="fclass">pro_greater</span>
+                                    <input type="checkbox" class="check-feature enriched">
+                                    <input type="text" class="pro en" value="1.0" disabled style="width:35px;">
+                                    <span class="fclass">pro_en</span>
                                   </div>
                                 </td>
                                 <td>
                                   <div>
-                                    <input type="checkbox" class="check-feature">
-                                    <input type="text" class="form-control d-inline" value="-1.0" disabled style="width:40px;">
-                                    <span class="fclass">pro_less</span>
+                                    <input type="checkbox" class="check-feature depleted">
+                                    <input type="text" class="pro de" value="-1.0" disabled style="width:35px;">
+                                    <span class="fclass">pro_de</span>
                                   </div>
                                 </td>
                                 <td>
                                   <div>
-                                    <input type="checkbox" class="check-feature">
-                                    <input type="text" class="form-control d-inline" value="1.0" disabled style="width:40px;">
-                                    <span class="fclass">cds_greater</span>
+                                    <input type="checkbox" class="check-feature enriched">
+                                    <input type="text" class="cds en" value="1.0" disabled style="width:35px;">
+                                    <span class="fclass">cds_en</span>
                                   </div>
                                 </td>
                                 <td>
                                   <div>
-                                    <input type="checkbox" class="check-feature">
-                                    <input type="text" class="form-control d-inline" value="-1.0" disabled style="width:40px;">
-                                    <span class="fclass">cds_less</span>
+                                    <input type="checkbox" class="check-feature depleted">
+                                    <input type="text" class="cds de" value="-1.0" disabled style="width:35px;">
+                                    <span class="fclass">cds_de</span>
                                   </div>
                                 </td>
                               </tr>
@@ -140,10 +126,10 @@
                           </table>
                         </div>
                       {% endfor %}
-                    {% endif %}
+                    </div>
                   </div>
-                </div>
-              </div>  
+                </div>  
+              {% endif %}
             {% endfor %}
           </div>
         </div>
@@ -166,7 +152,7 @@
       </label>
     </div>
     <div class="col-lg-4 col-6 text-right">
-      <div class="btn btn-primary w-10 mt-4" id="btn-refresh">
+      <div class="btn btn-primary w-10 mt-4" id="btn-reset">
         Reset <i class="fa fa-fw fa-refresh"></i></div>
       <div class="btn btn-primary w-10 mt-4" id="btn-send">
         Submit <i class="fa fa-fw fa-paper-plane"></i></div>
@@ -177,6 +163,8 @@
 
 {% endblock content %}
 
+<!--
 {% block customModal %}
   {% include "custom-setting.html" %}
 {% endblock customModal %}
+-->

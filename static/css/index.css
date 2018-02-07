@@ -555,17 +555,17 @@ footer.sticky-footer {
   border-radius: 0;
 }
 
-#div-filter input[type=text].form-control {
+#div-setting input[type=text].form-control {
   padding: .15rem .3rem;
 }
 
-#div-filter .card-header:hover,
+#div-setting .card-header:hover,
 #div-custom .card-header:hover {
   cursor: pointer;
 }
 
 .content-wrapper .row-input,
-#div-filter span.fclass, #div-custom span.fclass {
+#div-setting span.fclass, #div-custom span.fclass {
   display: none;
 }
 
@@ -574,7 +574,7 @@ footer.sticky-footer {
   padding: .2rem .3rem;
 }
 
-#div-filter .subtitle,
+#div-setting .subtitle,
 #div-custom .subtitle,
 #result .subtitle {
   padding: 4px 24px 0px 24px;

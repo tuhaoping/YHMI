@@ -14,29 +14,49 @@ function showExample(i){
 
 }
 
+
 function changePage(i){
-	// if(i==1)
+	/* ===================== *\
+	|| toggle different page ||
+	\* ===================== */
+
 	$(".content-wrapper .container-fluid").hide();
 	$(".content-wrapper .container-fluid").eq(i).fadeIn();
 }
 
+
 $(document).ready(function(){
-	// $("#example-btn-div .btn").click(e=>{
-	// 	console.log("click");
-	// });
+	/* ===================== *\
+	|| Default page setting  ||
+	\* ===================== */
+	
+	$("#switch").prop('checked',false);
+	// $("#H3_or_H4_Acetylation-collapse").collapse('show');
+	$("#H3_or_H4_Acetylation-setting-collapse").collapse('show');
+});
+
+
+$(document).ready(function(){
+	
 	$("*").click(e=>{
+		/* ========================= *\
+		|| hide example button panel ||
+		\* ========================= */
+
 		$("#example-btn-div.collapse.show").collapse('hide');
 	});
 	
-	$("#switch").prop('checked',false);
-	$("#H3_or_H4_Acetylation-collapse").collapse('show');
-	$("#H3_or_H4_Acetylation-setting-collapse").collapse('show');
+	
 
-	$("#btn-refresh").click(function(){
+	$("#btn-reset").click(function(){
+		/* ================== *\
+		|| Reset page default ||
+		\* ================== */
+
 		if($("#switch").prop("checked"))
 			$("#switch").trigger('click');
 		$("#H3_or_H4_Acetylation-collapse").collapse('show');
-		$("#div-filter input[type=text], #div-custom input[type=text]").prop('disabled', true);
+		$("#div-setting input[type=text]").prop('disabled', true);
 		document.getElementById("inputForm").reset();
 		// document.getElementById("settingForm").reset();
 
@@ -44,24 +64,46 @@ $(document).ready(function(){
 
 
 	$("#switch").click(function(){
+		/* =================== *\
+		|| Setting form enable ||
+		\* =================== */
+
 		if($("#switch").prop("checked")){
-			$("#div-filter").removeClass("div-disabled");
-			$("#div-genetext").addClass("div-disabled");
-			$("#a-eg").addClass("div-disabled");
+			$("#div-setting").removeClass("div-disabled");
 			$("#Composition-select").prop('disabled', false);
+			// $("#div-genetext").addClass("div-disabled");
+			// $("#a-eg").addClass("div-disabled");
 		}
 		else {
-			$("#div-filter").addClass("div-disabled");
-			$("#div-genetext").removeClass("div-disabled");
-			$("#a-eg").removeClass("div-disabled");
+			$("#div-setting").addClass("div-disabled");
 			$("#Composition-select").prop('disabled', true);
+			// $("#div-genetext").removeClass("div-disabled");
+			// $("#a-eg").removeClass("div-disabled");
 		}
 	});
 
-	//gene filter checkbox & text
+	
+	//============== SETTING FORM =============//
 	$(".check-feature").click(function(){
+		/* ================================= *\
+		|| Setting form checkbox & inputtext ||
+		\* ================================= */
+
 		$(this).siblings('input[type=text]').prop('disabled', !$(this).prop('checked'));
 	});
+	$("#div-setting .card-header").hover(
+		function(){$(this).find('h6').css({'color':'#0056b3', 'text-decoration':'underline'});},
+		function(){$(this).find('h6').css({'color':'#007bff', 'text-decoration':'none'});}
+	);
+	$('#custom-setting-accordion .card-header').click(function(e){
+		/* =========================== *\
+		|| Prevent all panel collapsed ||
+		\* =========================== */
+		if($(this).siblings('.collapse.show').length)
+	  		e.stopPropagation();
+	});
+	//============= ./SETTING FORM ============//
+
 
 	//left Accordion set active
 	$("#leftAccordion .nav-link").click(function(){
@@ -69,7 +111,9 @@ $(document).ready(function(){
 		$(this).addClass("active")
 	});
 
-	//corrected radio
+
+
+	//=============== CORRECTION RADIO ==============//
 	$("#div-corrected input[name=corrected]").click(function(){
 		$(this).siblings('input[type=text]').prop('disabled', !$(this).prop('checked'));
 		$(this).closest('label').siblings('label').find('input[type=text]').prop('disabled', $(this).prop('checked'));
@@ -79,15 +123,9 @@ $(document).ready(function(){
 		if (!$(this).val())
 			$(this).val(2);
 	});
+	//============== ./CORRECTION RADIO =============//
 
-	$("#div-filter .card-header, #div-custom .card-header").hover(
-		function(){
-			$(this).find('h6').css({'color':'#0056b3', 'text-decoration':'underline'});
-		},
-		function(){
-			$(this).find('h6').css({'color':'#007bff', 'text-decoration':'none'});
-		}
-	);
+
 
 
 	$('#div-custom').on('hidden.bs.modal', function (e) {
@@ -109,14 +147,4 @@ $(document).ready(function(){
 		custom_save = false;
 	});
 
-	// $("#example-popover").popover({
-	// 	placement: 'bottom',
-	// 	// container: 'body',
-	// 	html: true,
-	// 	content: "<button class='btn btn-sm btn-secondary'>1</button><button class='btn btn-secondary'>2</button>"
-
-	// 	// container: 'body',
-	// 	// conetnt: 'texst',
-	// 	// HTML: "<div>testtttt</div>"
-	// });
 });

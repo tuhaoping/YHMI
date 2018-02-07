@@ -51,22 +51,20 @@ function calcCardBody_h(){
 
 }
 
-function calcCustomCardBody_h(){
-  var custom_card_header_h = $("#custom-setting-accordion .card-header:nth(0)").height();
-  var custom_card_body_h = $("#custom-setting-accordion .card-body").outerHeight(
-      900-3*custom_card_header_h-5);
+function calcSettingCardBody_h(){
+  var custom_card_header_h = $("#custom-setting-accordion .card-header:nth(0)").outerHeight();
+  var custom_card_body_h = $("#custom-setting-accordion .card-body").outerHeight(500-3*custom_card_header_h-5);
   // var custom_card_body_h = $("#custom-setting-accordion .card-body").outerHeight('275px');
 }
 
 $(document).ready(function(){
-  calcCardBody_h();
+  // calcCardBody_h();
+  calcSettingCardBody_h();
 
-  // $("#div-custom").on('shown.bs.modal', function(){
-  //   calcCustomCardBody_h();
-  // })
 });
 
 
 $(window).resize(function(){
-  calcCardBody_h();
+  // calcCardBody_h();
+  calcSettingCardBody_h();
 });

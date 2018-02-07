@@ -30,32 +30,31 @@ $(document).ready(function(){
 	// });
 
 	$("#btn-send").click(function(){
-		let jdata
-		let composition
+		let jdata_gene
+		let jdata_setting
+		// let composition
 
 		if($("#switch").prop('checked')){
-			jdata = $("tr.tr-feature input[type=checkbox]:checked").map(function(){
+			jdata_setting = $("tr.tr-custom-setting input[type=checkbox]:checked").map(function(){
 						id = $(this).closest('tr').prop('id');
 						textbox = $(this).siblings('input');
 						fClass = $(this).siblings('span').text();
 						console.log(id + "_" + fClass + "_" + textbox.val());
 						return id + "_" + fClass + "_" + textbox.val();
 					});
-			jdata = JSON.stringify(jdata.get());
-			composition = $("#Composition-select").val();
+			jdata_setting = JSON.stringify(jdata_setting.get());
+			// composition = $("#Composition-select").val();
 		}
-		else{
-			jdata = JSON.stringify($('#inputTextArea').val().split("\n"));
-			composition = null;
-		}
+
+		jdata_gene = JSON.stringify($('#inputTextArea').val().split("\n"));
 
 		$.ajax({
 			url: rootURL + '/result',
 			type: 'POST',
 			data: {
 				'tableID':tableID,
-				'InputGene': jdata,
-				'composition': composition,
+				'InputGene': jdata_gene,
+				// 'composition': composition,
 				'corrected': $("#div-corrected input[name=corrected]:checked").val(),
 				'cutoff': $("#div-corrected input[type=text]:enabled").val(),
 			},
@@ -120,7 +119,7 @@ $(document).ready(function(){
 		custom_save = true
 	});
 
-	$("#btn-refresh").click(function(){
+	$("#btn-reset").click(function(){
 		$.ajax({
 			url:rootURL + '/setting/default'
 		});

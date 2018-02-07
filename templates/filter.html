@@ -1,0 +1,114 @@
+<!-- Gene Input Filter-->
+    <div class="col-lg-9 col-md-9 col-12">
+      <div class="card mb-3">
+        <div class="card-header" style="height:49px;">
+          <i class="fa fa-wrench"></i> Setting &nbsp;
+            <label class="switch m-0">
+              <input type="checkbox" id="switch">
+              <span class="slider round"></span>
+            </label>
+            <div class="text-right d-inline float-right">
+              Composition Option:
+              <select id="Composition-select" disabled>
+                <option value=" AND ">Intersection</option>
+                <option value=" OR ">Union</option>
+              </select>
+            </div>
+        </div>
+        <div class="card-body p-0 div-disabled" style="height:500px;" id="div-filter">
+          <div id="filter-accordion" role="tablist">
+            {% for MainClass,Data in filter_data.items %}
+              <div class="card">
+                <div class="card-header" role="tab" id="{{MainClass}}" data-target="#{{MainClass}}-collapse" data-toggle="collapse">
+                  <h6 class="mb-0" style="color:#007bff">{{ MainClass }}</h6>
+                </div>
+
+                <div id="{{MainClass}}-collapse" class="collapse" role="tabpanel" aria-labelledby="{{MainClass}}" data-parent="#filter-accordion" >
+                  <div class="card-body p-0" style="height:234.4px; overflow-y:scroll;">
+                    {% if MainClass == 'TF'%}
+                      <table class="table">
+                        <tbody>
+                        {% for id,f in Data %}
+                          <tr class="tr-feature" id="f{{ id }}">
+                            <td>
+                              <div>
+                                <label>
+                                  <input type="checkbox" class="check-feature">
+                                  <input type="text" class="form-control" value="1.0" style="display:none;">
+                                  {{ f }}
+                                  <span class="fclass">pro_greater</span>
+                                </label>
+                              </div>
+                            </td>
+                          </tr>
+                        {% endfor %}
+                        </tbody>
+                      </table>
+                    {% else %}
+                      {% for SubClass,Feature in Data.items %}
+                        <div class="subtitle">{{SubClass}}</div>
+                        <div class="pl-3 pr-3">
+                          <table class="table">
+                            <thead>
+                              <tr>
+                                <th></th>
+                                <th colspan="2">Promoter</th>
+                                <th colspan="2">Coding Region</th>
+                              </tr>
+                              <tr>
+                                <th></th>
+                                <th>&#62;=</th>
+                                <th>&#60;=</th>
+                                <th>&#62;=</th>
+                                <th>&#60;=</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                            {% for id,f in Feature %}
+                              <tr class="tr-feature" id="f{{ id }}">
+                                <td>{{ f }}</td>
+                                <td>
+                                  <div>
+                                    <input type="checkbox" class="check-feature">
+                                    <input type="text" class="form-control d-inline" value="1.0" disabled style="width:40px;">
+                                    <span class="fclass">pro_greater</span>
+                                  </div>
+                                </td>
+                                <td>
+                                  <div>
+                                    <input type="checkbox" class="check-feature">
+                                    <input type="text" class="form-control d-inline" value="-1.0" disabled style="width:40px;">
+                                    <span class="fclass">pro_less</span>
+                                  </div>
+                                </td>
+                                <td>
+                                  <div>
+                                    <input type="checkbox" class="check-feature">
+                                    <input type="text" class="form-control d-inline" value="1.0" disabled style="width:40px;">
+                                    <span class="fclass">cds_greater</span>
+                                  </div>
+                                </td>
+                                <td>
+                                  <div>
+                                    <input type="checkbox" class="check-feature">
+                                    <input type="text" class="form-control d-inline" value="-1.0" disabled style="width:40px;">
+                                    <span class="fclass">cds_less</span>
+                                  </div>
+                                </td>
+                              </tr>
+                            {% endfor %}
+                            </tbody>
+                          </table>
+                        </div>
+                      {% endfor %}
+                    {% endif %}
+                  </div>
+                </div>
+              </div>  
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- ./Gene Input-->
