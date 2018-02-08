@@ -11,7 +11,7 @@ import scipy.stats
 @csrf_exempt
 def enrichJSON(request):
 	'''
-	http://cosbi5.ee.ncku.edu.tw/api/enrich
+	http://cosbi4.ee.ncku.edu.tw/api/enrich
 	request.POST
 
 	argument:
@@ -21,7 +21,7 @@ def enrichJSON(request):
 	cutoff: correction standard
 
 	[option]
-	setting_data: json ['fs{id}_(pro|cds)_(en/de)_value', ...]
+	setting_data: json ['fs{id}_(pro|cds)_(en|de)_value', ...]
 	'''
 	if ('InputGene' not in request.POST) or ('corrected' not in request.POST) or ('cutoff' not in request.POST):
 		return HttpResponseBadRequest
