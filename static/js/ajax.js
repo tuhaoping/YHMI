@@ -34,17 +34,17 @@ $(document).ready(function(){
 		let jdata_setting
 		// let composition
 
-		if($("#switch").prop('checked')){
-			jdata_setting = $("tr.tr-custom-setting input[type=checkbox]:checked").map(function(){
-						id = $(this).closest('tr').prop('id');
-						textbox = $(this).siblings('input');
-						fClass = $(this).siblings('span').text();
-						console.log(id + "_" + fClass + "_" + textbox.val());
-						return id + "_" + fClass + "_" + textbox.val();
-					});
-			jdata_setting = JSON.stringify(jdata_setting.get());
-			// composition = $("#Composition-select").val();
-		}
+		// if($("#switch").prop('checked')){
+		// 	jdata_setting = $("tr.tr-custom-setting input[type=checkbox]:checked").map(function(){
+		// 				id = $(this).closest('tr').prop('id');
+		// 				textbox = $(this).siblings('input');
+		// 				fClass = $(this).siblings('span').text();
+		// 				console.log(id + "_" + fClass + "_" + textbox.val());
+		// 				return id + "_" + fClass + "_" + textbox.val();
+		// 			});
+		// 	jdata_setting = JSON.stringify(jdata_setting.get());
+		// 	// composition = $("#Composition-select").val();
+		// }
 
 		jdata_gene = JSON.stringify($('#inputTextArea').val().split("\n"));
 
@@ -98,9 +98,11 @@ $(document).ready(function(){
 
 	$("tr.tr-custom-setting input[type=text]").change(function(){
 
+		prevalue = $(this).data('prevalue');
+
 		fClass = $(this).siblings('span').text();
-		value = parseFloat($(this).val());
-		if (/^-?[0-9]+(.[0-9]*)?$/.test($(this).val()) && value){
+		value = Number($(this).val());
+		if (value && (value != prevalue)){
 			$(this).data('prevalue', value);
 			$(this).val(value);
 			let id = $(this).closest('tr').prop('id');
@@ -117,7 +119,7 @@ $(document).ready(function(){
 		}
 		else{
 			console.log('type err')
-			$(this).val($(this).data('prevalue'));
+			$(this).val(prevalue);
 		}
 		// console.log($(this).defaultValue);
 	});
