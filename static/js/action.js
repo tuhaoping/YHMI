@@ -53,37 +53,38 @@ $(document).ready(function(){
 		|| Reset page default ||
 		\* ================== */
 
-		if($("#switch").prop("checked"))
-			$("#switch").trigger('click');
+		// if($("#switch").prop("checked"))
+		// 	$("#switch").trigger('click');
 		$("#H3_or_H4_Acetylation-collapse").collapse('show');
-		$("#div-setting input[type=text]").prop('disabled', true);
-		$("#div-setting input[type=text]").prop('disabled', true);
+		// $("#div-setting input[type=text]").prop('disabled', true);
+		// $("#div-setting input[type=text]").prop('disabled', true);
 		$("#div-setting .tr-custom-setting input[type=text]:odd").data('prevalue', '-1.0');
 		$("#div-setting .tr-custom-setting input[type=text]:even").data('prevalue', '1.0');
+		$(".container-fluid.container-results").hide();
 		document.getElementById("inputForm").reset();
 		// document.getElementById("settingForm").reset();
 
 	});
 
 
-	$("#switch").click(function(){
-		/* =================== *\
-		|| Setting form enable ||
-		\* =================== */
+	// $("#switch").click(function(){
+	// 	/* =================== *\
+	// 	|| Setting form enable ||
+	// 	\* =================== */
 
-		if($("#switch").prop("checked")){
-			$("#div-setting").removeClass("div-disabled");
-			$("#Composition-select").prop('disabled', false);
-			// $("#div-genetext").addClass("div-disabled");
-			// $("#a-eg").addClass("div-disabled");
-		}
-		else {
-			$("#div-setting").addClass("div-disabled");
-			$("#Composition-select").prop('disabled', true);
-			// $("#div-genetext").removeClass("div-disabled");
-			// $("#a-eg").removeClass("div-disabled");
-		}
-	});
+	// 	if($("#switch").prop("checked")){
+	// 		$("#div-setting").removeClass("div-disabled");
+	// 		$("#Composition-select").prop('disabled', false);
+	// 		// $("#div-genetext").addClass("div-disabled");
+	// 		// $("#a-eg").addClass("div-disabled");
+	// 	}
+	// 	else {
+	// 		$("#div-setting").addClass("div-disabled");
+	// 		$("#Composition-select").prop('disabled', true);
+	// 		// $("#div-genetext").removeClass("div-disabled");
+	// 		// $("#a-eg").removeClass("div-disabled");
+	// 	}
+	// });
 
 	
 	//============== SETTING FORM =============//

@@ -147,7 +147,7 @@ def Correction(enrich_value, method='1', cutoff=2.0):
 	if method == '1':
 		for ftype, fdata in enrich_value.items():
 			length = len(fdata)
-			print(ftype, length)
+			# print(ftype, length)
 			temp = []
 			for i,data in enumerate(fdata):
 				data['pvalue'][0] *= length

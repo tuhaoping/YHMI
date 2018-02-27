@@ -59,7 +59,7 @@ $(document).ready(function(){
 				'cutoff': $("#div-corrected input[type=text]:enabled").val(),
 			},
 			success:function(d){
-				$(".container-fluid.container-input").hide();
+				// $(".container-fluid.container-input").hide();
 				$(".container-fluid.container-results").show();
 				$("#leftAccordion .nav-link").removeClass("active");
 				$("#leftAccordion .nav-link").eq(2).addClass("active");
