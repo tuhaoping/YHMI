@@ -19,6 +19,7 @@ var tableID = '';
 var rootURL = '';
 var setting_data = [];
 var custom_save = false;
+var bar_data;
 
 $(document).ready(function(){
 	// $.ajax({
@@ -58,24 +59,34 @@ $(document).ready(function(){
 				'corrected': $("#div-corrected input[name=corrected]:checked").val(),
 				'cutoff': $("#div-corrected input[type=text]:enabled").val(),
 			},
-			success:function(d){
+			dataType:'json',
+			success:function(res){
 				// $(".container-fluid.container-input").hide();
 				$(".container-fluid.container-results").show();
 				$("#leftAccordion .nav-link").removeClass("active");
 				$("#leftAccordion .nav-link").eq(2).addClass("active");
 
-				$("#result").html(d);
+				$("#result").html(res['template']);
+				$("#Acetylation_tab").addClass("active show");
+
+				$('html, body').stop().animate({
+			    	scrollTop: ($('#result').offset().top)-80
+			    }, 1000, 'easeInOutExpo');
+
 				$("#Acetylation_enrich_table, \
 				   #Methylation_enrich_table, \
 				   #H2A_Variant_enrich_table, \
 				   #H2BK123_Ubiquitination_enrich_table").DataTable({
-		    			'order': [[4, "asc"], [0, 'asc']],
+		    			'order': [[5, "asc"], [0, 'asc']],
 		    		});
 				$("#TF_enrich_table").DataTable({
-		    			'order': [[4, "asc"], [0, 'asc']],
+		    			'order': [[5, "asc"], [0, 'asc']],
 		    		});
 
 				$("#input_gene_table").DataTable();
+
+				bar_data = res['data']
+				barplot("Acetylation", 'fold');
 				// $("#Acetylation_enrich_table_wrapper, #Methylation_enrich_table_wrapper, #others_enrich_table_wrapper, #TF_enrich_table_wrapper").css('padding', '10');
 			}
 		});

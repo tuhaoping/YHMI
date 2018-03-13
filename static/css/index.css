@@ -571,6 +571,10 @@ footer.sticky-footer {
   padding: .2rem .3rem;
 }
 
+#div-corrected label {
+  margin: 0px 0px 5px 0px;
+}
+
 #div-setting .subtitle,
 #div-custom .subtitle,
 #result .subtitle {
@@ -618,4 +622,8 @@ footer.sticky-footer {
   /*color:white;*/
   background-color: buttonface;
 
+}
+
+hr {
+  border-color: gray;
 }

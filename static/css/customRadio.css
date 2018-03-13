@@ -1,5 +1,6 @@
-/* Customize the label (the#div-corrected  container) */
-#div-corrected .container {
+/* Customize the label (the#div-corrected, .graph_radio  container) */
+#div-corrected .container,
+.graph_radio .container {
   display: block;
   position: relative;
   padding-left: 24px;
@@ -13,7 +14,8 @@
 }
 
 /* Hide the browser's default radio button */
-#div-corrected .container input[type=radio] {
+#div-corrected .container input[type=radio], 
+.graph_radio .container input[type=radio]{
   position: absolute;
   opacity: 0;
 }
@@ -25,17 +27,19 @@
   left: 0;
   height: 18px;
   width: 18px;
-  background-color: #eee;
+  background-color: #ced4da;
   border-radius: 50%;
 }
 
 /* On mouse-over, add a grey background color */
-#div-corrected .container:hover input ~ .checkmark {
-  background-color: #ccc;
+#div-corrected .container:hover input ~ .checkmark,
+.graph_radio .container:hover input ~ .checkmark{
+  background-color: #dee2e6;
 }
 
 /* When the radio button is checked, add a blue background */
-#div-corrected .container input:checked ~ .checkmark {
+#div-corrected .container input:checked ~ .checkmark,
+.graph_radio .container input:checked ~ .checkmark {
   background-color: #2196F3;
 }
 
@@ -47,12 +51,14 @@
 }
 
 /* Show the indicator (dot/circle) when checked */
-#div-corrected .container input:checked ~ .checkmark:after {
+#div-corrected .container input:checked ~ .checkmark:after,
+.graph_radio .container input:checked ~ .checkmark:after {
   display: block;
 }
 
 /* Style the indicator (dot/circle) */
-#div-corrected .container .checkmark:after {
+#div-corrected .container .checkmark:after,
+.graph_radio .container .checkmark:after {
   top: 5px;
   left: 5px;
   width: 8px;

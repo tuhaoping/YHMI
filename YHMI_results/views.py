@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.template.loader import render_to_string
 from django.http import JsonResponse, HttpResponseBadRequest, HttpResponse
 from YHMI_results.models import YhmiEnrichment, FilterResult, YhmiEnrichmentTf, YhmiEnrichmentTempTable
 from django.views.decorators.csrf import csrf_exempt
@@ -37,27 +38,43 @@ def showEnrich(request):
 						'feature':i['feature'],
 						'enrich_type':t,
 						'intersectOfgene':(T, S, G),
-						'paper':i['paper'].replace('_', " ")
+						'paper':i['paper'].replace('_', " "),
+						'fold':T/S/G*6572,
 						})
 				except:
 					enrich_value_others[i['histoneType'].replace(" ",'_')].append({
 						'feature':i['feature'],
 						'enrich_type':t,
 						'intersectOfgene':(T, S, G),
-						'paper':i['paper'].replace('_', " ")
+						'paper':i['paper'].replace('_', " "),
+						'fold':T/S/G*6572,
 						})
-
 
 		for i in data_tf:
 			g = set(i.pro.split(','))
 			T = len(g & geneset)
 			G = len(g)
-			enrich_value_tf.append({'feature':i.feature, 'enrich_type':4, 'intersectOfgene':(T, S, G), 'paper':"Venters 2011"})
+			enrich_value_tf.append({
+				'feature':i.feature, 
+				'enrich_type':4, 
+				'intersectOfgene':(T, S, G), 
+				'paper':"Venters 2011", 
+				'fold':T/S/G*6572
+				})
 		
 		enrich_value = Hypergeometric_pvalue(enrich_value, enrich_value_tf)
 		enrich_value_others = Hypergeometric_pvalue(enrich_value_others)
 		enrich_value = Correction(enrich_value, request.POST['corrected'], float(request.POST['cutoff']))
 		enrich_value_others = Correction(enrich_value_others, request.POST['corrected'], float(request.POST['cutoff']))
+
+		data_fold = {}
+		for ftype, data in enrich_value.items():
+			data_fold[ftype] = list(
+				map(lambda x:[x['feature'], x['fold'], x['pvalue'][0], x['enrich_type']], data))
+
+		for ftype, data in enrich_value_others.items():
+			data_fold[ftype] = list(
+				map(lambda x:[x['feature'], x['fold'], x['pvalue'][0], x['enrich_type']], data))
 
 	else:
 		enrich_value_others = []
@@ -70,7 +87,9 @@ def showEnrich(request):
 		'corrected': request.POST['corrected'],
 		'cutoff': request.POST['cutoff'],
 	}
-	return render(request, 'enrich_template.html', render_dict)
+
+	template = render_to_string('enrich_template.html', render_dict)
+	return JsonResponse({"template":template, 'data':data_fold})
 
 
 def customSetting(request, method):

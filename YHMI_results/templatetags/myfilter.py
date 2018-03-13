@@ -19,5 +19,9 @@ def format_pvalue(pvalue):
 	return "{:1.3E}".format(pvalue)
 
 @register.filter
+def format_percent(num):
+	return "{:0<.3f}".format(num)
+
+@register.filter
 def remove_underline(s):
 	return s.replace("_", " ")

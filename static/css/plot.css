@@ -1,0 +1,11 @@
+#result .fig {
+	width: 100%;
+}
+
+/*@media (min-width: 1200px){
+	#result .fig {
+		width: 45%;
+		display: inline-block;
+	}
+}*/
+
