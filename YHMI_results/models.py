@@ -112,7 +112,6 @@ class FilterResult(object):
 
 
 class YhmiEnrichmentTempTable():
-	"""docstring for YhmiEnrichmentTempTable"""
 	__db = ["localhost", 'haoping', 'a012345', 'YHMI_database']
 	__tableID = ''
 	__main_table = 'yhmi_enrichment'
