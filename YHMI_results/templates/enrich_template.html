@@ -22,9 +22,10 @@
   </ul>
 
   <div class="tab-content">
-    {% for ftype,fdata in enrich_value.items %}
+    {% for ftype,data in enrich_value.items %}
     <div id="{{ftype}}_tab" class="tab-pane fade" data-graph="{{ftype}}">
       {% if ftype != 'H2A_Variant_and_H2B_Ubiquitination' %}
+      
       <div class="card mb-3">
         <div class="card-header">
           <i class="fa fa-fw fa-bar-chart"></i> Graphic View &nbsp;&nbsp;&nbsp;&nbsp;
@@ -47,8 +48,13 @@
       <div class="card mb-3">
         <div class="card-header">
           <i class="fa fa-fw fa-table"></i> Table View</div>
+
         <div class="card-body">
-          <table class='table p-1' id="{{ftype}}_enrich_table">
+          {% for regionType, fdata in data.items %}
+          {% if ftype != 'TF' %}
+          <div class="subtitle my-2 py-2" style="font-size:20px;">{{regionType|remove_underline}}</div>
+          {% endif %}
+          <table class='table p-1' id="{{ftype}}_{{regionType}}_enrich_table">
             <thead>
               <th class="text-left" style="width:30%;">Name</th>
               <th class="text-left" style="width:10%;">Paper</th>
@@ -70,8 +76,7 @@
                 <td class="text-left">{{ value.feature }} {{ value.enrich_type|now_type}}</td>
                 <td class="text-left">{{ value.paper }}</td>
                 <td class="text-right">{{ value.fold|format_percent }}</td>
-                <td class="text-right">{{ value.intersectOfgene.0 }}/{{ value.intersectOfgene.1 }}({{ value.intersectOfgene.0|calc_percent:value.intersectOfgene.1
-                  }})</td>
+                <td class="text-right">{{ value.intersectOfgene.0 }}/{{ value.intersectOfgene.1 }}({{ value.intersectOfgene.0|calc_percent:value.intersectOfgene.1}})</td>
                 <td class="text-right">{{ value.intersectOfgene.2 }}/{{ 6572 }}({{ value.intersectOfgene.2|calc_percent:6572 }})</td>
                 <td class="text-right">{{ value.pvalue.0|format_pvalue }}</td>
                 {% if ftype != 'TF' %}
@@ -81,9 +86,11 @@
               {% endfor %}
             </tbody>
           </table>
+          {% endfor %}
         </div>
       </div>
-      {% else%} {% for fftype,ffdata in enrich_value_others.items %}
+      {% else%} 
+      {% for fftype,data in enrich_value_others.items %}
       <div class="subtitle mt-2" style="font-size:18px;">{{fftype}}</div>
       <div class="card mb-3">
         <div class="card-header">
@@ -108,7 +115,8 @@
         <div class="card-header">
           <i class="fa fa-fw fa-table"></i> Table View</div>
         <div class="card-body">
-
+          {% for regionType, ffdata in data.items %}
+          <div class="subtitle my-2 py-2" style="font-size:20px;">{{regionType|remove_underline}}</div>
           <table class="table p-1" id="{{fftype}}_enrich_table">
             <thead>
               <th class="text-left" style="width:30%;">Name</th>
@@ -127,8 +135,7 @@
                 <td class="text-left">{{ value.feature }} {{ value.enrich_type|now_type}}</td>
                 <td class="text-left">{{ value.paper }}</td>
                 <td class="text-right">{{ value.fold|format_percent }}</td>
-                <td class="text-right">{{ value.intersectOfgene.0 }}/{{ value.intersectOfgene.1 }}({{ value.intersectOfgene.0|calc_percent:value.intersectOfgene.1
-                  }})</td>
+                <td class="text-right">{{ value.intersectOfgene.0 }}/{{ value.intersectOfgene.1 }}({{ value.intersectOfgene.0|calc_percent:value.intersectOfgene.1}})</td>
                 <td class="text-right">{{ value.intersectOfgene.2 }}/{{ 6572 }}({{ value.intersectOfgene.2|calc_percent:6572 }})</td>
                 <td class="text-right">{{ value.pvalue.0|format_pvalue }}</td>
                 <td class="text-right">{{ value.pvalue.1|pvalue_type }}</td>
@@ -136,6 +143,7 @@
               {% endfor %}
             </tbody>
           </table>
+          {% endfor %}
         </div>
       </div>
       {% endfor %} {% endif %}

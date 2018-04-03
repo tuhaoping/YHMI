@@ -73,15 +73,19 @@ $(document).ready(function(){
 			    	scrollTop: ($('#result').offset().top)-80
 			    }, 1000, 'easeInOutExpo');
 
-				$("#Acetylation_enrich_table, \
-				   #Methylation_enrich_table, \
-				   #H2A_Variant_enrich_table, \
-				   #H2BK123_Ubiquitination_enrich_table").DataTable({
+				$("#Acetylation_Promoter_enrich_table, \
+				   #Acetylation_Coding_Region_enrich_table, \
+				   #Methylation_Promoter_enrich_table, \
+				   #Methylation_Coding_Region_enrich_table, \
+				   #H2A_Variant_Promoter_enrich_table, \
+				   #H2A_Variant_Coding_Region_enrich_table, \
+				   #H2BK123_Ubiquitination_enrich_table, \
+				   #TF_Promoter_enrich_table").DataTable({
 		    			'order': [[5, "asc"], [0, 'asc']],
 		    		});
-				$("#TF_enrich_table").DataTable({
-		    			'order': [[5, "asc"], [0, 'asc']],
-		    		});
+				// $("#TF_enrich_table").DataTable({
+		  //   			'order': [[5, "asc"], [0, 'asc']],
+		  //   		});
 
 				$("#input_gene_table").DataTable();
 

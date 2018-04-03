@@ -15,7 +15,7 @@ def showEnrich(request):
 		geneset = set(FilterResult.filterGene(yhmi_filter, request.POST['composition']))
 	else:
 		geneset = set(filter(None, json.loads(request.POST['InputGene'])))
-	
+
 
 	if geneset:
 		enrich_db = YhmiEnrichmentTempTable(request.POST['tableID'])
@@ -29,7 +29,7 @@ def showEnrich(request):
 
 		for i in data:
 			gene = [set(i['pro_en'].split(',')), set(i['pro_de'].split(',')), set(i['cds_en'].split(',')), set(i['cds_de'].split(','))]
-			
+
 			for g,t in zip(gene, [0, 1, 2, 3]):
 				T = len(g & geneset)
 				G = len(g)
@@ -55,31 +55,42 @@ def showEnrich(request):
 			T = len(g & geneset)
 			G = len(g)
 			enrich_value_tf.append({
-				'feature':i.feature, 
-				'enrich_type':4, 
-				'intersectOfgene':(T, S, G), 
-				'paper':"Venters 2011", 
+				'feature':i.feature,
+				'enrich_type':4,
+				'intersectOfgene':(T, S, G),
+				'paper':"Venters 2011",
 				'fold':T/S/G*6572
 				})
-		
+
 		enrich_value = Hypergeometric_pvalue(enrich_value, enrich_value_tf)
 		enrich_value_others = Hypergeometric_pvalue(enrich_value_others)
-		enrich_value = Correction(enrich_value, request.POST['corrected'], float(request.POST['cutoff']))
-		enrich_value_others = Correction(enrich_value_others, request.POST['corrected'], float(request.POST['cutoff']))
+		temp_enrich_value = Correction(enrich_value, request.POST['corrected'], float(request.POST['cutoff']))
+		temp_enrich_value_others = Correction(enrich_value_others, request.POST['corrected'], float(request.POST['cutoff']))
+
 
 		data_fold = {}
-		for ftype, data in enrich_value.items():
+		for ftype, data in temp_enrich_value.items():
+			if ftype != 'TF':
+				enrich_value[ftype] = {}
+				enrich_value[ftype]['Promoter'] = list(filter(lambda x: x if x['enrich_type'] <= 1 else None, data))
+				enrich_value[ftype]['Coding_Region'] = list(filter(lambda x: x if x['enrich_type'] >= 2 else None, data))
+			else:
+				enrich_value[ftype] = {}
+				enrich_value[ftype]['Promoter'] = data
 			data_fold[ftype] = list(
 				map(lambda x:[x['feature'], x['fold'], x['pvalue'][0], x['enrich_type']], data))
 
-		for ftype, data in enrich_value_others.items():
+		for ftype, data in temp_enrich_value_others.items():
+			enrich_value_others[ftype] = {}
+			enrich_value_others[ftype]['Promoter'] = list(filter(lambda x: x if x['enrich_type'] <= 1 else None, data))
+			enrich_value_others[ftype]['Coding_Region'] = list(filter(lambda x: x if x['enrich_type'] >= 2 else None, data))
+		
 			data_fold[ftype] = list(
 				map(lambda x:[x['feature'], x['fold'], x['pvalue'][0], x['enrich_type']], data))
 
 	else:
 		enrich_value_others = []
 		enrich_value = []
-		
 	render_dict = {
 		'inputGene':sorted(list(geneset)),
 		'enrich_value': enrich_value,
@@ -106,7 +117,7 @@ def customSetting(request, method):
 
 	elif method == 'drop':
 		enrich_db.dropTable()
-		
+
 	elif method == 'default':
 		enrich_db.defaultTable()
 
@@ -123,14 +134,14 @@ def Hypergeometric_pvalue(temp_enrich, enrich_value_tf=None):
 	temp = {}
 	for t,temp_enrich_over in temp_enrich.items():
 		temp_enrich_under = copy.deepcopy(temp_enrich_over)
-		
+
 		for i,data in enumerate(temp_enrich_over):
 			T, S, G = data['intersectOfgene']
 			F = 6572
 			S_T = S-T
 			G_T = G-T
 			F_G_S_T = F-G-S+T
-		
+
 			if F_G_S_T <= 0:
 				temp_enrich_over[i]['pvalue'] = (math.inf,)
 				temp_enrich_under[i]['pvalue'] = (math.inf,)
@@ -146,7 +157,7 @@ def Hypergeometric_pvalue(temp_enrich, enrich_value_tf=None):
 			S_T = S-T
 			G_T = G-T
 			F_G_S_T = F-G-S+T
-			
+
 			if F_G_S_T <= 0:
 				enrich_value_tf[i]['pvalue'] = (math.inf,)
 			else:
