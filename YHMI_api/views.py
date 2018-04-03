@@ -104,8 +104,15 @@ def enrichJSON(request):
 		enrich_db.dropTable()
 	else:
 		print("empty gene input")
-		enrich_value = []
+		enrich_value = {
+			'Acetylation': {'promoter':[], 'Code_Region':[]}, 
+			'Methylation': {'promoter':[], 'Code_Region':[]},
+			'H2A_Variant': {'promoter':[], 'Code_Region':[]}, 
+			'H2BK123_Ubiquitination': {'promoter':[], 'Code_Region':[]},
+			'TF': {'promoter': []},
+			}
 
+	print(enrich_value)
 	return JsonResponse(enrich_value)
 
 
