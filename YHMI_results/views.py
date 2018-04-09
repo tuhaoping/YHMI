@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.http import JsonResponse, HttpResponseBadRequest, HttpResponse
-from YHMI_results.models import YhmiEnrichment, FilterResult, YhmiEnrichmentTf, YhmiEnrichmentTempTable
+from YHMI_results.models import YhmiEnrichment, FilterResult, YhmiEnrichmentTf, YhmiEnrichmentTempTable, InputCheak
 from django.views.decorators.csrf import csrf_exempt
 
 import copy
@@ -10,11 +10,13 @@ import math
 import scipy.stats
 
 def showEnrich(request):
+	input_gene = InputCheak(json.loads(request.POST['InputGene']))
+
 	if 'composition' in request.POST:
 		yhmi_filter = list(filter(None, json.loads(request.POST['InputGene'])))
 		geneset = set(FilterResult.filterGene(yhmi_filter, request.POST['composition']))
 	else:
-		geneset = set(filter(None, json.loads(request.POST['InputGene'])))
+		geneset = set(filter(None, input_gene.qualified_gene))
 
 
 	if geneset:

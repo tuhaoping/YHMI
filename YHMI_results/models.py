@@ -110,6 +110,16 @@ class FilterResult(object):
 
 		return self.result_gene
 
+class InputCheak():
+	"""docstring for InputCheak"""
+	def __init__(self, inputGene):
+		
+		db = MySQLdb.connect('localhost', 'haoping', 'a012345', 'YHMI_database')
+		cursor = db.cursor()
+		query = "SELECT DISTINCT `ORF` FROM `const_comparison_orf` WHERE `InputGene` IN('{}')".format("','".join(inputGene))
+
+		cursor.execute(query)
+		self.qualified_gene = [g[0] for g in cursor.fetchall()]
 
 class YhmiEnrichmentTempTable():
 	__db = ["localhost", 'haoping', 'a012345', 'YHMI_database']
