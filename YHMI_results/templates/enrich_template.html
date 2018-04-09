@@ -1,5 +1,5 @@
 {% load myfilter %} {# {% include "inputGene.html" %} #}
-
+{% load static %}
 <div class="mb-0 mt-4">
   <span class="block-title">
     <i class="fa fa-file"></i> Results </span>&#40;Corrected Method: {% if corrected == '1' %} Bonferroni-corrected, cutoff=10
@@ -75,9 +75,14 @@
               <tr>
                 <td class="text-left">{{ value.feature }} {{ value.enrich_type|now_type}}</td>
                 <td class="text-left">{{ value.paper }}</td>
-                <td class="text-right">{{ value.fold|format_percent }}</td>
-                <td class="text-right">{{ value.intersectOfgene.0 }}/{{ value.intersectOfgene.1 }}({{ value.intersectOfgene.0|calc_percent:value.intersectOfgene.1}})</td>
-                <td class="text-right">{{ value.intersectOfgene.2 }}/{{ 6572 }}({{ value.intersectOfgene.2|calc_percent:6572 }})</td>
+                <td class="text-right">{{ value.fold|format_enrichment }}</td>
+                <td class="text-right">
+                  <span style="display:none;">{{ value.intersectOfgene.0|format_calc_percent:value.intersectOfgene.1}}</span>
+                  <a href="#{{ value.enrichID }}_{{ value.enrich_type }}" class="intersect" data-toggle="modal" data-target="#genemodal">
+                    {{ value.intersectOfgene.0 }}</a>/{{ value.intersectOfgene.1 }} ({{ value.intersectOfgene.0|calc_percent:value.intersectOfgene.1}})</td>
+                <td class="text-right">
+                    <span style="display:none;">{{ value.intersectOfgene.2|format_calc_percent:6572}}</span>
+                    {{ value.intersectOfgene.2 }}/{{ 6572 }} ({{ value.intersectOfgene.2|calc_percent:6572 }})</td>
                 <td class="text-right">{{ value.pvalue.0|format_pvalue }}</td>
                 {% if ftype != 'TF' %}
                 <td class="text-right">{{ value.pvalue.1|pvalue_type }}</td>
@@ -89,7 +94,7 @@
           {% endfor %}
         </div>
       </div>
-      {% else%} 
+      {% else %} 
       {% for fftype,data in enrich_value_others.items %}
       <div class="subtitle mt-2" style="font-size:18px;">{{fftype}}</div>
       <div class="card mb-3">
@@ -134,9 +139,14 @@
               <tr>
                 <td class="text-left">{{ value.feature }} {{ value.enrich_type|now_type}}</td>
                 <td class="text-left">{{ value.paper }}</td>
-                <td class="text-right">{{ value.fold|format_percent }}</td>
-                <td class="text-right">{{ value.intersectOfgene.0 }}/{{ value.intersectOfgene.1 }}({{ value.intersectOfgene.0|calc_percent:value.intersectOfgene.1}})</td>
-                <td class="text-right">{{ value.intersectOfgene.2 }}/{{ 6572 }}({{ value.intersectOfgene.2|calc_percent:6572 }})</td>
+                <td class="text-right">{{ value.fold|format_enrichment }}</td>
+                <td class="text-right">
+                  <span style="display:none;">{{ value.intersectOfgene.0|format_calc_percent:value.intersectOfgene.1}}</span>
+                  <a class="intersect" href="#{{ value.enrichID }}_{{ value.enrich_type }}" data-toggle="modal" data-target="#genemodal">
+                    {{ value.intersectOfgene.0 }}</a>/{{ value.intersectOfgene.1 }} ({{ value.intersectOfgene.0|calc_percent:value.intersectOfgene.1}})</td>
+                <td class="text-right">
+                    <span style="display:none;">{{ value.intersectOfgene.2|format_calc_percent:6572}}</span>
+                    {{ value.intersectOfgene.2 }}/{{ 6572 }} ({{ value.intersectOfgene.2|calc_percent:6572 }})</td>
                 <td class="text-right">{{ value.pvalue.0|format_pvalue }}</td>
                 <td class="text-right">{{ value.pvalue.1|pvalue_type }}</td>
               </tr>
@@ -151,6 +161,50 @@
     {% endfor %}
   </div>
 </div>
+
+<!-- Mod class="intersect"al -->
+<div class="modal fade" id="genemodal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modelTitleId">Modal title</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" style="min-height:609px;">
+        <div class="container-fluid text-center align-middle">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <script src="/static/jquery/jquery.easing.min.js"></script> -->
+
+<style>
+  .intersect_gene {
+    width:20%!important;
+  }
+  .intersect_input, .intersect_histone {
+    width:40%!important;
+  }
+
+</style>
+
+{% comment %} <script>
+  $('#genemodal').on('show.bs.modal', event => {
+    var button = $(event.relatedTarget);
+    var modal = $(this);
+    // Use above variables to manipulate the DOM
+    
+  }); {% endcomment %}
+
+
+</script>
 
 <script>
   $(document).ready(function () {

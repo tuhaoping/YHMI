@@ -1,16 +1,16 @@
 function csrfSafeMethod(method) {
-    // these HTTP methods do not require CSRF protection
-    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+	// these HTTP methods do not require CSRF protection
+	return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 }
 
 $.ajaxSetup({
 	// crossDomain: false,
 	timeout:20000,
 	beforeSend: function(xhr, settings) {
-        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-            xhr.setRequestHeader("X-CSRFToken", csrftoken);
-        }
-    }
+		if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+			xhr.setRequestHeader("X-CSRFToken", csrftoken);
+		}
+	}
 
 });
 
@@ -70,8 +70,8 @@ $(document).ready(function(){
 				$("#Acetylation_tab").addClass("active show");
 
 				$('html, body').stop().animate({
-			    	scrollTop: ($('#result').offset().top)-80
-			    }, 1000, 'easeInOutExpo');
+					scrollTop: ($('#result').offset().top)-80
+				}, 1000, 'easeInOutExpo');
 
 				$("#Acetylation_Promoter_enrich_table, \
 				   #Acetylation_Coding_Region_enrich_table, \
@@ -81,8 +81,45 @@ $(document).ready(function(){
 				   #H2A_Variant_Coding_Region_enrich_table, \
 				   #H2BK123_Ubiquitination_enrich_table, \
 				   #TF_Promoter_enrich_table").DataTable({
-		    			'order': [[5, "asc"], [0, 'asc']],
-		    		});
+						'order': [[5, "asc"], [0, 'asc']],
+					});
+				
+				var intersect_data = {};
+				$("#Acetylation_Promoter_enrich_table, \
+				   #Acetylation_Coding_Region_enrich_table, \
+				   #Methylation_Promoter_enrich_table, \
+				   #Methylation_Coding_Region_enrich_table, \
+				   #H2A_Variant_Promoter_enrich_table, \
+				   #H2A_Variant_Coding_Region_enrich_table, \
+				   #H2BK123_Ubiquitination_enrich_table, \
+				   #TF_Promoter_enrich_table").on('click', 'a.intersect', function(){
+					$("#genemodal .modal-body .container-fluid").html("");
+						id = $(this).attr('href');
+						if(id in intersect_data){
+							$("#genemodal .modal-body .container-fluid").html(intersect_data[$(this).attr('href')]);
+								$("#intersect_datatable").DataTable({
+									'order': [[1, "asc"], [2, 'asc'], [0, 'asc']],
+								});
+						}
+						else {
+							$.ajax({
+								url: rootURL + '/intersect',
+								type: 'POST',
+								data: {
+									'tableID':tableID,
+									'histone':$(this).attr('href'),
+								},
+								success:function(res){
+									$("#genemodal .modal-body .container-fluid").html(res);
+									$("#intersect_datatable").DataTable({
+										'order': [[1, "asc"], [2, 'asc'], [0, 'asc']],
+									});
+									intersect_data[id] = res
+								}
+							});
+						};
+					});
+					
 				// $("#TF_enrich_table").DataTable({
 		  //   			'order': [[5, "asc"], [0, 'asc']],
 		  //   		});

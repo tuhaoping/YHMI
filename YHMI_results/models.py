@@ -110,16 +110,40 @@ class FilterResult(object):
 
 		return self.result_gene
 
-class InputCheak():
-	"""docstring for InputCheak"""
-	def __init__(self, inputGene):
-		
-		db = MySQLdb.connect('localhost', 'haoping', 'a012345', 'YHMI_database')
-		cursor = db.cursor()
-		query = "SELECT DISTINCT `ORF` FROM `const_comparison_orf` WHERE `InputGene` IN('{}')".format("','".join(inputGene))
+class YhmiInputTempTable():
+	__tableID = ''
+	__temp_input_table = 'yhmi_temporary_input'
+	__qualified_gene = ''
+	def __init__(self, tableID, inputGene=None):
 
-		cursor.execute(query)
-		self.qualified_gene = [g[0] for g in cursor.fetchall()]
+		self.__tableID = tableID
+		try:
+			con = MySQLdb.connect('localhost', 'haoping', 'a012345', 'YHMI_database')
+			cursor = con.cursor()
+
+			if inputGene:
+				query = "SELECT DISTINCT `ORF` FROM `const_comparison_orf` WHERE `InputGene` IN('{}')".format("','".join(inputGene))
+				cursor.execute(query)
+				self.__qualified_gene = [g[0] for g in cursor.fetchall()]
+				query = "DELETE FROM `{}` WHERE `tempID`='{}'".format(self.__temp_input_table, self.__tableID)
+				cursor.execute(query)
+				query = "INSERT INTO `{}` VALUES(NULL,'{}','{}',NULL)".format(self.__temp_input_table, self.__tableID, ",".join(self.__qualified_gene))
+				cursor.execute(query)
+				con.commit()
+			else:
+				query = "SELECT * FROM `{}` WHERE `tempID` = '{}'".format(self.__temp_input_table, self.__tableID)
+				cursor.execute(query)
+				res = cursor.fetchone()
+				self.__qualified_gene = res[2].split(",")
+		except MySQLdb.Error as e:
+			print(e)
+			con.rollback()
+		finally:
+			con.close()
+
+
+	def get_qualified(self):
+		return self.__qualified_gene
 
 class YhmiEnrichmentTempTable():
 	__db = ["localhost", 'haoping', 'a012345', 'YHMI_database']
@@ -247,15 +271,19 @@ class YhmiEnrichmentTempTable():
 		finally:
 			con.close()
 
-	def getData(self):
+	def getData(self, FeatureID=None):
 		try:
 			con = MySQLdb.connect(*self.__db)
 			cursor = con.cursor()
-			sqlCmd = '''SELECT `{temp}`.*,`const_comparison_feature`.`Paper`
-						FROM `{temp}`
-						LEFT JOIN `const_comparison_feature`
-						ON `const_comparison_feature`.`Feature`=`{temp}`.`Feature`'''.format(
-						temp=self.__temp_table + self.__tableID)
+			if FeatureID:
+				sqlCmd = "SELECT * FROM `{}` WHERE `ID`='{}'".format(
+							self.__temp_table + self.__tableID, FeatureID)
+			else:
+				sqlCmd = '''SELECT `{temp}`.*,`const_comparison_feature`.`Paper`
+							FROM `{temp}`
+							LEFT JOIN `const_comparison_feature`
+							ON `const_comparison_feature`.`Feature`=`{temp}`.`Feature`'''.format(
+							temp=self.__temp_table + self.__tableID)
 
 			cursor.execute(sqlCmd)
 			res = cursor.fetchall()
@@ -264,17 +292,20 @@ class YhmiEnrichmentTempTable():
 		finally:
 			con.close()
 
-		for r in res:
-			yield {'feature':r[0], 'pro_en':r[1], 'pro_de':r[2], 'cds_en':r[3], 'cds_de':r[4], 'histoneType':r[5],'paper':r[6]}
+		if FeatureID:
+			yield {'feature':res[0][1], 'pro_en':res[0][2], 'pro_de':res[0][3], 'cds_en':res[0][4], 'cds_de':res[0][5]}
+		else:
+			for r in res:
+				yield {'ID':r[0], 'feature':r[1], 'pro_en':r[2], 'pro_de':r[3], 'cds_en':r[4], 'cds_de':r[5], 'histoneType':r[6],'paper':r[7]}
 		
-
-
 class YhmiEnrichment(models.Model):
+	ID = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
 	feature = models.CharField(db_column='Feature', primary_key=True, max_length=50)  # Field name made lowercase.
 	pro_en = models.TextField(db_column='Pro_en', blank=True, null=True)  # Field name made lowercase.
 	pro_de = models.TextField(db_column='Pro_de', blank=True, null=True)  # Field name made lowercase.
 	cds_en = models.TextField(db_column='Cds_en', blank=True, null=True)  # Field name made lowercase.
 	cds_de = models.TextField(db_column='Cds_de', blank=True, null=True)  # Field name made lowercase.
+	histonetype = models.CharField(db_column='HistoneType', max_length=50)  # Field name made lowercase.
 
 	def __str__(self):
 		return self.feature

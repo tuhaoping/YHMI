@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.http import JsonResponse, HttpResponseBadRequest, HttpResponse
-from YHMI_results.models import YhmiEnrichment, FilterResult, YhmiEnrichmentTf, YhmiEnrichmentTempTable, InputCheak
+from YHMI_results.models import YhmiEnrichment, FilterResult, YhmiEnrichmentTf, YhmiEnrichmentTempTable, YhmiInputTempTable
 from django.views.decorators.csrf import csrf_exempt
 
 import copy
@@ -9,14 +9,46 @@ import json
 import math
 import scipy.stats
 
+def showIntersect(request):
+	input_gene = YhmiInputTempTable(request.POST['tableID'])
+	enrich_db = YhmiEnrichmentTempTable(request.POST['tableID'])
+	tlist = ['pro_en', 'pro_de', 'cds_en', 'cds_de']
+	featureID, histoneType = request.POST['histone'][1:].split("_")
+	# print(featureID, histoneType)
+	# print("="*100)
+	histone_data = list(enrich_db.getData(featureID))[0]
+	# print(histone_data)
+	histone_gene = set(histone_data[tlist[int(histoneType)]].split(','))
+	all_gene = {gene:{} for gene in sorted(list(set(input_gene.get_qualified())|histone_gene))}
+	# print(all_gene)
+	for gene in all_gene.keys():
+		# print(gene)
+		# if gene in input_gene:
+		all_gene[gene]['input'] = True if gene in input_gene.get_qualified() else False
+		# if gene in histone_gene:
+		all_gene[gene]['histone'] = True if gene in histone_gene else False
+
+	# print("="*100)
+	# print(histone_data['feature'])
+	# print("test")
+	# print(histone_data)
+	# print(input_gene.get_qualified())
+	render_dict = {
+		 'all_gene': all_gene,
+		 'input_length': len(input_gene.get_qualified()),
+		 'histone_length': len(histone_gene),
+		 'histone_name': histone_data['feature']
+	}
+	return render(request, 'intersect_template.html', render_dict)
+
 def showEnrich(request):
-	input_gene = InputCheak(json.loads(request.POST['InputGene']))
+	input_gene = YhmiInputTempTable(request.POST['tableID'], json.loads(request.POST['InputGene']))
 
 	if 'composition' in request.POST:
 		yhmi_filter = list(filter(None, json.loads(request.POST['InputGene'])))
 		geneset = set(FilterResult.filterGene(yhmi_filter, request.POST['composition']))
 	else:
-		geneset = set(filter(None, input_gene.qualified_gene))
+		geneset = set(filter(None, input_gene.get_qualified()))
 
 
 	if geneset:
@@ -35,8 +67,10 @@ def showEnrich(request):
 			for g,t in zip(gene, [0, 1, 2, 3]):
 				T = len(g & geneset)
 				G = len(g)
+				# print(i['ID'])。
 				try:
 					enrich_value[i['histoneType']].append({
+						'enrichID':i["ID"],
 						'feature':i['feature'],
 						'enrich_type':t,
 						'intersectOfgene':(T, S, G),
@@ -45,6 +79,7 @@ def showEnrich(request):
 						})
 				except:
 					enrich_value_others[i['histoneType'].replace(" ",'_')].append({
+						'enrichID':i["ID"],
 						'feature':i['feature'],
 						'enrich_type':t,
 						'intersectOfgene':(T, S, G),
