@@ -15,18 +15,18 @@ def showIntersect(request):
 	tlist = ['pro_en', 'pro_de', 'cds_en', 'cds_de']
 	featureID, histoneType = request.POST['histone'][1:].split("_")
 	histone_data = list(enrich_db.getData(featureID))[0]
-	histone_gene = set(histone_data[tlist[int(histoneType)]].split(','))
-	# all_gene = {gene:{} for gene in sorted(list(set(input_gene.get_qualified())|histone_gene))}
+	histone_gene = set(histone_data[tlist[int(histoneType)]].strip().split(","))
+
+	all_gene = {gene:{} for gene in sorted(input_gene.get_qualified())}
+	intersect_length = len(set(input_gene.get_qualified())&histone_gene)
+
 	for gene in input_gene.get_qualified():
-		# print(gene)
-		# if gene in input_gene:
-		all_gene[gene] = True if gene in input_gene.get_qualified() else False
-		# if gene in histone_gene:
+		all_gene[gene] = True if gene.strip() in histone_gene else False
 
 	render_dict = {
 		 'all_gene': all_gene,
 		 'input_length': len(input_gene.get_qualified()),
-		 'intersect_length': len(histone_gene),
+		 'intersect_length': intersect_length,
 		 'histone_name': histone_data['feature']
 	}
 	return render(request, 'intersect_template.html', render_dict)
@@ -93,7 +93,6 @@ def showEnrich(request):
 		enrich_value_others = Hypergeometric_pvalue(enrich_value_others)
 		temp_enrich_value = Correction(enrich_value, request.POST['corrected'], float(request.POST['cutoff']))
 		temp_enrich_value_others = Correction(enrich_value_others, request.POST['corrected'], float(request.POST['cutoff']))
-
 
 		data_fold = {}
 		for ftype, data in temp_enrich_value.items():

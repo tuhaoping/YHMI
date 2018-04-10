@@ -12,7 +12,7 @@
 			{% for g, intersectData in all_gene.items %}
 			<tr>
 				<td>{{ g }}</td>
-				{% if intersectData.input %}
+				{% if intersectData %}
 					<td class="text-center align-middle"><span style="display:none;">V</span><img class="border-0" width="20px" src="{% static '/image/check.png' %}" alt=""></td>
 				{% else %}
 					<td class="text-center align-middle"><span style="display:none;">X</span><img class="border-0" width="20px" src="{% static '/image/wrong.png' %}" alt=""></td>
