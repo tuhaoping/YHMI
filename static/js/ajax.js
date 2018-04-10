@@ -79,7 +79,8 @@ $(document).ready(function(){
 				   #Methylation_Coding_Region_enrich_table, \
 				   #H2A_Variant_Promoter_enrich_table, \
 				   #H2A_Variant_Coding_Region_enrich_table, \
-				   #H2BK123_Ubiquitination_enrich_table, \
+				   #H2BK123_Ubiquitination_Promoter_enrich_table, \
+				   #H2BK123_Ubiquitination_Coding_Region_enrich_table, \
 				   #TF_Promoter_enrich_table").DataTable({
 						'order': [[5, "asc"], [0, 'asc']],
 					});
@@ -91,14 +92,15 @@ $(document).ready(function(){
 				   #Methylation_Coding_Region_enrich_table, \
 				   #H2A_Variant_Promoter_enrich_table, \
 				   #H2A_Variant_Coding_Region_enrich_table, \
-				   #H2BK123_Ubiquitination_enrich_table, \
+				   #H2BK123_Ubiquitination_Promoter_enrich_table, \
+				   #H2BK123_Ubiquitination_Coding_Region_enrich_table, \
 				   #TF_Promoter_enrich_table").on('click', 'a.intersect', function(){
 					$("#genemodal .modal-body .container-fluid").html("");
 						id = $(this).attr('href');
 						if(id in intersect_data){
 							$("#genemodal .modal-body .container-fluid").html(intersect_data[$(this).attr('href')]);
 								$("#intersect_datatable").DataTable({
-									'order': [[1, "asc"], [2, 'asc'], [0, 'asc']],
+									'order': [[1, "asc"], [0, 'asc']],
 								});
 						}
 						else {
@@ -112,7 +114,7 @@ $(document).ready(function(){
 								success:function(res){
 									$("#genemodal .modal-body .container-fluid").html(res);
 									$("#intersect_datatable").DataTable({
-										'order': [[1, "asc"], [2, 'asc'], [0, 'asc']],
+										'order': [[1, "asc"], [0, 'asc']],
 									});
 									intersect_data[id] = res
 								}

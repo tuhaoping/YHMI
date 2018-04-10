@@ -1,11 +1,13 @@
 {% load myfilter %} {# {% include "inputGene.html" %} #}
 {% load static %}
+
 <div class="mb-0 mt-4">
   <span class="block-title">
     <i class="fa fa-file"></i> Results </span>&#40;Corrected Method: {% if corrected == '1' %} Bonferroni-corrected, cutoff=10
   <sup>-{{ cutoff }}</sup> &#41; {% else %} FDR (False Discovery Rate), &alpha;=10
   <sup>-{{ cutoff }}</sup> &#41;; {% endif %}
 </div>
+
 <hr class="mt-2">
 
 <div>
@@ -21,153 +23,185 @@
     {% endfor %}
   </ul>
 
-  <div class="tab-content">
+  <div class="tab-content" style="border: 0px 1px 1px 1px;">
     {% for ftype,data in enrich_value.items %}
-    <div id="{{ftype}}_tab" class="tab-pane fade" data-graph="{{ftype}}">
-      {% if ftype != 'H2A_Variant_and_H2B_Ubiquitination' %}
-      
-      <div class="card mb-3">
-        <div class="card-header">
-          <i class="fa fa-fw fa-bar-chart"></i> Graphic View &nbsp;&nbsp;&nbsp;&nbsp;
-          <div class="d-inline graph_radio">
-            <label class="container d-inline">Fold Enrichment
-              <input type="radio" name="graph_radio_{{ftype}}" checked data-ftype="{{ftype}}" data-graph="fold">
-              <span class="checkmark"></span>
-            </label>
-            <label class="container d-inline">P-value
-              <input type="radio" name="graph_radio_{{ftype}}" data-ftype="{{ftype}}" data-graph="pvalue">
-              <span class="checkmark"></span>
-            </label>
-          </div>
-        </div>
-        <div class="card-body">
-          <div id="{{ftype}}_fig" class="text-center my-1" style="height:450px;"></div>
-        </div>
-      </div>
-
-      <div class="card mb-3">
-        <div class="card-header">
-          <i class="fa fa-fw fa-table"></i> Table View</div>
-
-        <div class="card-body">
+      <div id="{{ftype}}_tab" class="tab-pane fade" data-graph="{{ftype}}">
+        {% if ftype != 'H2A_Variant_and_H2B_Ubiquitination' %}
           {% for regionType, fdata in data.items %}
-          {% if ftype != 'TF' %}
-          <div class="subtitle my-2 py-2" style="font-size:20px;">{{regionType|remove_underline}}</div>
-          {% endif %}
-          <table class='table p-1' id="{{ftype}}_{{regionType}}_enrich_table">
-            <thead>
-              <th class="text-left" style="width:30%;">Name</th>
-              <th class="text-left" style="width:10%;">Paper</th>
-              <th class="text-right" style="width:10%;">Fold enrichment</th>
-              <th class="text-right" style="width:15%;">Intersects /
-                <br># of input genes</th>
-              <th class="text-right" style="width:20%;">Histone Modification /
-                <br># of genes in the yeast genome</th>
-              {% if ftype == 'TF' %}
-              <th class="text-right" style="width:15%;">P-value</th>
-              {% else %}
-              <th class="text-right" style="width:9%;">P-value</th>
-              <th class="text-right" style="width:6%;">Side</th>
-              {% endif %}
-            </thead>
-            <tbody>
-              {% for value in fdata %}
-              <tr>
-                <td class="text-left">{{ value.feature }} {{ value.enrich_type|now_type}}</td>
-                <td class="text-left">{{ value.paper }}</td>
-                <td class="text-right">{{ value.fold|format_enrichment }}</td>
-                <td class="text-right">
-                  <span style="display:none;">{{ value.intersectOfgene.0|format_calc_percent:value.intersectOfgene.1}}</span>
-                  <a href="#{{ value.enrichID }}_{{ value.enrich_type }}" class="intersect" data-toggle="modal" data-target="#genemodal">
-                    {{ value.intersectOfgene.0 }}</a>/{{ value.intersectOfgene.1 }} ({{ value.intersectOfgene.0|calc_percent:value.intersectOfgene.1}})</td>
-                <td class="text-right">
-                    <span style="display:none;">{{ value.intersectOfgene.2|format_calc_percent:6572}}</span>
-                    {{ value.intersectOfgene.2 }}/{{ 6572 }} ({{ value.intersectOfgene.2|calc_percent:6572 }})</td>
-                <td class="text-right">{{ value.pvalue.0|format_pvalue }}</td>
-                {% if ftype != 'TF' %}
-                <td class="text-right">{{ value.pvalue.1|pvalue_type }}</td>
-                {% endif %}
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-          {% endfor %}
-        </div>
-      </div>
-      {% else %} 
-      {% for fftype,data in enrich_value_others.items %}
-      <div class="subtitle mt-2" style="font-size:18px;">{{fftype}}</div>
-      <div class="card mb-3">
-        <div class="card-header">
-          <i class="fa fa-fw fa-bar-chart"></i> Graphic View &nbsp;&nbsp;&nbsp;&nbsp;
-          <div class="d-inline graph_radio">
-            <label class="container d-inline">Fold Enrichment
-              <input type="radio" name="graph_radio_{{fftype}}" checked data-ftype="{{fftype}}" data-graph="fold">
-              <span class="checkmark"></span>
-            </label>
-            <label class="container d-inline">P-value
-              <input type="radio" name="graph_radio_{{fftype}}" data-ftype="{{fftype}}" data-graph="pvalue">
-              <span class="checkmark"></span>
-            </label>
-          </div>
-        </div>
-        <div class="card-body">
-          <div id="{{fftype}}_fig" class="text-center my-1" style="height:450px;"></div>
-        </div>
-      </div>
+            {% if ftype != 'TF' %}
+              <div class="subtitle my-2 py-2" style="font-size:20px;">{{regionType|remove_underline}}</div>
+            {% endif %}
 
-      <div class="card mb-3">
-        <div class="card-header">
-          <i class="fa fa-fw fa-table"></i> Table View</div>
-        <div class="card-body">
-          {% for regionType, ffdata in data.items %}
-          <div class="subtitle my-2 py-2" style="font-size:20px;">{{regionType|remove_underline}}</div>
-          <table class="table p-1" id="{{fftype}}_enrich_table">
-            <thead>
-              <th class="text-left" style="width:30%;">Name</th>
-              <th class="text-left" style="width:10%;">Paper</Pth>
-                <th class="text-right" style="width:10%;">Fold enrichment</th>
-                <th class="text-right" style="width:20%;">Intersects /
-                  <br># of input genes</th>
-                <th class="text-right" style="width:25%;">Histone Modification /
-                  <br># of genes in the yeast genome</th>
-                <th class="text-right" style="width:9%;">P-value</th>
-                <th class="text-right" style="width:6%;">Side</th>
-            </thead>
-            <tbody>
-              {% for value in ffdata %}
-              <tr>
-                <td class="text-left">{{ value.feature }} {{ value.enrich_type|now_type}}</td>
-                <td class="text-left">{{ value.paper }}</td>
-                <td class="text-right">{{ value.fold|format_enrichment }}</td>
-                <td class="text-right">
-                  <span style="display:none;">{{ value.intersectOfgene.0|format_calc_percent:value.intersectOfgene.1}}</span>
-                  <a class="intersect" href="#{{ value.enrichID }}_{{ value.enrich_type }}" data-toggle="modal" data-target="#genemodal">
-                    {{ value.intersectOfgene.0 }}</a>/{{ value.intersectOfgene.1 }} ({{ value.intersectOfgene.0|calc_percent:value.intersectOfgene.1}})</td>
-                <td class="text-right">
-                    <span style="display:none;">{{ value.intersectOfgene.2|format_calc_percent:6572}}</span>
-                    {{ value.intersectOfgene.2 }}/{{ 6572 }} ({{ value.intersectOfgene.2|calc_percent:6572 }})</td>
-                <td class="text-right">{{ value.pvalue.0|format_pvalue }}</td>
-                <td class="text-right">{{ value.pvalue.1|pvalue_type }}</td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
+            <div class="card mb-3">
+              <div class="card-header">
+                <i class="fa fa-fw fa-bar-chart"></i> Graphic View &nbsp;&nbsp;&nbsp;&nbsp;
+                <!--
+                <div class="d-inline graph_radio">
+                  <label class="container d-inline">Fold Enrichment
+                    <input type="radio" name="graph_radio_{{ftype}}_{{regionType}}" checked data-ftype="{{ftype}}" data-graph="fold">
+                    <span class="checkmark"></span>
+                  </label>
+                  <label class="container d-inline">P-value
+                    <input type="radio" name="graph_radio_{{ftype}}_{{regionType}}" data-ftype="{{ftype}}" data-graph="pvalue">
+                    <span class="checkmark"></span>
+                  </label>
+                </div>
+                -->
+              </div>
+              <div class="card-body">
+                <div>
+                  <div id="{{ftype}}_{{regionType}}_fold_fig" class="text-center my-1 d-inline-block" style="height:450px; width:49%;"></div>
+                  <div id="{{ftype}}_{{regionType}}_pvalue_fig" class="text-center my-1 d-inline-block" style="height:450px; width:49%;"></div>
+                </div>
+              </div>
+            </div>
+            <div class="card mb-3">
+              <div class="card-header">
+                <i class="fa fa-fw fa-table"></i> Table View
+              </div>
+              <div class="card-body">
+                <table class='table p-1' id="{{ftype}}_{{regionType}}_enrich_table">
+                  <thead>
+                    <th class="text-left" style="width:30%;">Name</th>
+                    <th class="text-left" style="width:10%;">Paper</th>
+                    <th class="text-right" style="width:10%;">Fold enrichment</th>
+                    <th class="text-right" style="width:15%;">Intersects /
+                      <br># of input genes</th>
+                    <th class="text-right" style="width:20%;">Histone Modification /
+                      <br># of genes in the yeast genome</th>
+                    {% if ftype == 'TF' %}
+                    <th class="text-right" style="width:15%;">P-value</th>
+                    {% else %}
+                    <th class="text-right" style="width:9%;">P-value</th>
+                    <th class="text-right" style="width:6%;">Side</th>
+                    {% endif %}
+                  </thead>
+                  <tbody>
+                    {% for value in fdata %}
+                    <tr>
+                      <td class="text-left">{{ value.feature }} {{ value.enrich_type|now_type}}</td>
+                      <td class="text-left">{{ value.paper }}</td>
+                      <td class="text-right">{{ value.fold|format_enrichment }}</td>
+                      <td class="text-right">
+                        <span style="display:none;">
+                          {{ value.intersectOfgene.0|format_calc_percent:value.intersectOfgene.1}}
+                        </span>
+                        <a class="intersect"  href="#{{ value.enrichID }}_{{ value.enrich_type }}" class="intersect" data-toggle="modal" data-target="#genemodal">
+                          {{ value.intersectOfgene.0 }}
+                        </a>/{{ value.intersectOfgene.1 }} ({{ value.intersectOfgene.0|calc_percent:value.intersectOfgene.1}})
+                      </td>
+                      <td class="text-right">
+                        <span style="display:none;">{{ value.intersectOfgene.2|format_calc_percent:6572}}</span>
+                        {{ value.intersectOfgene.2 }}/{{ 6572 }} ({{ value.intersectOfgene.2|calc_percent:6572 }})
+                      </td>
+                      <td class="text-right">{{ value.pvalue.0|format_pvalue }}</td>
+                      {% if ftype != 'TF' %}
+                      <td class="text-right">{{ value.pvalue.1|pvalue_type }}</td>
+                      {% endif %}
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
           {% endfor %}
-        </div>
+        {% else %}
+          <!-- H2A_Variant_and_H2B_Ubiquitination -->
+          {% for fftype,data in enrich_value_others.items %} 
+            <div class="subtitle mt-2" style="font-size:18px;">{{fftype}}</div> <!-- Histone Modifications 種類 title-->
+            <!-- Promoter/CDS-->
+            {% for regionType, ffdata in data.items %}
+              <div class="subtitle my-2 py-2" style="font-size:20px;">{{regionType|remove_underline}}</div>
+
+              <!-- Graphic View -->
+              <div class="card mb-3">
+                <div class="card-header">
+                  <i class="fa fa-fw fa-bar-chart"></i> Graphic View &nbsp;&nbsp;&nbsp;&nbsp;
+                  <!--
+                  <div class="d-inline graph_radio">
+                    <label class="container d-inline">Fold Enrichment
+                      <input type="radio" name="graph_radio_{{fftype}}" checked data-ftype="{{fftype}}" data-graph="fold">
+                      <span class="checkmark"></span>
+                    </label>
+                    <label class="container d-inline">P-value
+                      <input type="radio" name="graph_radio_{{fftype}}" data-ftype="{{fftype}}" data-graph="pvalue">
+                      <span class="checkmark"></span>
+                    </label>
+                  </div>
+                  -->
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                    <div id="{{fftype}}_{{regionType}}_fold_fig" class="col-6 text-center my-1" style="height:450px;"></div>
+                    <div id="{{fftype}}_{{regionType}}_pvalue_fig" class="col-6 text-center my-1" style="height:450px;"></div>
+                  </div>
+                </div>
+              </div>
+              <!-- ./ Graphic View -->
+
+              <!-- Table View -->
+              <div class="card mb-3">
+                <div class="card-header"><i class="fa fa-fw fa-table"></i> Table View</div>
+                <div class="card-body">
+                  <table class="table p-1" id="{{fftype}}_{{regionType}}_enrich_table">
+                    <thead>
+                      <th class="text-left" style="width:30%;">Name</th>
+                      <th class="text-left" style="width:10%;">Paper</th>
+                      <th class="text-right" style="width:10%;">Fold enrichment</th>
+                      <th class="text-right" style="width:20%;">Intersects /
+                        <br># of input genes</th>
+                      <th class="text-right" style="width:25%;">Histone Modification /
+                        <br># of genes in the yeast genome</th>
+                      <th class="text-right" style="width:9%;">P-value</th>
+                      <th class="text-right" style="width:6%;">Side</th>
+                    </thead>
+                    <tbody>
+                      {% for value in ffdata %}
+                      <tr>
+                        <td class="text-left">{{ value.feature }} {{ value.enrich_type|now_type}}</td>
+                        <td class="text-left">{{ value.paper }}</td>
+                        <td class="text-right">{{ value.fold|format_enrichment }}</td>
+                        <td class="text-right">
+                          <span style="display:none;">
+                            {{ value.intersectOfgene.0|format_calc_percent:value.intersectOfgene.1}}
+                          </span>
+                          <a class="intersect" href="#{{ value.enrichID }}_{{ value.enrich_type }}" data-toggle="modal" data-target="#genemodal">
+                            {{ value.intersectOfgene.0 }}
+                          </a>/{{ value.intersectOfgene.1 }} ({{ value.intersectOfgene.0|calc_percent:value.intersectOfgene.1}})
+                        </td>
+                        <td class="text-right">
+                          <span style="display:none;">{{ value.intersectOfgene.2|format_calc_percent:6572}}</span>
+                          {{ value.intersectOfgene.2 }}/{{ 6572 }} ({{ value.intersectOfgene.2|calc_percent:6572 }})
+                        </td>
+                        <td class="text-right">{{ value.pvalue.0|format_pvalue }}</td>
+                        <td class="text-right">{{ value.pvalue.1|pvalue_type }}</td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <!-- ./ Table View -->
+
+            {% endfor %}
+            <!-- ./ Promoter/CDS-->
+
+          {% endfor %}
+          <!-- ./ H2A_Variant_and_H2B_Ubiquitination -->
+
+        {% endif %}
       </div>
-      {% endfor %} {% endif %}
-    </div>
     {% endfor %}
   </div>
 </div>
 
-<!-- Mod class="intersect"al -->
+
+<!-- Modal #genemodal -->
 <div class="modal fade" id="genemodal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title" id="modelTitleId">Modal title</h4>
+        <h4 class="modal-title" id="modelTitleId">Intersects of  Histione Modifications</h4>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -182,29 +216,12 @@
     </div>
   </div>
 </div>
-
-<!-- <script src="/static/jquery/jquery.easing.min.js"></script> -->
+<!-- ./ Modal #genemodal -->
 
 <style>
-  .intersect_gene {
-    width:20%!important;
-  }
-  .intersect_input, .intersect_histone {
-    width:40%!important;
-  }
-
+  .intersect_gene {width:40%!important;}
+  .intersect_input, .intersect_histone {width:60%!important;}
 </style>
-
-{% comment %} <script>
-  $('#genemodal').on('show.bs.modal', event => {
-    var button = $(event.relatedTarget);
-    var modal = $(this);
-    // Use above variables to manipulate the DOM
-    
-  }); {% endcomment %}
-
-
-</script>
 
 <script>
   $(document).ready(function () {
@@ -213,20 +230,21 @@
       var target = $(this).data('graph')
       setTimeout(function () {
         if (target == 'H2A_Variant_and_H2B_Ubiquitination') {
-          target = $("#result .tab-content div.active.show .graph_radio input[type='radio']:checked").eq(0)
-            .data('ftype');
-          graphtype = $("#result .tab-content div.active.show .graph_radio input[type='radio']:checked").eq(
-            0).data('graph');
-          barplot(target, graphtype);
-          target = $("#result .tab-content div.active.show .graph_radio input[type='radio']:checked").eq(1)
-            .data('ftype');
-          graphtype = $("#result .tab-content div.active.show .graph_radio input[type='radio']:checked").eq(
-            1).data('graph');
-          barplot(target, graphtype);
+          // target = $("#result .tab-content div.active.show .graph_radio input[type='radio']:checked").eq(0)
+          //   .data('ftype');
+          // graphtype = $("#result .tab-content div.active.show .graph_radio input[type='radio']:checked").eq(
+          //   0).data('graph');
+          // barplot(target, graphtype);
+          // target = $("#result .tab-content div.active.show .graph_radio input[type='radio']:checked").eq(1)
+          //   .data('ftype');
+          // graphtype = $("#result .tab-content div.active.show .graph_radio input[type='radio']:checked").eq(
+          //   1).data('graph');
+          barplot('H2A_Variant');
+          barplot('H2BK123_Ubiquitination');
         } else {
-          var graphtype = $("#result .tab-content div.active.show .graph_radio input[type='radio']:checked")
-            .data('graph');
-          barplot(target, graphtype);
+          // var graphtype = $("#result .tab-content div.active.show .graph_radio input[type='radio']:checked")
+            // .data('graph');
+          barplot(target);
         }
       }, 200);
     });

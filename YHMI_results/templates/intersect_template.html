@@ -3,9 +3,9 @@
 	<table class="table table-hover" id="intersect_datatable">
 		<thead>
 			<tr>
-				<th class="intersect_gene">Gene</th>
-				<th class="intersect_input text-center">Input ({{ input_length }})</th>
-				<th class="intersect_histone text-center">{{ histone_name }} ({{ histone_length }})</th>
+				<th class="intersect_gene">Input ({{ input_length }})</th>
+				<th class="intersect_input text-center">intersect ({{ intersect_length }})</th>
+				{# <th class="intersect_histone text-center">{{ histone_name }} ({{ histone_length }})</th> #}
 			</tr>
 		</thead>
 		<tbody>
@@ -17,11 +17,11 @@
 				{% else %}
 					<td class="text-center align-middle"><span style="display:none;">X</span><img class="border-0" width="20px" src="{% static '/image/wrong.png' %}" alt=""></td>
 				{% endif %}
-				{% if intersectData.histone %}
+				{% comment %} {% if intersectData.histone %}
 					<td class="text-center align-middle"><span style="display:none;">V</span><img class="border-0" width="20px" src="{% static '/image/check.png' %}" alt=""></td>
 				{% else %}
 					<td class="text-center align-middle"><span style="display:none;">X</span><img class="border-0" width="20px" src="{% static '/image/wrong.png' %}" alt=""></td>
-				{% endif %}
+				{% endif %} {% endcomment %}
 			</tr>
 			{% endfor %}
 		</tbody>

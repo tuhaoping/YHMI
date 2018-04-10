@@ -2,7 +2,8 @@
 
 {% block content %}
   <div class="mb-0 mt-4">
-    <span class="block-title"><i class="fa fa-file"></i> Gene Input </span>
+    <span class="block-title" style="font-size: 30px;"><i class="fa fa-file"></i> Gene Input </span>
+    <span class="block-title" style="font-size:20px;"> : Identify Enriched/Depleted Histone Modifications in Your Gene List</span>
     <!--
     &nbsp;&nbsp;|&nbsp;
     <span class="input-option">
@@ -22,7 +23,7 @@
     <div class="col-lg-3 col-md-3 col-12">
       <div class="card mb-3">
         <div class="card-header" style="height:49px;">
-          <i class="fa fa-search"></i> Input 
+          <span style="font-size: 18px;"><i class="fa fa-search"></i> Input Your Gene List</span>
           <a id="a-eg" data-toggle="collapse" data-target="#example-btn-div" href="#">(e.g.)</a>
         </div>
         
@@ -44,7 +45,7 @@
     <div class="col-lg-9 col-md-9 col-12">
       <div class="card mb-3">
         <div class="card-header" style="height:49px;">
-          <i class="fa fa-wrench"></i> Custom Setting &nbsp;
+          <span style="font-size: 18px;"><i class="fa fa-wrench"></i> Define Genes With Specific Histone Modifications &nbsp;</span>
             <!--
             <label class="switch m-0">
               <input type="checkbox" id="switch">
@@ -137,6 +138,10 @@
   <!-- ./Gene Input-->
 
   <hr class="mt-0 mb-2">
+  <span style="font-size: 18px; text-decoration:underline;">
+    <i class="fa fa-gear"></i> Specify P-value Cutoff for Mulitple Hypothese Testing
+  </span>
+  
   <div class="row" id="div-corrected">
     <div class="col-lg-8 col-6">
       <label class="container">Bonferroni-corrected p-value: cutoff=10<sup>-</sup>

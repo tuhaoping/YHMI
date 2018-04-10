@@ -1,6 +1,7 @@
-function barplot(ftype, graphtype) {
-	var item = {'Promoter':{'name':[], 'fold':[], 'pvalue':[]}, 'CodingRegion':{'name':[], 'fold':[], 'pvalue':[]}};
-	var fig_id = ftype + "_fig"
+function barplot(ftype) {
+	var item = {'Promoter':{'name':[], 'fold':[], 'pvalue':[]}, 'Coding_Region':{'name':[], 'fold':[], 'pvalue':[]}};
+	// var fig_id1 = ftype + "_Promoter_pvalue_fig"
+	// var fig_id2 = ftype + "_Coding_Region_pvalue_fig"
 	var enrich_type = ['Enriched in Promoter', 'depleted in Promoter', 'Enriched in Coding Region', 'depleted in Coding Region', ''];
 	var title, barcolor;
 
@@ -9,23 +10,28 @@ function barplot(ftype, graphtype) {
 		var item = {'name':[], 'fold':[], 'pvalue':[]};
 		var plot_data = bar_data['H2A_Variant'];
 		var fig_id = "H2A_Variant_fig"
-		plot(plot_data, graphtype);
+		plot(plot_data, 'pvalue');
+		plot(plot_data, 'fold');
 		
 		var item = {'name':[], 'fold':[], 'pvalue':[]};
 		var plot_data = bar_data['H2BK123_Ubiquitination'];
 		var fig_id = "H2BK123_Ubiquitination_fig"
-		plot(plot_data, graphtype);
+		plot(plot_data, 'pvalue');
+		plot(plot_data, 'fold');
 	}
 	else
 		var plot_data = bar_data[ftype];
-		plot(plot_data, graphtype);
+		plot(plot_data, 'pvalue');
+		plot(plot_data, 'fold');
 
 	function plot(plot_data, graphtype){
+		var fig_id1 = ftype + "_Promoter_" + graphtype +"_fig";
+		var fig_id2 = ftype + "_Coding_Region_" + graphtype +"_fig"
 		if(graphtype == 'fold'){
 			plot_data.sort(function(a,b){return b[1]-a[1]})
 			plot_data.forEach((e)=>{
 				if(e[3]<2 || e[3]==4) histoneType = 'Promoter';
-				else histoneType = 'CodingRegion';
+				else histoneType = 'Coding_Region';
 
 				item[histoneType]['name'].push(e[0] + " " + enrich_type[Number(e[3])]);
 				item[histoneType]['fold'].push(Math.log2(Number(e[1])));
@@ -38,7 +44,7 @@ function barplot(ftype, graphtype) {
 			plot_data.sort(function(a,b){return a[2]-b[2]})
 			plot_data.forEach((e)=>{
 				if(e[3]<2 || e[3]==4) histoneType = 'Promoter';
-				else histoneType = 'CodingRegion';
+				else histoneType = 'Coding_Region';
 				item[histoneType]['name'].push(e[0] + " " + enrich_type[Number(e[3])]);
 				item[histoneType]['pvalue'].push(-Math.log10(e[2]));
 				title = 'P-value (-log10)';
@@ -59,8 +65,8 @@ function barplot(ftype, graphtype) {
 			}
 		}
 		var trace2 = {
-			x:item['CodingRegion']['name'],
-			y:item['CodingRegion'][graphtype],
+			x:item['Coding_Region']['name'],
+			y:item['Coding_Region'][graphtype],
 			type: 'bar',
 			name:'Coding Region',
 			marker:{
@@ -69,7 +75,8 @@ function barplot(ftype, graphtype) {
 			}
 		}
 
-		var data = [trace1, trace2];
+		var data1 = [trace1]
+		var data2 = [trace2];
 
 
 		var layout = {
@@ -78,7 +85,9 @@ function barplot(ftype, graphtype) {
 			},
 		}
 
-		Plotly.newPlot(fig_id, data, layout, {displayModeBar: false});
+		Plotly.newPlot(fig_id1, data1, layout, {displayModeBar: false});
+		if(ftype != "TF")
+			Plotly.newPlot(fig_id2, data2, layout, {displayModeBar: false});
 	}
 }
 
@@ -88,16 +97,17 @@ $(window).resize(function(){
 	var ftype = $("#result .tab-content div.active.show").data('graph');
 
 	if(ftype == 'H2A_Variant_and_H2B_Ubiquitination'){
-          ftype = $("#result .tab-content div.active.show .graph_radio input[type='radio']:checked").eq(0).data('ftype');
-          graphtype = $("#result .tab-content div.active.show .graph_radio input[type='radio']:checked").eq(0).data('graph');
-          barplot(ftype, graphtype);
-          ftype = $("#result .tab-content div.active.show .graph_radio input[type='radio']:checked").eq(1).data('ftype');
-          graphtype = $("#result .tab-content div.active.show .graph_radio input[type='radio']:checked").eq(1).data('graph');
-          barplot(ftype, graphtype);
+          // ftype = $("#result .tab-content div.active.show .graph_radio input[type='radio']:checked").eq(0).data('ftype');
+          // graphtype = $("#result .tab-content div.active.show .graph_radio input[type='radio']:checked").eq(0).data('graph');
+          // barplot(ftype, graphtype);
+          // ftype = $("#result .tab-content div.active.show .graph_radio input[type='radio']:checked").eq(1).data('ftype');
+          // graphtype = $("#result .tab-content div.active.show .graph_radio input[type='radio']:checked").eq(1).data('graph');
+          barplot('H2A_Variant');
+          barplot('H2BK123_Ubiquitination');
         }
         else{
-        	var graphtype = $("#result .tab-content div.active.show .graph_radio input[type='radio']:checked").data('graph');
-        	barplot(ftype, graphtype);
+        	// var graphtype = $("#result .tab-content div.active.show .graph_radio input[type='radio']:checked").data('graph');
+        	barplot(ftype);
         }
 
 	// console.log('resize plot')
