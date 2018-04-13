@@ -50,6 +50,19 @@ $(document).ready(function(){
 		jdata_gene = JSON.stringify($('#inputTextArea').val().split("\n"));
 
 		$.ajax({
+			url: rootURL + '/result/specific',
+			type: "POST",
+			data:{
+				'InputGene': jdata_gene,
+				'corrected': $("#div-corrected input[name=corrected]:checked").val(),
+				'cutoff': $("#div-corrected input[type=text]:enabled").val()
+			},
+			success:function(res){
+				$("#userspecific").html(res)
+			}
+		});
+
+		$.ajax({
 			url: rootURL + '/result',
 			type: 'POST',
 			data: {
@@ -70,7 +83,7 @@ $(document).ready(function(){
 				$("#Acetylation_tab").addClass("active show");
 
 				$('html, body').stop().animate({
-					scrollTop: ($('#result').offset().top)-80
+					scrollTop: ($('#userspecific').offset().top)-80
 				}, 1000, 'easeInOutExpo');
 
 				$("#Acetylation_Promoter_enrich_table, \
@@ -95,12 +108,19 @@ $(document).ready(function(){
 				   #H2BK123_Ubiquitination_Promoter_enrich_table, \
 				   #H2BK123_Ubiquitination_Coding_Region_enrich_table, \
 				   #TF_Promoter_enrich_table").on('click', 'a.intersect', function(){
-					$("#genemodal .modal-body .container-fluid").html("");
-						id = $(this).attr('href');
+						$("#genemodal .modal-body .container-fluid").html("");
+						id = $(this).attr('href').slice(1);
+						console.log(id);
+						intersect_download_a_url = $('#intersect_download_a').attr('href')
+						$('#intersect_download_a').attr('href',intersect_download_a_url+'tableID=' + tableID + "&histone="+id);
 						if(id in intersect_data){
 							$("#genemodal .modal-body .container-fluid").html(intersect_data[$(this).attr('href')]);
 								$("#intersect_datatable").DataTable({
 									'order': [[1, "asc"], [0, 'asc']],
+									"searching": false,
+									"paging": false,
+									"info": false,
+									"lengthMenu": [[15, 25, 50, -1], [15, 25, 50, "All"]]
 								});
 						}
 						else {
@@ -109,12 +129,16 @@ $(document).ready(function(){
 								type: 'POST',
 								data: {
 									'tableID':tableID,
-									'histone':$(this).attr('href'),
+									'histone':id,
 								},
 								success:function(res){
 									$("#genemodal .modal-body .container-fluid").html(res);
 									$("#intersect_datatable").DataTable({
 										'order': [[1, "asc"], [0, 'asc']],
+										"searching": false,
+										"paging": false,
+										"info": false,
+										"lengthMenu": [[15, 25, 50, -1], [15, 25, 50, "All"]]
 									});
 									intersect_data[id] = res
 								}

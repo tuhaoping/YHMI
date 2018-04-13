@@ -36,7 +36,7 @@ function barplot(ftype) {
 				item[histoneType]['name'].push(e[0] + " " + enrich_type[Number(e[3])]);
 				item[histoneType]['fold'].push(Math.log2(Number(e[1])));
 				title = 'Fold enrichment (log2)';
-				barcolor_promoter = '#66ffff';
+				barcolor_promoter = '#2679ff';
 				barcolor_cds = '#2679ff';
 			});
 		}
@@ -48,7 +48,7 @@ function barplot(ftype) {
 				item[histoneType]['name'].push(e[0] + " " + enrich_type[Number(e[3])]);
 				item[histoneType]['pvalue'].push(-Math.log10(e[2]));
 				title = 'P-value (-log10)';
-				barcolor_promoter = '#ffff8e';
+				barcolor_promoter = '#ffff00';
 				barcolor_cds = '#ffff00';
 			});
 
@@ -58,7 +58,7 @@ function barplot(ftype) {
 			x:item['Promoter']['name'],
 			y:item['Promoter'][graphtype],
 			type: 'bar',
-			name:'Promoter',
+			// name:'Promoter',
 			marker:{
 				color: barcolor_promoter,
 				opacity: 0.7,
@@ -68,7 +68,7 @@ function barplot(ftype) {
 			x:item['Coding_Region']['name'],
 			y:item['Coding_Region'][graphtype],
 			type: 'bar',
-			name:'Coding Region',
+			// name:'Coding Region',
 			marker:{
 				color: barcolor_cds,
 				opacity: 0.7,

@@ -170,6 +170,12 @@ class YhmiEnrichmentTempTable():
 				cursor.execute(sqlCmd)
 				sqlCmd = 'INSERT INTO `{}` select * from `{}`;'.format(self.__temp_table + self.__tableID, self.__main_table)
 				cursor.execute(sqlCmd)
+				sqlCmd = """
+					ALTER TABLE `{}` 
+					ADD `Pro_criteria` INT(2) NOT NULL DEFAULT '1' AFTER `HistoneType`,
+					ADD `Cod_criteria` INT(2) NOT NULL DEFAULT '1' AFTER `pro_criteria`
+					""".format(self.__temp_table + self.__tableID)
+				cursor.execute(sqlCmd)
 				con.commit()
 			except MySQLdb.Error as e:
 				print(e)
@@ -271,7 +277,7 @@ class YhmiEnrichmentTempTable():
 		finally:
 			con.close()
 
-	def getData(self, FeatureID=None):
+	def getData(self, FeatureID=None, histoneType=None):
 		try:
 			con = MySQLdb.connect(*self.__db)
 			cursor = con.cursor()
@@ -279,11 +285,12 @@ class YhmiEnrichmentTempTable():
 				sqlCmd = "SELECT * FROM `{}` WHERE `ID`='{}'".format(
 							self.__temp_table + self.__tableID, FeatureID)
 			else:
-				sqlCmd = '''SELECT `{temp}`.*,`const_comparison_feature`.`Paper`
+				temp_column = ['ID', 'Feature', 'Pro_en', 'Pro_de', 'Cod_en', 'Cod_de', 'HistoneType']
+				sqlCmd = '''SELECT `{temp}`.`{}`,`{temp}`.`{}`,`{temp}`.`{}`,`{temp}`.`{}`,`{temp}`.`{}`,`{temp}`.`{}`,`{temp}`.`{}`,`const_comparison_feature`.`Paper`
 							FROM `{temp}`
 							LEFT JOIN `const_comparison_feature`
 							ON `const_comparison_feature`.`Feature`=`{temp}`.`Feature`'''.format(
-							temp=self.__temp_table + self.__tableID)
+							*temp_column, temp=self.__temp_table + self.__tableID)
 
 			cursor.execute(sqlCmd)
 			res = cursor.fetchall()
@@ -293,7 +300,10 @@ class YhmiEnrichmentTempTable():
 			con.close()
 
 		if FeatureID:
-			yield {'feature':res[0][1], 'pro_en':res[0][2], 'pro_de':res[0][3], 'cds_en':res[0][4], 'cds_de':res[0][5]}
+			if histoneType:
+				yield {'feature':res[0][1], 'genes':set(res[0][int(histoneType)+2].split(","))}
+			else:
+				yield {'feature':res[0][1], 'pro_en':res[0][2], 'pro_de':res[0][3], 'cds_en':res[0][4], 'cds_de':res[0][5]}
 		else:
 			for r in res:
 				yield {'ID':r[0], 'feature':r[1], 'pro_en':r[2], 'pro_de':r[3], 'cds_en':r[4], 'cds_de':r[5], 'histoneType':r[6],'paper':r[7]}
@@ -315,10 +325,29 @@ class YhmiEnrichment(models.Model):
 		db_table = 'yhmi_enrichment'
 
 class YhmiEnrichmentTf(models.Model):
-	feature = models.CharField(db_column='Feature', primary_key=True, max_length=50)  # Field name made lowercase.
+	ID = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
+	feature = models.CharField(db_column='Feature', max_length=50)  # Field name made lowercase.
 	pro = models.TextField(db_column='Pro', blank=True, null=True)  # Field name made lowercase.
+	pro_len = models.IntegerField(db_column='Pro_len')  # Field name made lowercase.
 	cds = models.TextField(db_column='Cds', blank=True, null=True)  # Field name made lowercase.
 
 	class Meta:
 		managed = False
 		db_table = 'yhmi_enrichment_tf'
+
+class ConstComparisonOrf(models.Model):
+    inputgene = models.CharField(db_column='InputGene', primary_key=True, max_length=130)  # Field name made lowercase.
+    orf = models.CharField(db_column='ORF', max_length=9, blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'const_comparison_orf'
+
+class ConstYeastName(models.Model):
+    orf = models.CharField(db_column='ORF', primary_key=True, max_length=28)  # Field name made lowercase.
+    standard = models.CharField(db_column='Standard', max_length=34, blank=True, null=True)  # Field name made lowercase.
+    alias = models.CharField(db_column='Alias', max_length=130, blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'const_yeast_name'

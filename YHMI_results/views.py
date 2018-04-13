@@ -1,35 +1,61 @@
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.http import JsonResponse, HttpResponseBadRequest, HttpResponse
-from YHMI_results.models import YhmiEnrichment, FilterResult, YhmiEnrichmentTf, YhmiEnrichmentTempTable, YhmiInputTempTable
+from YHMI_results.models import YhmiEnrichment, FilterResult, YhmiEnrichmentTf, YhmiEnrichmentTempTable, YhmiInputTempTable, ConstYeastName, ConstComparisonOrf
 from django.views.decorators.csrf import csrf_exempt
 
+import csv
 import copy
 import json
 import math
 import scipy.stats
 
 def showIntersect(request):
-	input_gene = YhmiInputTempTable(request.POST['tableID'])
-	enrich_db = YhmiEnrichmentTempTable(request.POST['tableID'])
-	tlist = ['pro_en', 'pro_de', 'cds_en', 'cds_de']
-	featureID, histoneType = request.POST['histone'][1:].split("_")
-	histone_data = list(enrich_db.getData(featureID))[0]
-	histone_gene = set(histone_data[tlist[int(histoneType)]].strip().split(","))
+	if request.method == "POST":
+		featureID, histoneType = request.POST['histone'].split("_")
+		tableID = request.POST['tableID']
+	
+	else:
+		featureID, histoneType = request.GET['histone'].split("_")
+		tableID = request.GET['tableID']
 
-	all_gene = {gene:{} for gene in sorted(input_gene.get_qualified())}
-	intersect_length = len(set(input_gene.get_qualified())&histone_gene)
+	input_gene = YhmiInputTempTable(tableID)
+	
+	if histoneType != '4':
+		enrich_db = YhmiEnrichmentTempTable(tableID)
+		histone_data = list(enrich_db.getData(featureID, histoneType))[0]
+	else:
+		histone_data = YhmiEnrichmentTf.objects.get(pk=featureID)
+		histone_data = {'feature':histone_data.feature, 'genes':set(histone_data.pro.split(","))}
 
-	for gene in input_gene.get_qualified():
-		all_gene[gene] = True if gene.strip() in histone_gene else False
+	all_gene = [{'input':gene} for gene in sorted(input_gene.get_qualified())]
+	intersect_length = len(set(input_gene.get_qualified())&histone_data['genes'])
 
-	render_dict = {
-		 'all_gene': all_gene,
-		 'input_length': len(input_gene.get_qualified()),
-		 'intersect_length': intersect_length,
-		 'histone_name': histone_data['feature']
-	}
-	return render(request, 'intersect_template.html', render_dict)
+
+	for i,gene in enumerate(all_gene):
+		all_gene[i]['intersect'] = True if gene['input'].strip() in histone_data['genes'] else False
+
+	all_gene.sort(key=lambda x: (~x['intersect'], x['input']))
+
+	if request.method == "GET":
+		response = HttpResponse(content_type='text/csv')
+		response['Content-Disposition'] = 'attachment; filename="{}.csv"'.format(histone_data['feature'])
+
+		writer = csv.writer(response)
+		writer.writerow(['Input', 'Intersect of Histone Modification'])
+		for gene in all_gene:
+			writer.writerow([gene['input'], "V" if gene['intersect'] else "X"])
+
+		return response
+
+	else:
+		render_dict = {
+			 'all_gene': all_gene,
+			 'input_length': len(input_gene.get_qualified()),
+			 'intersect_length': intersect_length,
+			 'histone_name': histone_data['feature']
+		}
+		return render(request, 'intersect_template.html', render_dict)
 
 def showEnrich(request):
 	input_gene = YhmiInputTempTable(request.POST['tableID'], json.loads(request.POST['InputGene']))
@@ -82,6 +108,7 @@ def showEnrich(request):
 			T = len(g & geneset)
 			G = len(g)
 			enrich_value_tf.append({
+				'enrichID':i.ID,
 				'feature':i.feature,
 				'enrich_type':4,
 				'intersectOfgene':(T, S, G),
@@ -118,7 +145,7 @@ def showEnrich(request):
 		enrich_value_others = []
 		enrich_value = []
 	render_dict = {
-		'inputGene':sorted(list(geneset)),
+		'inputGene_length':len(list(geneset)),
 		'enrich_value': enrich_value,
 		'enrich_value_others': enrich_value_others,
 		'corrected': request.POST['corrected'],
@@ -149,6 +176,18 @@ def customSetting(request, method):
 
 	return HttpResponse(status=200)
 
+
+def userSpecific(request):
+	geneset = json.loads(request.POST['InputGene'])
+	gene_name = set(ConstComparisonOrf.objects.filter(inputgene__in=geneset).values_list('orf', flat=True))
+	gene_name = ConstYeastName.objects.filter(orf__in=gene_name)
+	render_dict = {
+		'inputGene':gene_name,
+		'inputGene_length':len(geneset),
+		'corrected': request.POST['corrected'],
+		'cutoff': request.POST['cutoff'],
+	}
+	return render(request, 'user_specification.html', render_dict)
 
 def Hypergeometric_pvalue(temp_enrich, enrich_value_tf=None):
 	'''calculate every pvalue of each feature'''

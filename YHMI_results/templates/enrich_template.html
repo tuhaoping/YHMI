@@ -1,17 +1,17 @@
 {% load myfilter %} {# {% include "inputGene.html" %} #}
 {% load static %}
 
+
+
+
 <div class="mb-0 mt-4">
-  <span class="block-title">
-    <i class="fa fa-file"></i> Results </span>&#40;Corrected Method: {% if corrected == '1' %} Bonferroni-corrected, cutoff=10
-  <sup>-{{ cutoff }}</sup> &#41; {% else %} FDR (False Discovery Rate), &alpha;=10
-  <sup>-{{ cutoff }}</sup> &#41;; {% endif %}
+  <span class="block-title"><i class="fa fa-file"></i> Results </span>
 </div>
 
 <hr class="mt-2">
 
 <div>
-  <ul class="nav nav-tabs mb-2" id="result-tabs">
+  <ul class="nav nav-tabs nav-fill" id="result-tabs">
     {% for ftype in enrich_value.keys %}
     <li class="nav-item">
       {% if forloop.first %}
@@ -23,13 +23,13 @@
     {% endfor %}
   </ul>
 
-  <div class="tab-content" style="border: 0px 1px 1px 1px;">
+  <div class="tab-content pt-2">
     {% for ftype,data in enrich_value.items %}
       <div id="{{ftype}}_tab" class="tab-pane fade" data-graph="{{ftype}}">
         {% if ftype != 'H2A_Variant_and_H2B_Ubiquitination' %}
           {% for regionType, fdata in data.items %}
             {% if ftype != 'TF' %}
-              <div class="subtitle my-2 py-2" style="font-size:20px;">{{regionType|remove_underline}}</div>
+              <div class="subtitle my-2 py-2">{{regionType|remove_underline}}</div>
             {% endif %}
 
             <div class="card mb-3">
@@ -50,8 +50,8 @@
               </div>
               <div class="card-body">
                 <div>
-                  <div id="{{ftype}}_{{regionType}}_fold_fig" class="text-center my-1 d-inline-block" style="height:450px; width:49%;"></div>
-                  <div id="{{ftype}}_{{regionType}}_pvalue_fig" class="text-center my-1 d-inline-block" style="height:450px; width:49%;"></div>
+                  <div id="{{ftype}}_{{regionType}}_fold_fig" class="text-center my-1 d-inline-block" style="height:450px; min-width:49%; max-width:49%;"></div>
+                  <div id="{{ftype}}_{{regionType}}_pvalue_fig" class="text-center my-1 d-inline-block" style="height:450px; min-width:49%; max-width:49%;"></div>
                 </div>
               </div>
             </div>
@@ -108,10 +108,12 @@
         {% else %}
           <!-- H2A_Variant_and_H2B_Ubiquitination -->
           {% for fftype,data in enrich_value_others.items %} 
-            <div class="subtitle mt-2" style="font-size:18px;">{{fftype}}</div> <!-- Histone Modifications 種類 title-->
+            <div class="pt-2 mx-3" style="font-size:1.5rem;">{{fftype}}</div> <!-- Histone Modifications 種類 title-->
+            <hr class="mt-1" style="border-width:5px;">
+
             <!-- Promoter/CDS-->
             {% for regionType, ffdata in data.items %}
-              <div class="subtitle my-2 py-2" style="font-size:20px;">{{regionType|remove_underline}}</div>
+              <div class="subtitle my-2 py-2">{{regionType|remove_underline}}</div>
 
               <!-- Graphic View -->
               <div class="card mb-3">
@@ -132,8 +134,8 @@
                 </div>
                 <div class="card-body">
                   <div class="row">
-                    <div id="{{fftype}}_{{regionType}}_fold_fig" class="col-6 text-center my-1" style="height:450px;"></div>
-                    <div id="{{fftype}}_{{regionType}}_pvalue_fig" class="col-6 text-center my-1" style="height:450px;"></div>
+                    <div id="{{fftype}}_{{regionType}}_fold_fig" class="col-6 text-center my-1" style="height:450px; min-width:49%; max-width:49%;"></div>
+                    <div id="{{fftype}}_{{regionType}}_pvalue_fig" class="col-6 text-center my-1" style="height:450px; min-width:49%; max-width:49%;"></div>
                   </div>
                 </div>
               </div>
@@ -201,17 +203,16 @@
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title" id="modelTitleId">Intersects of  Histione Modifications</h4>
+        <h4 class="modal-title" id="modelTitleId">Intersects of  Histione Modifications</h4>&nbsp;&nbsp;
+        <a id="intersect_download_a" class="btn btn-sm btn-info" href="/intersect/download?" target="_blank">
+            <i class="fa fa-download" aria-hidden="true"></i> Download</a>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body" style="min-height:609px;">
+      <div class="modal-body" style="min-height:694px;">
         <div class="container-fluid text-center align-middle">
         </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
@@ -219,8 +220,39 @@
 <!-- ./ Modal #genemodal -->
 
 <style>
-  .intersect_gene {width:40%!important;}
-  .intersect_input, .intersect_histone {width:60%!important;}
+  .intersect_gene {width:50%!important;}
+  .intersect_input, .intersect_histone {width:50%!important;}
+  #genemodal table tr td {padding: 4px;}
+  #genemodal table th {border-top: 4px;}
+  #result .nav-tabs .nav-link:hover {
+    border-color: #a5a7a9;
+}
+  #result .nav-tabs{border-bottom-color: #a5a7a9;}
+  #result .nav-tabs .nav-link.active{
+      color:#000;
+      background-color: #ced4da;
+      border-color: #a5a7a9 #a5a7a9 #ced4da;
+  }
+  #result .tab-content {
+    background-color: #ced4da;
+    border:1px solid #a5a7a9;
+    border-top:0px;
+  }
+  #result .card{
+    margin-right: 0.5rem;
+    margin-left: 0.5rem;
+  }
+
+  .table-bordered td {border:1px solid #a5a7a9}
+  #result .nav-tabs .nav-link{font-size:1.5rem;}
+  #result .subtitle {
+    padding: 4px 24px 0px 24px;
+    margin: 0px 8px 16px 8px;
+    background-color: #585858cf;
+    color:white;
+    font-size:1.3rem;
+    border-radius: .25rem;
+  }
 </style>
 
 <script>
@@ -254,5 +286,28 @@
       var graph = $(this).data('graph');
       barplot(ftype, graph)
     });
+
+    // $("#intersect_download_btn").click(function(){
+    //   console.log($(this).data('url'))
+    //   $.ajax({
+    //       url: rootURL + '/intersect/download',
+    //       type: 'POST',
+    //       data: {
+    //         'tableID':tableID,
+    //         'histone':$(this).data('url'),
+    //       },
+    //       success:function(res){
+    //         $("#genemodal .modal-body .container-fluid").html(res);
+    //         $("#intersect_datatable").DataTable({
+    //           'order': [[1, "asc"], [0, 'asc']],
+    //           "searching": false,
+    //           "paging": false,
+    //           "info": false,
+    //           "lengthMenu": [[15, 25, 50, -1], [15, 25, 50, "All"]]
+    //         });
+    //         intersect_data[id] = res
+    //       }
+    //     });
+    // });
   });
 </script>

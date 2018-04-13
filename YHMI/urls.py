@@ -16,7 +16,7 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from .views import HomePage
-from YHMI_results.views import showEnrich, customSetting, showIntersect
+from YHMI_results.views import showEnrich, customSetting, showIntersect, userSpecific
 from YHMI_api.views import enrichJSON
 
 
@@ -25,7 +25,9 @@ urlpatterns = [
     url(r'^home/$', HomePage),
 
     url(r'^result$', showEnrich),
+    url(r'^result/specific$', userSpecific),
     url(r'^intersect$', showIntersect),
+    url(r'^intersect/download$', showIntersect),
     url(r'^setting/(init|update|drop|default)$', customSetting),
 
     url(r'^api/enrich$', enrichJSON),

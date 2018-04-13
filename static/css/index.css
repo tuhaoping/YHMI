@@ -29,7 +29,7 @@ body.fixed-nav {
 
 .content-wrapper .block-title {
   /*cursor: pointer;*/
-  font-size: 20px;
+  font-size: 2rem;
 
   color: rgb(0, 123, 255);
   /*text-decoration: underline;*/
@@ -576,8 +576,7 @@ footer.sticky-footer {
 }
 
 #div-setting .subtitle,
-#div-custom .subtitle,
-#result .subtitle {
+#div-custom .subtitle {
   padding: 4px 24px 0px 24px;
   margin-bottom: 6px;
   background-color: #e9ecef;

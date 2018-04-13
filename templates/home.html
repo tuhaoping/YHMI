@@ -2,17 +2,7 @@
 
 {% block content %}
   <div class="mb-0 mt-4">
-    <span class="block-title" style="font-size: 30px;"><i class="fa fa-file"></i> Gene Input </span>
-    <span class="block-title" style="font-size:20px;"> : Identify Enriched/Depleted Histone Modifications in Your Gene List</span>
-    <!--
-    &nbsp;&nbsp;|&nbsp;
-    <span class="input-option">
-      <a data-toggle="modal" data-target="#div-custom">
-        <i class="fa fa-wrench"></i> custom setting 
-      </a>
-    </span>
-    -->
-    {# <span class="input-option"><i class="fa fa-cog"></i> cutoff setting</span> #}
+    <span class="block-title"><i class="fa fa-file"></i> Identify Enriched/Depleted Histone Modifications in Your Gene List </span>
   </div>
   <hr class="mt-2">
 
@@ -22,8 +12,8 @@
     <!-- Gene Input Set-->
     <div class="col-lg-3 col-md-3 col-12">
       <div class="card mb-3">
-        <div class="card-header" style="height:49px;">
-          <span style="font-size: 18px;"><i class="fa fa-search"></i> Input Your Gene List</span>
+        <div class="card-header" style="height:51px;">
+          <span style="font-size: 1.3rem;"><i class="fa fa-search"></i> Input Your Gene List</span>
           <a id="a-eg" data-toggle="collapse" data-target="#example-btn-div" href="#">(e.g.)</a>
         </div>
         
@@ -44,8 +34,8 @@
     <!-- Gene Input Filter-->
     <div class="col-lg-9 col-md-9 col-12">
       <div class="card mb-3">
-        <div class="card-header" style="height:49px;">
-          <span style="font-size: 18px;"><i class="fa fa-wrench"></i> Define Genes With Specific Histone Modifications &nbsp;</span>
+        <div class="card-header" style="height:51px;">
+          <span style="font-size: 1.3rem;"><i class="fa fa-wrench"></i> Define Genes With Specific Histone Modifications &nbsp;</span>
             <!--
             <label class="switch m-0">
               <input type="checkbox" id="switch">
@@ -138,11 +128,11 @@
   <!-- ./Gene Input-->
 
   <hr class="mt-0 mb-2">
-  <span style="font-size: 18px; text-decoration:underline;">
+  <span style="font-size: 1.3rem; text-decoration:underline;">
     <i class="fa fa-gear"></i> Specify P-value Cutoff for Mulitple Hypothese Testing
   </span>
   
-  <div class="row" id="div-corrected">
+  <div class="row mt-1" id="div-corrected">
     <div class="col-lg-8 col-6">
       <label class="container">Bonferroni-corrected p-value: cutoff=10<sup>-</sup>
         <input type="radio" checked="checked" name="corrected" value="1">
