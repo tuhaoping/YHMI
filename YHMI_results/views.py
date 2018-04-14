@@ -5,7 +5,7 @@ from YHMI_results.models import (
 	YhmiEnrichment, FilterResult,
 	YhmiEnrichmentTf, YhmiEnrichmentTempTable,
 	YhmiInputTempTable, ConstYeastName,
-	ConstComparisonOrf
+	ConstComparisonOrf, histone_gene_info_server_side
 	)
 from django.views.decorators.csrf import csrf_exempt
 
@@ -182,32 +182,39 @@ def customSetting(request, method):
 	return HttpResponse(status=200)
 
 
-def userSpecific(request):
-	geneset = json.loads(request.POST['InputGene'])
-	gene_name = set(ConstComparisonOrf.objects.filter(inputgene__in=geneset).values_list('orf', flat=True))
-	gene_name = ConstYeastName.objects.filter(orf__in=gene_name)
-	enrich_db = YhmiEnrichmentTempTable(request.POST['tableID'])
-	data = enrich_db.getData(criteria=True)
-	custom_data = []
-	for i in data:
-		custom_data.append({
-			'enrichID':i["ID"],
-			'feature':i['feature'],
-			'pro_len':i['pro_en'].count(',')+1,
-			'cds_len':i['cds_en'].count(',')+1,
-			'pro_criteria':i['pro_criteria'],
-			'cds_criteria':i['cds_criteria'],
-		})
-	# print(request.POST['tableID'])
-	# print(custom_data)
-	render_dict = {
-		'inputGene':gene_name,
-		'inputGene_length':len(geneset),
-		'corrected': request.POST['corrected'],
-		'cutoff': request.POST['cutoff'],
-		'custom_data':custom_data,
-	}
-	return render(request, 'user_specification.html', render_dict)
+def userSpecific(request, HistoneGene = False):
+	if HistoneGene:
+		enrich_db = YhmiEnrichmentTempTable(request.POST['tableID'])
+		histone_data = list(enrich_db.getData(request.POST['histoneID'], request.POST['histoneType']))[0]
+		data = histone_gene_info_server_side(histone_data['genes'], **request.POST)
+
+		return JsonResponse(data)
+		
+
+	else:
+		geneset = json.loads(request.POST['InputGene'])
+		gene_name = set(ConstComparisonOrf.objects.filter(inputgene__in=geneset).values_list('orf', flat=True))
+		gene_name = ConstYeastName.objects.filter(orf__in=gene_name)
+		enrich_db = YhmiEnrichmentTempTable(request.POST['tableID'])
+		data = enrich_db.getData(criteria=True)
+		custom_data = []
+		for i in data:
+			custom_data.append({
+				'enrichID':i["ID"],
+				'feature':i['feature'],
+				'pro_len':i['pro_en'].count(',')+1,
+				'cds_len':i['cds_en'].count(',')+1,
+				'pro_criteria':i['pro_criteria'],
+				'cds_criteria':i['cds_criteria'],
+			})
+		render_dict = {
+			'inputGene':gene_name,
+			'inputGene_length':len(geneset),
+			'corrected': request.POST['corrected'],
+			'cutoff': request.POST['cutoff'],
+			'custom_data':custom_data,
+		}
+		return render(request, 'user_specification.html', render_dict)
 
 def Hypergeometric_pvalue(temp_enrich, enrich_value_tf=None):
 	'''calculate every pvalue of each feature'''

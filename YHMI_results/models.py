@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 from django.db import models
+from django.db.models import Q
 
 from collections import Counter
 import json
@@ -347,6 +348,42 @@ class ConstYeastName(models.Model):
     standard = models.CharField(db_column='Standard', max_length=34, blank=True, null=True)  # Field name made lowercase.
     alias = models.CharField(db_column='Alias', max_length=130, blank=True, null=True)  # Field name made lowercase.
 
+    def __str__(self):
+    	return self.orf
+
     class Meta:
         managed = False
         db_table = 'const_yeast_name'
+
+
+def histone_gene_info_server_side(histone_gene, **kwargs):
+	ORDER_COLUMN_CHOICES = ['orf','standard','alias']
+
+	draw = int(kwargs['draw'][0])
+	length = int(kwargs['length'][0])
+	start = int(kwargs['start'][0])
+	search_value = kwargs['search[value]'][0]
+	order_column = ORDER_COLUMN_CHOICES[int(kwargs['order[0][column]'][0])]
+	order = kwargs['order[0][dir]'][0]
+
+	if order == 'desc':
+		order_column = '-' + order_column
+
+	queryset = ConstYeastName.objects.filter(orf__in=histone_gene)
+	total = queryset.count()
+
+	if search_value:
+		queryset = queryset.filter(
+			Q(orf__icontains=search_value) |
+			Q(standard__icontains=search_value) |
+			Q(alias__icontains=search_value)
+		)
+	count = queryset.count()
+	queryset = queryset.order_by(order_column).values_list()[start:start+length]
+	data = {
+		'draw':draw,
+		'recordsTotal':total,
+		'recordsFiltered':count,
+		'data':list(queryset)
+	}
+	return data

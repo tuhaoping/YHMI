@@ -26,6 +26,7 @@ urlpatterns = [
 
     url(r'^result$', showEnrich),
     url(r'^result/specific$', userSpecific),
+    url(r'^result/specific/histonegene$', userSpecific, {'HistoneGene':True}),
     url(r'^intersect$', showIntersect),
     url(r'^intersect/download$', showIntersect),
     url(r'^setting/(init|update|drop|default)$', customSetting),

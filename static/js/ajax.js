@@ -59,7 +59,20 @@ $(document).ready(function(){
 				'cutoff': $("#div-corrected input[type=text]:enabled").val()
 			},
 			success:function(res){
-				$("#userspecific").html(res)
+				$("#userspecific").html(res);
+				$("#HistoneGeneInfo_table").DataTable({
+					serverSide: true,
+					ajax: {
+						url: rootURL + '/result/specific/histonegene',
+						type: 'POST',
+						dataType: 'json',
+						data: {
+							'tableID': tableID,
+							'histoneID': 1,
+							'histoneType': 0
+						}
+					},
+				});
 			}
 		});
 

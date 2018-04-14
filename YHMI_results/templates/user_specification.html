@@ -21,8 +21,8 @@
       <td class="p-0">
         <div class="p-3" style="height:200px;overflow-y:scroll;">
         {% for data in custom_data %}
-          - {{ data.feature }} (Promoter) {{ data.pro_len }} Genes criteria > {{ data.pro_criteria }} <br>
-          - {{ data.feature }} (Coding Region) {{ data.cds_len }} Genes criteria > {{ data.cds_criteria }} <br>
+          - {{ data.feature }} (Promoter) <a href="#{{ data.enrichID }}" data-toggle="modal" data-target="#HistoneGeneInfo">{{ data.pro_len }}</a> Genes criteria > {{ data.pro_criteria }} <br>
+          - {{ data.feature }} (Coding Region) <a href="#{{ data.enrichID }}" data-toggle="modal" data-target="#HistoneGeneInfo">{{ data.cds_len }}</a> Genes criteria > {{ data.cds_criteria }} <br>
         {% endfor %}
         </div>
       </td>
@@ -65,8 +65,56 @@
 </div>
 <!-- ./ Modal #geneInfo -->
 
+<!-- Modal #HistoneGeneInfo -->
+<div class="modal fade" id="HistoneGeneInfo" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" >Genes with Specific Histone Modifications</h4>&nbsp;&nbsp;
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" style="min-height:694px;">
+        <table class="table table-bordered table-hover w-100" style="border:1px solid #a5a7a9;" id="HistoneGeneInfo_table">
+          <thead>
+            <tr>
+              <th class="orf_col" style="border:1px solid #a5a7a9; border-bottom:2px solid #a5a7a9;">Feature Name</th>
+              <th class="gene_col" style="border:1px solid #a5a7a9; border-bottom:2px solid #a5a7a9;">Standard Name</th>
+              <th class="alias_col" style="border:1px solid #a5a7a9; border-bottom:2px solid #a5a7a9;">Alias ( seperate by "|" )</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Feature Name</td>
+              <td>Standard Name</td>
+              <td>Alias</td>
+            </tr>
+            <!--
+            {% for gene in inputGene %}
+              <tr>
+                <td>{{ gene.orf }}</td>
+                <td>{{ gene.standard }}</td>
+                <td>{{ gene.alias }}</td>
+              </tr>
+            {% endfor %}
+            -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ./ Modal #HistoneGeneInfo -->
+
 <style>
+  #userspecific {
+    font-size: 1.2rem;
+  }
   #userspecific .modal-lg{
     max-width: 70%;
   }
+
+  #HistoneGeneInfo .orf_col, #HistoneGeneInfo .gene_col {width:15%!important;}
+  #HistoneGeneInfo .alias_col{width:70%!important;}
 </style>
