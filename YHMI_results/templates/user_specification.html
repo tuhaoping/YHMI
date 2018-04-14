@@ -5,9 +5,9 @@
 
 <hr class="mt-2">
 <div>
-  <table class="table table-bordered w-50">
+  <table class="table table-bordered">
     <tr>
-      <td class="w-50">Input Genes</td>
+      <td class="w-25">Input Genes</td>
       <td><a href="#" data-toggle="modal" data-target="#geneInfo">{{inputGene_length}}</a></td>
     </tr>
     <tr>
@@ -17,8 +17,15 @@
       <td>10<sup>-{{ cutoff }}</sup></td>
     </tr>
     <tr>
-      <td>Genes with Specific Histone Modifications</td>
-      <td></td>
+      <td class="align-middle" style="height:200px;">Genes with Specific Histone Modifications</td>
+      <td class="p-0">
+        <div class="p-3" style="height:200px;overflow-y:scroll;">
+        {% for data in custom_data %}
+          - {{ data.feature }} (Promoter) {{ data.pro_len }} Genes criteria > {{ data.pro_criteria }} <br>
+          - {{ data.feature }} (Coding Region) {{ data.cds_len }} Genes criteria > {{ data.cds_criteria }} <br>
+        {% endfor %}
+        </div>
+      </td>
     </tr>
   </table>
 </div>

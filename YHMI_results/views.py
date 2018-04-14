@@ -1,7 +1,12 @@
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.http import JsonResponse, HttpResponseBadRequest, HttpResponse
-from YHMI_results.models import YhmiEnrichment, FilterResult, YhmiEnrichmentTf, YhmiEnrichmentTempTable, YhmiInputTempTable, ConstYeastName, ConstComparisonOrf
+from YHMI_results.models import (
+	YhmiEnrichment, FilterResult,
+	YhmiEnrichmentTf, YhmiEnrichmentTempTable,
+	YhmiInputTempTable, ConstYeastName,
+	ConstComparisonOrf
+	)
 from django.views.decorators.csrf import csrf_exempt
 
 import csv
@@ -181,11 +186,26 @@ def userSpecific(request):
 	geneset = json.loads(request.POST['InputGene'])
 	gene_name = set(ConstComparisonOrf.objects.filter(inputgene__in=geneset).values_list('orf', flat=True))
 	gene_name = ConstYeastName.objects.filter(orf__in=gene_name)
+	enrich_db = YhmiEnrichmentTempTable(request.POST['tableID'])
+	data = enrich_db.getData(criteria=True)
+	custom_data = []
+	for i in data:
+		custom_data.append({
+			'enrichID':i["ID"],
+			'feature':i['feature'],
+			'pro_len':i['pro_en'].count(',')+1,
+			'cds_len':i['cds_en'].count(',')+1,
+			'pro_criteria':i['pro_criteria'],
+			'cds_criteria':i['cds_criteria'],
+		})
+	# print(request.POST['tableID'])
+	# print(custom_data)
 	render_dict = {
 		'inputGene':gene_name,
 		'inputGene_length':len(geneset),
 		'corrected': request.POST['corrected'],
 		'cutoff': request.POST['cutoff'],
+		'custom_data':custom_data,
 	}
 	return render(request, 'user_specification.html', render_dict)
 

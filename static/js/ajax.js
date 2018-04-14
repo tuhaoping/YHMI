@@ -53,6 +53,7 @@ $(document).ready(function(){
 			url: rootURL + '/result/specific',
 			type: "POST",
 			data:{
+				'tableID': tableID,
 				'InputGene': jdata_gene,
 				'corrected': $("#div-corrected input[name=corrected]:checked").val(),
 				'cutoff': $("#div-corrected input[type=text]:enabled").val()
