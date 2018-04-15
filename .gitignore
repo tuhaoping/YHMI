@@ -3,3 +3,4 @@ YHMI_env/*
 *.sql
 *.pptx
 .vscode/*
+env*
