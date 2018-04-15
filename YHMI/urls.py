@@ -16,8 +16,8 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from .views import HomePage
-from YHMI_results.views import showEnrich, customSetting, showIntersect, userSpecific
-from YHMI_api.views import enrichJSON
+from YHMI_results.views import showEnrich, customSetting, showIntersect, userSpecific, result_download
+from YHMI_api.views import enrich_api
 
 
 urlpatterns = [
@@ -25,11 +25,14 @@ urlpatterns = [
     url(r'^home/$', HomePage),
 
     url(r'^result$', showEnrich),
+    url(r'^result/download$', result_download),
     url(r'^result/specific$', userSpecific),
     url(r'^result/specific/histonegene$', userSpecific, {'HistoneGene':True}),
+
     url(r'^intersect$', showIntersect),
     url(r'^intersect/download$', showIntersect),
+
     url(r'^setting/(init|update|drop|default)$', customSetting),
 
-    url(r'^api/enrich$', enrichJSON),
+    url(r'^api/enrich$', enrich_api),
 ]

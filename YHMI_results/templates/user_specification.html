@@ -21,8 +21,8 @@
       <td class="p-0">
         <div class="p-3" style="height:200px;overflow-y:scroll;">
         {% for data in custom_data %}
-          - {{ data.feature }} (Promoter) <a href="#{{ data.enrichID }}" data-toggle="modal" data-target="#HistoneGeneInfo">{{ data.pro_len }}</a> Genes criteria > {{ data.pro_criteria }} <br>
-          - {{ data.feature }} (Coding Region) <a href="#{{ data.enrichID }}" data-toggle="modal" data-target="#HistoneGeneInfo">{{ data.cds_len }}</a> Genes criteria > {{ data.cds_criteria }} <br>
+          - {{ data.feature }} (Promoter) <a class="histone_gene_modal" href="#{{ data.enrichID }}_0" data-feature="{{ data.feature }}" data-toggle="modal" data-target="#HistoneGeneInfo">{{ data.pro_len }}</a> Genes criteria > {{ data.pro_criteria }} <br>
+          - {{ data.feature }} (Coding Region) <a class="histone_gene_modal" href="#{{ data.enrichID }}_2" data-feature="{{ data.feature }}" data-toggle="modal" data-target="#HistoneGeneInfo">{{ data.cds_len }}</a> Genes criteria > {{ data.cds_criteria }} <br>
         {% endfor %}
         </div>
       </td>
@@ -71,6 +71,8 @@
     <div class="modal-content">
       <div class="modal-header">
         <h4 class="modal-title" >Genes with Specific Histone Modifications</h4>&nbsp;&nbsp;
+        <a class="download_a btn btn-sm btn-info" href="/result/specific/histonegene?" target="_blank">
+            <i class="fa fa-download" aria-hidden="true"></i> Download</a>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>

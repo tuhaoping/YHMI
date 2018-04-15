@@ -44,7 +44,7 @@ def showIntersect(request):
 
 	if request.method == "GET":
 		response = HttpResponse(content_type='text/csv')
-		response['Content-Disposition'] = 'attachment; filename="{}.csv"'.format(histone_data['feature'])
+		response['Content-Disposition'] = 'attachment; filename="intersect of {}.csv"'.format(histone_data['feature'])
 
 		writer = csv.writer(response)
 		writer.writerow(['Input', 'Intersect of Histone Modification'])
@@ -155,11 +155,23 @@ def showEnrich(request):
 		'enrich_value_others': enrich_value_others,
 		'corrected': request.POST['corrected'],
 		'cutoff': request.POST['cutoff'],
+		'tableID':request.POST['tableID']
 	}
 
 	template = render_to_string('enrich_template.html', render_dict)
 	return JsonResponse({"template":template, 'data':data_fold})
 
+def result_download(request):
+	from YHMI_api.views import enrich_json
+	input_gene = YhmiInputTempTable(request.GET['tableID'])
+	data = enrich_json(
+		input_gene=json.dumps(input_gene.get_qualified()),
+		corrected=request.GET['corrected'],
+		cutoff=request.GET['cutoff'],
+		tableID=request.GET['tableID']
+		)
+	print(data)
+	return HttpResponse(status=200)
 
 def customSetting(request, method):
 	if 'tableID' in request.POST:
@@ -182,13 +194,28 @@ def customSetting(request, method):
 	return HttpResponse(status=200)
 
 
-def userSpecific(request, HistoneGene = False):
+def userSpecific(request, HistoneGene=False):
 	if HistoneGene:
-		enrich_db = YhmiEnrichmentTempTable(request.POST['tableID'])
-		histone_data = list(enrich_db.getData(request.POST['histoneID'], request.POST['histoneType']))[0]
-		data = histone_gene_info_server_side(histone_data['genes'], **request.POST)
+		if request.method == 'POST':
+			enrich_db = YhmiEnrichmentTempTable(request.POST['tableID'])
+			histone_data = list(enrich_db.getData(request.POST['histoneID'], request.POST['histoneType']))[0]
+			data = histone_gene_info_server_side(histone_data['genes'], **request.POST)
 
-		return JsonResponse(data)
+			return JsonResponse(data)
+		else:
+			enrich_db = YhmiEnrichmentTempTable(request.GET['tableID'])
+			histone_data = list(enrich_db.getData(request.GET['histoneID'], request.GET['histoneType']))[0]
+			data = ConstYeastName.objects.filter(orf__in=histone_data['genes'])
+			
+			response = HttpResponse(content_type='text/csv')
+			response['Content-Disposition'] = 'attachment; filename="Gene with {}.csv"'.format(histone_data['feature'])
+
+			writer = csv.writer(response)
+			writer.writerow(['Feature Name', 'Standard Name', 'Alias'])
+			for gene in data:
+				writer.writerow([gene.orf, gene.standard, gene.alias])
+
+			return response
 		
 
 	else:

@@ -9,7 +9,7 @@ import math
 import scipy.stats
 
 @csrf_exempt
-def enrichJSON(request):
+def enrich_api(request):
 	'''
 	http://cosbi4.ee.ncku.edu.tw/api/enrich
 	request.POST
@@ -26,11 +26,26 @@ def enrichJSON(request):
 	if ('InputGene' not in request.POST) or ('corrected' not in request.POST) or ('cutoff' not in request.POST):
 		return HttpResponseBadRequest
 
-	geneset = set(filter(None, json.loads(request.POST['InputGene'])))
+	if 'setting_data' in request.PSOT:
+		enrich_value = enrich_json(
+			request.POST['InputGene'], request.POST['corrected'], request.POST['cutoff'], request.POST['setting_data'])
+	else:
+		enrich_value = enrich_json(
+			request.POST['InputGene'], request.POST['corrected'], request.POST['cutoff'])
+
+	return JsonResponse(enrich_value)
+
+
+def enrich_json(input_gene, corrected, cutoff, setting_data=None, tableID=None):
+	geneset = set(filter(None, json.loads(input_gene)))
 	if geneset:
-		enrich_db = YhmiEnrichmentTempTable()
-		if 'setting_data' in request.POST:
-			enrich_db.updateTable(request.POST['setting_data'])
+		if tableID:
+			enrich_db = YhmiEnrichmentTempTable(tableID)
+		else:
+			enrich_db = YhmiEnrichmentTempTable()
+
+		if setting_data:
+			enrich_db.updateTable(setting_data)
 
 		data_tf = YhmiEnrichmentTf.objects.all()
 		data = enrich_db.getData()
@@ -81,8 +96,8 @@ def enrichJSON(request):
 		# enrich_value.extend(enrich_value_tf)
 		enrich_value = Hypergeometric_pvalue(enrich_value, enrich_value_tf)
 		enrich_value_others = Hypergeometric_pvalue(enrich_value_others)
-		enrich_value = Correction(enrich_value, request.POST['corrected'], float(request.POST['cutoff']))
-		enrich_value_others = Correction(enrich_value_others, request.POST['corrected'], float(request.POST['cutoff']))
+		enrich_value = Correction(enrich_value, corrected, float(cutoff))
+		enrich_value_others = Correction(enrich_value_others, corrected, float(cutoff))
 
 		for ftype, data in enrich_value.items():
 			if ftype != 'TF':
@@ -112,8 +127,7 @@ def enrichJSON(request):
 			'TF': {'promoter': []},
 			}
 
-	print(enrich_value)
-	return JsonResponse(enrich_value)
+	return enrich_value
 
 
 

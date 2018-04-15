@@ -59,20 +59,29 @@ $(document).ready(function(){
 				'cutoff': $("#div-corrected input[type=text]:enabled").val()
 			},
 			success:function(res){
+				// let histoneID = 1
 				$("#userspecific").html(res);
-				$("#HistoneGeneInfo_table").DataTable({
-					serverSide: true,
-					ajax: {
-						url: rootURL + '/result/specific/histonegene',
-						type: 'POST',
-						dataType: 'json',
-						data: {
-							'tableID': tableID,
-							'histoneID': 1,
-							'histoneType': 0
-						}
-					},
-				});
+				$("#userspecific a.histone_gene_modal").click(function(){
+					var histone_gene_download_url = '/result/specific/histonegene?';
+					[histoneID, histoneType] = $(this).attr('href').slice(1).split("_");
+					$("#HistoneGeneInfo .modal-title").text("Genes with " + $(this).data('feature'));
+					console.log(histone_gene_download_url)
+					$("#HistoneGeneInfo a.download_a").attr('href',histone_gene_download_url+'tableID=' + tableID + "&histoneID="+histoneID + '&histoneType='+histoneType);
+					$("#HistoneGeneInfo_table").DataTable().destroy();
+					$("#HistoneGeneInfo_table").DataTable({
+						serverSide: true,
+						ajax: {
+							url: rootURL + '/result/specific/histonegene',
+							type: 'POST',
+							dataType: 'json',
+							data: {
+								'tableID': tableID,
+								'histoneID': histoneID,
+								'histoneType': histoneType
+							}
+						},
+					});
+				})
 			}
 		});
 
@@ -122,11 +131,10 @@ $(document).ready(function(){
 				   #H2BK123_Ubiquitination_Promoter_enrich_table, \
 				   #H2BK123_Ubiquitination_Coding_Region_enrich_table, \
 				   #TF_Promoter_enrich_table").on('click', 'a.intersect', function(){
+						var intersect_download_url = '/intersect/download?';
 						$("#genemodal .modal-body .container-fluid").html("");
 						id = $(this).attr('href').slice(1);
-						console.log(id);
-						intersect_download_a_url = $('#intersect_download_a').attr('href')
-						$('#intersect_download_a').attr('href',intersect_download_a_url+'tableID=' + tableID + "&histone="+id);
+						$('#intersect_download_a').attr('href',intersect_download_url+'tableID=' + tableID + "&histone="+id);
 						if(id in intersect_data){
 							$("#genemodal .modal-body .container-fluid").html(intersect_data[$(this).attr('href')]);
 								$("#intersect_datatable").DataTable({
@@ -134,7 +142,6 @@ $(document).ready(function(){
 									"searching": false,
 									"paging": false,
 									"info": false,
-									"lengthMenu": [[15, 25, 50, -1], [15, 25, 50, "All"]]
 								});
 						}
 						else {
@@ -152,7 +159,6 @@ $(document).ready(function(){
 										"searching": false,
 										"paging": false,
 										"info": false,
-										"lengthMenu": [[15, 25, 50, -1], [15, 25, 50, "All"]]
 									});
 									intersect_data[id] = res
 								}
