@@ -115,6 +115,7 @@ class YhmiInputTempTable():
 	__tableID = ''
 	__temp_input_table = 'yhmi_temporary_input'
 	__qualified_gene = ''
+	__results = ''
 	def __init__(self, tableID, inputGene=None):
 
 		self.__tableID = tableID
@@ -128,23 +129,42 @@ class YhmiInputTempTable():
 				self.__qualified_gene = [g[0] for g in cursor.fetchall()]
 				query = "DELETE FROM `{}` WHERE `tempID`='{}'".format(self.__temp_input_table, self.__tableID)
 				cursor.execute(query)
-				query = "INSERT INTO `{}` VALUES(NULL,'{}','{}',NULL)".format(self.__temp_input_table, self.__tableID, ",".join(self.__qualified_gene))
+				query = "INSERT INTO `{}` VALUES(NULL,'{}','{}',NULL, NULL)".format(self.__temp_input_table, self.__tableID, ",".join(self.__qualified_gene))
 				cursor.execute(query)
 				con.commit()
 			else:
 				query = "SELECT * FROM `{}` WHERE `tempID` = '{}'".format(self.__temp_input_table, self.__tableID)
 				cursor.execute(query)
-				res = cursor.fetchone()
+				res = list(cursor.fetchone())
 				self.__qualified_gene = res[2].split(",")
+				self.__results = res[4]
+
 		except MySQLdb.Error as e:
 			print(e)
 			con.rollback()
 		finally:
 			con.close()
 
-
 	def get_qualified(self):
 		return self.__qualified_gene
+
+	def update_results(self, results_json):
+		try:
+			con = MySQLdb.connect('localhost', 'haoping', 'a012345', 'YHMI_database')
+			cursor = con.cursor()
+
+			query = "UPDATE `{}` SET `results`='{}' WHERE `tempID` = '{}'".format(self.__temp_input_table, results_json, self.__tableID)
+			cursor.execute(query)
+			con.commit()
+		except MySQLdb.Error as e:
+			print(e)
+			con.rollback()
+		finally:
+			con.close()
+
+	def get_results(self):
+		return json.loads(self.__results)
+		
 
 class YhmiEnrichmentTempTable():
 	__db = ["localhost", 'haoping', 'a012345', 'YHMI_database']
@@ -365,6 +385,7 @@ def histone_gene_info_server_side(histone_gene, **kwargs):
 	search_value = kwargs['search[value]'][0]
 	order_column = ORDER_COLUMN_CHOICES[int(kwargs['order[0][column]'][0])]
 	order = kwargs['order[0][dir]'][0]
+	print(draw, length, start, order)
 
 	if order == 'desc':
 		order_column = '-' + order_column

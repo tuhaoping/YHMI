@@ -14,6 +14,7 @@ import copy
 import json
 import math
 import scipy.stats
+import pandas as pd
 
 def showIntersect(request):
 	if request.method == "POST":
@@ -149,6 +150,8 @@ def showEnrich(request):
 	else:
 		enrich_value_others = []
 		enrich_value = []
+
+	input_gene.update_results(json.dumps({**enrich_value, **enrich_value_others}))
 	render_dict = {
 		'inputGene_length':len(list(geneset)),
 		'enrich_value': enrich_value,
@@ -162,15 +165,16 @@ def showEnrich(request):
 	return JsonResponse({"template":template, 'data':data_fold})
 
 def result_download(request):
-	from YHMI_api.views import enrich_json
 	input_gene = YhmiInputTempTable(request.GET['tableID'])
-	data = enrich_json(
-		input_gene=json.dumps(input_gene.get_qualified()),
-		corrected=request.GET['corrected'],
-		cutoff=request.GET['cutoff'],
-		tableID=request.GET['tableID']
-		)
-	print(data)
+	# print(input_gene.get_results())
+	response = HttpResponse(content_type='application/application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+	response['Content-Disposition'] = 'attachment; filename="results.xlsx"'
+
+	writer = produce_download_file(input_gene.get_results(), pd.ExcelWriter(response))
+	writer.save()
+	return response
+
+
 	return HttpResponse(status=200)
 
 def customSetting(request, method):
@@ -319,3 +323,52 @@ def Correction(enrich_value, method='1', cutoff=2.0):
 			enrich_value[ftype] = fdata[:pass_range]
 
 	return enrich_value
+
+
+def produce_download_file(results_data, writer):
+	enrichType = [' enriched in promoter', ' depleted in promoter', ' enriched in coding region', ' depleted in coding region', '']
+	for histoneType, data in results_data.items():
+		if histoneType == "H2A_Variant_and_H2B_Ubiquitination":
+			continue
+		elif histoneType != 'TF':
+			prerow = 1
+			for regionType, innerdata in data.items():
+				if regionType == "Coding_Region":
+					regionType = "CDS"
+				df = pd.DataFrame(columns=['Name', 'Paper', 'Fold Enrichment', 'Intersects/# of input genes', 'Histone Modification / # of genes in the yeast genome', 'P-value', 'Side'])
+				for d in innerdata:
+					df.loc[len(df)] = [
+						d['feature'] + enrichType[d['enrich_type']],
+						d['paper'],
+						d['fold'],
+						"{}/{}({:0<.2f}%)".format(d['intersectOfgene'][0], d['intersectOfgene'][1], d['intersectOfgene'][0]/d['intersectOfgene'][1]*100),
+						"{}/6572({:0<.2f}%)".format(d['intersectOfgene'][2], d['intersectOfgene'][2]/6572*100),
+						d['pvalue'][0],
+						"Under" if d['pvalue'][1] else "Over"
+					]
+				df = df.sort_values(['P-value', 'Name'])
+				df.to_excel(writer,histoneType, startrow=prerow, index=False)
+				worksheet = writer.sheets[histoneType]
+				worksheet.write(prerow-1,0,regionType)
+				prerow = len(df)+4
+		elif histoneType == 'TF':
+			prerow = 1
+			for regionType, innerdata in data.items():
+				if regionType == "Coding_Region":
+					regionType = "CDS"
+				df = pd.DataFrame(columns=['Name', 'Paper', 'Fold Enrichment', 'Intersects/# of input genes', 'Histone Modification / # of genes in the yeast genome', 'P-value',])
+				for d in innerdata:
+					df.loc[len(df)] = [
+						d['feature'] + enrichType[d['enrich_type']],
+						d['paper'],
+						d['fold'],
+						"{}/{}({:0<.2f}%)".format(d['intersectOfgene'][0], d['intersectOfgene'][1], d['intersectOfgene'][0]/d['intersectOfgene'][1]*100),
+						"{}/6572({:0<.2f}%)".format(d['intersectOfgene'][2], d['intersectOfgene'][0]/6572*100),
+						d['pvalue'][0],
+					]
+				df = df.sort_values(['P-value', 'Name'])
+				df.to_excel(writer,histoneType, startrow=prerow, index=False)
+				worksheet = writer.sheets[histoneType]
+				worksheet.write(prerow-1,0,regionType)
+				prerow = len(df)+4
+	return writer
