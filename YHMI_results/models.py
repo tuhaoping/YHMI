@@ -385,7 +385,6 @@ def histone_gene_info_server_side(histone_gene, **kwargs):
 	search_value = kwargs['search[value]'][0]
 	order_column = ORDER_COLUMN_CHOICES[int(kwargs['order[0][column]'][0])]
 	order = kwargs['order[0][dir]'][0]
-	print(draw, length, start, order)
 
 	if order == 'desc':
 		order_column = '-' + order_column

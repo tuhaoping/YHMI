@@ -174,9 +174,6 @@ def result_download(request):
 	writer.save()
 	return response
 
-
-	return HttpResponse(status=200)
-
 def customSetting(request, method):
 	if 'tableID' in request.POST:
 		enrich_db = YhmiEnrichmentTempTable(request.POST['tableID'])
@@ -220,7 +217,6 @@ def userSpecific(request, HistoneGene=False):
 				writer.writerow([gene.orf, gene.standard, gene.alias])
 
 			return response
-		
 
 	else:
 		geneset = json.loads(request.POST['InputGene'])
