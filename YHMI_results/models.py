@@ -189,7 +189,7 @@ class YhmiEnrichmentTempTable():
 
 				sqlCmd = 'CREATE TABLE `{}` LIKE `{}`'.format(self.__temp_table + self.__tableID, self.__main_table)
 				cursor.execute(sqlCmd)
-				sqlCmd = 'INSERT INTO `{}` SELECT * FROM `{}`;'.format(self.__temp_table + self.__tableID, self.__main_table)
+				sqlCmd = 'INSERT INTO `{}` SELECT * FROM `{}` WHERE `Feature` IN (SELECT `Feature` FROM `const_comparison_feature` WHERE `Valid`)'.format(self.__temp_table + self.__tableID, self.__main_table)
 				cursor.execute(sqlCmd)
 				con.commit()
 			except MySQLdb.Error as e:
@@ -300,9 +300,9 @@ class YhmiEnrichmentTempTable():
 				sqlCmd = "SELECT * FROM `{}` WHERE `ID`='{}'".format(
 							self.__temp_table + self.__tableID, FeatureID)
 			elif criteria:
-				sqlCmd = "SELECT `ID`, `Feature`, `Pro_en`, `Cod_en`, `Pro_criteria`, `Cod_criteria` FROM `{}`".format(self.__temp_table+self.__tableID)
+				sqlCmd = "SELECT `ID`, `Feature`, `Pro_en`, `Cds_en`, `Pro_criteria`, `Cod_criteria` FROM `{}`".format(self.__temp_table+self.__tableID)
 			else:
-				temp_column = ['ID', 'Feature', 'Pro_en', 'Pro_de', 'Cod_en', 'Cod_de', 'HistoneType']
+				temp_column = ['ID', 'Feature', 'Pro_en', 'Pro_de', 'Cds_en', 'Cds_de', 'HistoneType']
 				sqlCmd = '''SELECT `{temp}`.`{}`,`{temp}`.`{}`,`{temp}`.`{}`,`{temp}`.`{}`,`{temp}`.`{}`,`{temp}`.`{}`,`{temp}`.`{}`,`const_comparison_feature`.`Paper`
 							FROM `{temp}`
 							LEFT JOIN `const_comparison_feature`

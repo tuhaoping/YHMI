@@ -1,5 +1,5 @@
 from django.template.defaulttags import register
-
+import re
 @register.filter
 def now_type(count):
 	tlist = ['Enriched in Promoter', 'Depleted in Promoter', 'Enriched in Coding Region', 'Depleted in Coding Region', '']
@@ -29,3 +29,11 @@ def format_enrichment(num):
 @register.filter
 def remove_underline(s):
 	return s.replace("_", " ")
+
+@register.filter
+def TF_name_transfer(s):
+	return re.sub(r'(?<=_(25|37))C', '℃', s)
+
+@register.filter
+def TF_temperature(s):
+	return s[-3:-1] + '℃'

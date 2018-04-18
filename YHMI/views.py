@@ -10,7 +10,7 @@ def HomePage(request):
 	######## get Papers and Features #########
 	db = MySQLdb.connect('localhost', 'haoping', 'a012345', 'yhmi_database')
 	cursor = db.cursor()
-	SqlCmd = "SELECT `ID`,`Feature`,`MainClass`,`SubClass` FROM `const_comparison_feature`"
+	SqlCmd = "SELECT `ID`,`Feature`,`MainClass`,`SubClass` FROM `const_comparison_feature` WHERE `Valid`"
 	cursor.execute(SqlCmd)
 
 	filter_item = {}

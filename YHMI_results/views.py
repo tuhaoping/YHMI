@@ -77,6 +77,8 @@ def showEnrich(request):
 		enrich_db = YhmiEnrichmentTempTable(request.POST['tableID'])
 		data_tf = YhmiEnrichmentTf.objects.all()
 		data = enrich_db.getData()
+		data = list(data)
+		print(len(data))
 
 		S = len(geneset)
 		enrich_value = {'Acetylation':[], 'Methylation':[], 'H2A_Variant_and_H2B_Ubiquitination':[]}
@@ -85,7 +87,6 @@ def showEnrich(request):
 
 		for i in data:
 			gene = [set(i['pro_en'].split(',')), set(i['pro_de'].split(',')), set(i['cds_en'].split(',')), set(i['cds_de'].split(','))]
-
 			for g,t in zip(gene, [0, 1, 2, 3]):
 				T = len(g & geneset)
 				G = len(g)
@@ -197,6 +198,7 @@ def customSetting(request, method):
 
 def userSpecific(request, HistoneGene=False):
 	if HistoneGene:
+		'''Histone Gene Tables'''
 		if request.method == 'POST':
 			enrich_db = YhmiEnrichmentTempTable(request.POST['tableID'])
 			histone_data = list(enrich_db.getData(request.POST['histoneID'], request.POST['histoneType']))[0]
@@ -229,8 +231,8 @@ def userSpecific(request, HistoneGene=False):
 			custom_data.append({
 				'enrichID':i["ID"],
 				'feature':i['feature'],
-				'pro_len':i['pro_en'].count(',')+1,
-				'cds_len':i['cds_en'].count(',')+1,
+				'pro_len':i['pro_en'].count(",")+1 if i['pro_en'] else 0,
+				'cds_len':i['cds_en'].count(",")+1 if i['cds_en'] else 0,
 				'pro_criteria':i['pro_criteria'],
 				'cds_criteria':i['cds_criteria'],
 			})
@@ -298,6 +300,7 @@ def Correction(enrich_value, method='1', cutoff=2.0):
 			length = len(fdata)
 			# print(ftype, length)
 			temp = []
+			print(ftype, length)
 			for i,data in enumerate(fdata):
 				data['pvalue'][0] *= length
 				if data['pvalue'][0] < 10**(-cutoff):

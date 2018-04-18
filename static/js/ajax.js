@@ -116,10 +116,19 @@ $(document).ready(function(){
 				   #H2A_Variant_Promoter_enrich_table, \
 				   #H2A_Variant_Coding_Region_enrich_table, \
 				   #H2BK123_Ubiquitination_Promoter_enrich_table, \
-				   #H2BK123_Ubiquitination_Coding_Region_enrich_table, \
-				   #TF_Promoter_enrich_table").DataTable({
+				   #H2BK123_Ubiquitination_Coding_Region_enrich_table").DataTable({
 						'order': [[5, "asc"], [0, 'asc']],
 					});
+
+				$("#TF_Promoter_enrich_table").DataTable({
+					'order': [[1, 'asc'], [6, "asc"], [0, 'asc']],
+					// 'columnDefs':[
+					// 	{'targets':[0], 'orderData':[1,0,6]},
+					// 	{'targets':[1], 'orderData':[1,6,0]},
+					// 	{'targets':[6], 'orderData':[1,6,0]},
+
+					// ]
+				})
 				
 				var intersect_data = {};
 				$("#Acetylation_Promoter_enrich_table, \
