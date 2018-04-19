@@ -85,9 +85,9 @@ function barplot(ftype) {
 			},
 		}
 
-		Plotly.newPlot(fig_id1, data1, layout, {displayModeBar: false});
+		Plotly.newPlot(fig_id1, data1, layout);
 		if(ftype != "TF")
-			Plotly.newPlot(fig_id2, data2, layout, {displayModeBar: false});
+			Plotly.newPlot(fig_id2, data2, layout);
 	}
 }
 

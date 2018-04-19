@@ -13,7 +13,7 @@
     <div class="col-lg-3 col-md-3 col-12">
       <div class="card mb-3">
         <div class="card-header" style="height:51px;">
-          <span style="font-size: 1.3rem;"><i class="fa fa-search"></i> Input Your Gene List</span>
+          <span style="font-size: 1.3rem;"><i class="fa fa-search"></i> Step1. Input Your Gene List</span>
           <a id="a-eg" data-toggle="collapse" data-target="#example-btn-div" href="#">(e.g.)</a>
         </div>
         
@@ -35,7 +35,7 @@
     <div class="col-lg-9 col-md-9 col-12">
       <div class="card mb-3">
         <div class="card-header" style="height:51px;">
-          <span style="font-size: 1.3rem;"><i class="fa fa-wrench"></i> Define Genes With Specific Histone Modifications &nbsp;</span>
+          <span style="font-size: 1.3rem;"><i class="fa fa-wrench"></i> Step2. Define Genes With Specific Histone Modifications &nbsp;</span>
             <!--
             <label class="switch m-0">
               <input type="checkbox" id="switch">
@@ -69,46 +69,56 @@
                           <table class="table">
                             <thead>
                               <tr>
-                                <th></th>
-                                <th colspan="2">Promoter</th>
-                                <th colspan="2">Coding Region</th>
+                                <th class="text-left" style="width:30%;">Histone</th>
+                                <th class="text-left" style="width:30%;">Criteria</th>
+                                <th colspan="1" style="width:20%;">Promoter</th>
+                                <th colspan="1" style="width:20%;">Coding Region</th>
                               </tr>
+                              <!--
                               <tr>
                                 <th></th>
                                 <th>enriched(&#62;=)</th>
-                                <th>depleted(&#60;=)</th>
+                                {# <th>depleted(&#60;=)</th> #}
                                 <th>enriched(&#62;=)</th>
-                                <th>depleted(&#60;=)</th>
+                                {# <th>depleted(&#60;=)</th> #}
                               </tr>
+                            -->
                             </thead>
                             <tbody>
-                            {% for id,f in Feature %}
+                            {% for id,f,criteria in Feature %}
                               <tr class="tr-custom-setting" id="fs{{ id }}">
                                 <td>{{ f }}</td>
+                                <td class="text-left">{{ criteria }}</td>
                                 <td>
                                   <div>
-                                    <input type="text" class="form-control text-center" value="1.0" data-prevalue="1.0" style="width:100%;">
+                                    ≥ 
+                                    <input type="text" class="form-control text-center d-inline-block" value="1.0" data-prevalue="1.0" style="width:30%;">
                                     <span class="fclass">pro_en</span>
                                   </div>
                                 </td>
+                                <!--
                                 <td>
                                   <div>
                                     <input type="text" class="form-control text-center" value="-1.0" data-prevalue="-1.0" style="width:100%;">
                                     <span class="fclass">pro_de</span>
                                   </div>
                                 </td>
+                                -->
                                 <td>
                                   <div>
-                                    <input type="text" class="form-control text-center" value="1.0" data-prevalue="1.0" style="width:100%;">
+                                    ≥ 
+                                    <input type="text" class="form-control text-center d-inline-block" value="1.0" data-prevalue="1.0" style="width:30%;">
                                     <span class="fclass">cds_en</span>
                                   </div>
                                 </td>
+                                <!--
                                 <td>
                                   <div>
                                     <input type="text" class="form-control text-center" value="-1.0" data-prevalue="-1.0" style="width:100%;">
                                     <span class="fclass">cds_de</span>
                                   </div>
                                 </td>
+                                -->
                               </tr>
                             {% endfor %}
                             </tbody>
@@ -129,20 +139,20 @@
 
   <hr class="mt-0 mb-2">
   <span style="font-size: 1.3rem; text-decoration:underline;">
-    <i class="fa fa-gear"></i> Specify P-value Cutoff for Mulitple Hypothese Testing
+    <i class="fa fa-gear"></i> Step3. Specify P-value Cutoff for Mulitple Hypothese Testing
   </span>
   
   <div class="row mt-1" id="div-corrected">
     <div class="col-lg-8 col-6">
-      <label class="container">Bonferroni-corrected p-value: cutoff=10<sup>-</sup>
+      <label class="container"><span style="font-size:1.3rem;">Bonferroni-corrected p-value: cutoff=10<sup>-</sup></span>
         <input type="radio" checked="checked" name="corrected" value="1">
         <span class="checkmark"></span>
-        <input type="text" class="form-control d-inline" style="width:30px;" value="2">
+        <input type="text" class="form-control d-inline" style="width:25px; position:relative; top:-8px;" value="2">
       </label>
-      <label class="container">FDR (False Discovery Rate): &alpha;=10<sup>-</sup>
+      <label class="container"><span style="font-size:1.3rem;">FDR (False Discovery Rate): &alpha;=10<sup>-</sup></span>
         <input type="radio" name="corrected" value="2">
         <span class="checkmark"></span>
-        <input type="text" class="form-control d-inline" disabled style="width:30px;" value="2">
+        <input type="text" class="form-control d-inline" disabled style="width:25px; position:relative; top:-8px;" value="2">
       </label>
     </div>
     <div class="col-lg-4 col-6 text-right">

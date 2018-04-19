@@ -77,8 +77,6 @@ def showEnrich(request):
 		enrich_db = YhmiEnrichmentTempTable(request.POST['tableID'])
 		data_tf = YhmiEnrichmentTf.objects.all()
 		data = enrich_db.getData()
-		data = list(data)
-		print(len(data))
 
 		S = len(geneset)
 		enrich_value = {'Acetylation':[], 'Methylation':[], 'H2A_Variant_and_H2B_Ubiquitination':[]}
@@ -227,10 +225,13 @@ def userSpecific(request, HistoneGene=False):
 		enrich_db = YhmiEnrichmentTempTable(request.POST['tableID'])
 		data = enrich_db.getData(criteria=True)
 		custom_data = []
+		cont = 0
 		for i in data:
+			cont += 1
 			custom_data.append({
 				'enrichID':i["ID"],
 				'feature':i['feature'],
+				'criteria':i['feature_criteria'],
 				'pro_len':i['pro_en'].count(",")+1 if i['pro_en'] else 0,
 				'cds_len':i['cds_en'].count(",")+1 if i['cds_en'] else 0,
 				'pro_criteria':i['pro_criteria'],
@@ -298,9 +299,7 @@ def Correction(enrich_value, method='1', cutoff=2.0):
 	if method == '1':
 		for ftype, fdata in enrich_value.items():
 			length = len(fdata)
-			# print(ftype, length)
 			temp = []
-			print(ftype, length)
 			for i,data in enumerate(fdata):
 				data['pvalue'][0] *= length
 				if data['pvalue'][0] < 10**(-cutoff):

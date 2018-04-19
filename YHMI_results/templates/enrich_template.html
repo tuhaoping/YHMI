@@ -123,7 +123,7 @@
         {% else %}
           <!-- H2A_Variant_and_H2B_Ubiquitination -->
           {% for fftype,data in enrich_value_others.items %} 
-            <div class="pt-2 mx-3" style="font-size:1.5rem;">{{fftype}}</div> <!-- Histone Modifications 種類 title-->
+            <div class="pt-2 mx-3" style="font-size:2rem;">{{fftype}}</div> <!-- Histone Modifications 種類 title-->
             <hr class="mt-1" style="border-width:5px;">
 
             <!-- Promoter/CDS-->
@@ -239,9 +239,9 @@
   .intersect_input, .intersect_histone {width:50%!important;}
   #genemodal table tr td {padding: 4px;}
   #genemodal table th {border-top: 4px;}
-  #result .nav-tabs .nav-link:hover {
-    border-color: #a5a7a9;
-}
+  #result .nav-tabs .nav-link:hover {border-color: #a5a7a9;}
+  #result .nav-tabs .nav-link {border-color: #a5a7a9;}
+
   #result .nav-tabs{border-bottom-color: #a5a7a9;}
   #result .nav-tabs .nav-link.active{
       color:#000;
@@ -261,11 +261,12 @@
   .table-bordered td {border:1px solid #a5a7a9}
   #result .nav-tabs .nav-link{font-size:1.5rem;}
   #result .subtitle {
+    text-align: center;
     padding: 4px 24px 0px 24px;
     margin: 0px 8px 16px 8px;
     background-color: #585858cf;
     color:white;
-    font-size:1.3rem;
+    font-size:2rem;
     border-radius: .25rem;
   }
 </style>

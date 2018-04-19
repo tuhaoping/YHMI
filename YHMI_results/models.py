@@ -244,30 +244,29 @@ class YhmiEnrichmentTempTable():
 			res = cursor.fetchall()
 		
 		except MySQLdb.Error as e:
+			print("updateTable:", e)
 			print(sqlCmd)
-			print(e)
 
 		tableDict = {}
-		# {'H3_or_H4_Acetylation_mutant': [('`Data0_pro` en 1.0', 'pro_en', 'H3K4ac_set1D_on_WT_exp2')]
+		# {'H3_or_H4_Acetylation_mutant': [('`Data0_pro` en 1.0', 'pro_en', 'H3K4ac_set1D_on_WT_exp2', '1')]
 		for r in res:
 			TableID = "_"+r[3] if r[3] else ""
 			for f in feature_ID[str(r[0])]:
 				table_name = r[2]+TableID
 				if table_name in tableDict:
-					tableDict[table_name].append(("`Data{}_{}` {} {}".format(r[4], f[0], f[1], f[2]), f[0]+"_"+f[1], r[1]))
+					tableDict[table_name].append(("`Data{}_{}` {} {}".format(r[4], f[0], f[1], f[2]), f[0]+"_"+f[1], r[1], f[2]))
 				else:
-					tableDict[table_name] = [("`Data{}_{}` {} {}".format(r[4], f[0], f[1], f[2]), f[0]+"_"+f[1], r[1])]
-
+					tableDict[table_name] = [("`Data{}_{}` {} {}".format(r[4], f[0], f[1], f[2]), f[0]+"_"+f[1], r[1], f[2])]
 		try:
 			for table, condiction in tableDict.items():
-				for c, t, feature in condiction:
+				for c, t, feature, criteria in condiction:
 					c = c.replace("en", '>=').replace('de', '<=')
 					sqlCmd = "SELECT `ORF` FROM `yhmi_filter_{}` WHERE {}".format(table.lower(), c)
 					# print(sqlCmd)
 					cursor.execute(sqlCmd)
 					update_gene = ",".join([r[0] for r in cursor.fetchall()])
-					sqlCmd = "UPDATE `{}` SET `{}` = '{}' WHERE `Feature` = '{}'".format(
-						self.__temp_table + self.__tableID, t, update_gene, feature)
+					sqlCmd = "UPDATE `{}` SET `{}` = '{}',`{}_criteria`={} WHERE `Feature` = '{}'".format(
+						self.__temp_table + self.__tableID, t, update_gene, t[:3], criteria, feature)
 					cursor.execute(sqlCmd)
 			
 			con.commit()
@@ -300,14 +299,21 @@ class YhmiEnrichmentTempTable():
 				sqlCmd = "SELECT * FROM `{}` WHERE `ID`='{}'".format(
 							self.__temp_table + self.__tableID, FeatureID)
 			elif criteria:
-				sqlCmd = "SELECT `ID`, `Feature`, `Pro_en`, `Cds_en`, `Pro_criteria`, `Cod_criteria` FROM `{}`".format(self.__temp_table+self.__tableID)
+				temp_column = ['ID', 'Feature', 'Pro_en', 'Cds_en', 'Pro_criteria', 'Cds_criteria']
+				sqlCmd = '''SELECT `{temp}`.`{}`, `{temp}`.`{}`, `{temp}`.`{}`, `{temp}`.`{}`, `{temp}`.`{}`, `{temp}`.`{}`, `const_comparison_feature`.`Feature_Criteria`
+							FROM `{temp}`
+							JOIN `const_comparison_feature`
+							ON `const_comparison_feature`.`ID`=`{temp}`.`ID`
+							WHERE `const_comparison_feature`.`Valid` = 1'''.format(
+								*temp_column, temp=self.__temp_table+self.__tableID)
 			else:
 				temp_column = ['ID', 'Feature', 'Pro_en', 'Pro_de', 'Cds_en', 'Cds_de', 'HistoneType']
 				sqlCmd = '''SELECT `{temp}`.`{}`,`{temp}`.`{}`,`{temp}`.`{}`,`{temp}`.`{}`,`{temp}`.`{}`,`{temp}`.`{}`,`{temp}`.`{}`,`const_comparison_feature`.`Paper`
 							FROM `{temp}`
-							LEFT JOIN `const_comparison_feature`
-							ON `const_comparison_feature`.`Feature`=`{temp}`.`Feature`'''.format(
-							*temp_column, temp=self.__temp_table+self.__tableID)
+							JOIN `const_comparison_feature`
+							ON `const_comparison_feature`.`ID`=`{temp}`.`ID`
+							WHERE `const_comparison_feature`.`Valid` = 1'''.format(
+								*temp_column, temp=self.__temp_table+self.__tableID)
 
 			cursor.execute(sqlCmd)
 			res = cursor.fetchall()
@@ -323,7 +329,7 @@ class YhmiEnrichmentTempTable():
 				yield {'feature':res[0][1], 'pro_en':res[0][2], 'pro_de':res[0][3], 'cds_en':res[0][4], 'cds_de':res[0][5]}
 		elif criteria:
 			for r in res:
-				yield {'ID':r[0], 'feature':r[1], 'pro_en':r[2], 'cds_en':r[3], 'pro_criteria':r[4], 'cds_criteria':r[5]}
+				yield {'ID':r[0], 'feature':r[1], 'pro_en':r[2], 'cds_en':r[3], 'pro_criteria':r[4], 'cds_criteria':r[5], 'feature_criteria':r[6]}
 		else:
 			for r in res:
 				yield {'ID':r[0], 'feature':r[1], 'pro_en':r[2], 'pro_de':r[3], 'cds_en':r[4], 'cds_de':r[5], 'histoneType':r[6],'paper':r[7]}

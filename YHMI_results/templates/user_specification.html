@@ -33,12 +33,12 @@
           <div class="tab-content" style="height:200px;overflow-y:scroll;">
             <div class="tab-pane fade show active" id="pro_histone">
               {% for data in custom_data %}
-                - {{ data.feature }} <a class="histone_gene_modal" href="#{{ data.enrichID }}_0" data-feature="{{ data.feature }}" data-toggle="modal" data-target="#HistoneGeneInfo">{{ data.pro_len }}</a> Genes criteria > {{ data.pro_criteria }} <br>
+                - {{ data.feature }} <a class="histone_gene_modal" href="#{{ data.enrichID }}_0" data-feature="{{ data.feature }}" data-toggle="modal" data-target="#HistoneGeneInfo">{{ data.pro_len }}</a> Genes {{ data.criteria }} > {{ data.pro_criteria }} <br>
               {% endfor %}
             </div>
             <div class="tab-pane fade" id="cds_histone">
               {% for data in custom_data %}
-                - {{ data.feature }} <a class="histone_gene_modal" href="#{{ data.enrichID }}_0" data-feature="{{ data.feature }}" data-toggle="modal" data-target="#HistoneGeneInfo">{{ data.cds_len }}</a> Genes criteria > {{ data.pro_criteria }} <br>
+                - {{ data.feature }} <a class="histone_gene_modal" href="#{{ data.enrichID }}_2" data-feature="{{ data.feature }}" data-toggle="modal" data-target="#HistoneGeneInfo">{{ data.cds_len }}</a> Genes {{ data.criteria }} > {{ data.pro_criteria }} <br>
               {% endfor %}
             </div>
           </div>
@@ -138,6 +138,10 @@
 <style>
   #userspecific {
     font-size: 1.2rem;
+  }
+  #userspecific .nav-pills .nav-link{
+    border:0.5px solid #ced4da;
+    margin-right: .8rem;
   }
   #userspecific .modal-lg{
     max-width: 70%;
