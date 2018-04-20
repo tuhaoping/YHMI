@@ -57,14 +57,23 @@ function calcSettingCardBody_h(){
   // var custom_card_body_h = $("#custom-setting-accordion .card-body").outerHeight('275px');
 }
 
+
+function equal_header(){
+  var step1header = document.getElementById("step1header");
+  document.getElementById("step2header").style.height = step1header.offsetHeight + "px";
+
+}
+
 $(document).ready(function(){
   // calcCardBody_h();
-  calcSettingCardBody_h();
+  // calcSettingCardBody_h();
+  equal_header();
 
 });
 
 
 $(window).resize(function(){
   // calcCardBody_h();
-  calcSettingCardBody_h();
+  // calcSettingCardBody_h();
+  equal_header();
 });

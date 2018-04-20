@@ -12,7 +12,7 @@
     <!-- Gene Input Set-->
     <div class="col-lg-3 col-md-3 col-12">
       <div class="card mb-3">
-        <div class="card-header" style="height:51px;">
+        <div id="step1header" class="card-header" style="height:;">
           <span style="font-size: 1.3rem;"><i class="fa fa-search"></i> Step1. Input Your Gene List</span>
           <a id="a-eg" data-toggle="collapse" data-target="#example-btn-div" href="#">(e.g.)</a>
         </div>
@@ -25,6 +25,7 @@
               <div class="btn btn-sm" onclick="showExample(3)">4-16</div>
               <div class="btn btn-sm" onclick="showExample(4)">16-50</div>
               <div class="btn btn-sm" onclick="showExample(5)">50+</div>
+              <div class="btn btn-sm mt-1" onclick="showExample(6)">Esa1(25C)</div>
             </div>
           </div>
           <textarea id="inputTextArea" class="form-control" style="height:100%; resize:none; overflow-x:hidden;"></textarea>
@@ -34,7 +35,7 @@
     <!-- Gene Input Filter-->
     <div class="col-lg-9 col-md-9 col-12">
       <div class="card mb-3">
-        <div class="card-header" style="height:51px;">
+        <div id="step2header" class="card-header" style="height:;">
           <span style="font-size: 1.3rem;"><i class="fa fa-wrench"></i> Step2. Define Genes With Specific Histone Modifications &nbsp;</span>
             <!--
             <label class="switch m-0">
@@ -58,11 +59,15 @@
               {% if MainClass != 'TF'%}
                 <div class="card">
                   <div class="card-header" role="tab" id="{{MainClass}}-setting" data-toggle="collapse" data-target="#{{MainClass}}-setting-collapse">
-                    <h6 class="mb-0" style="color:#007bff">{{ MainClass }}</h6>
+                    {% if forloop.counter0 %}
+                      <h6 class="mb-0" style="color:#007bff">{{ MainClass }} &nbsp;<i class="fa fa-plus-circle"></i></h6>
+                    {% else %}
+                      <h6 class="mb-0" style="color:#007bff">{{ MainClass }} &nbsp;<i class="fa fa-minus-circle"></i></h6>
+                    {% endif %}
                   </div>
 
                   <div id="{{MainClass}}-setting-collapse" class="collapse" role="tabpanel" aria-labelledby="{{MainClass}}-setting" data-parent="#custom-setting-accordion" >
-                    <div class="card-body p-0" style="height:300px; overflow-y:scroll;">
+                    <div class="card-body p-0" style="max-height:393px; overflow-y:scroll;">
                       {% for SubClass,Feature in Data.items %}
                         <div class="subtitle">{{ SubClass }}</div>
                         <div class="pl-3 pr-3">

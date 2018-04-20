@@ -85,30 +85,38 @@ function barplot(ftype) {
 			},
 		}
 
-		Plotly.newPlot(fig_id1, data1, layout);
+		var modeBarButtonsToRemove = [
+			'sendDataToCloud',
+			'hoverCompareCartesian',
+			'zoom2d',
+			// 'pan2d',
+			'select2d',
+			'lasso2d',
+			'toggleSpikelines',
+			'hoverClosestCartesian',
+			'hoverCompareCartesian',
+		]
+		Plotly.newPlot(fig_id1, data1, layout, {'displayModeBar':true, 'modeBarButtonsToRemove': modeBarButtonsToRemove});
 		if(ftype != "TF")
-			Plotly.newPlot(fig_id2, data2, layout);
+			Plotly.newPlot(fig_id2, data2, layout, {'displayModeBar':true, 'modeBarButtonsToRemove': modeBarButtonsToRemove});
 	}
 }
 
 
 
 $(window).resize(function(){
-	var ftype = $("#result .tab-content div.active.show").data('graph');
+	var ftype = $("#result .result-tabs-content > div.active.show").data('graph');
+	// var histoneType = $("#result .result-tabs-content > div.active.show > .histonetype-pill a.active").data("graph");
+	// console.log(histoneType);
+	if(bar_data)
+		if(ftype == 'H2A_Variant_and_H2B_Ubiquitination'){
+        	  barplot('H2A_Variant');
+          	barplot('H2BK123_Ubiquitination');
+        	}
+    	else{
+    		barplot(ftype);
+    	}
+    else
+    	return 0;
 
-	if(ftype == 'H2A_Variant_and_H2B_Ubiquitination'){
-          // ftype = $("#result .tab-content div.active.show .graph_radio input[type='radio']:checked").eq(0).data('ftype');
-          // graphtype = $("#result .tab-content div.active.show .graph_radio input[type='radio']:checked").eq(0).data('graph');
-          // barplot(ftype, graphtype);
-          // ftype = $("#result .tab-content div.active.show .graph_radio input[type='radio']:checked").eq(1).data('ftype');
-          // graphtype = $("#result .tab-content div.active.show .graph_radio input[type='radio']:checked").eq(1).data('graph');
-          barplot('H2A_Variant');
-          barplot('H2BK123_Ubiquitination');
-        }
-        else{
-        	// var graphtype = $("#result .tab-content div.active.show .graph_radio input[type='radio']:checked").data('graph');
-        	barplot(ftype);
-        }
-
-	// console.log('resize plot')
 });
