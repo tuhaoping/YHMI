@@ -77,6 +77,8 @@ def showEnrich(request):
 		enrich_db = YhmiEnrichmentTempTable(request.POST['tableID'])
 		data_tf = YhmiEnrichmentTf.objects.all()
 		data = enrich_db.getData()
+		data = list(data)
+		print(len(data))
 
 		S = len(geneset)
 		enrich_value = {'Acetylation':[], 'Methylation':[], 'H2A_Variant_and_H2B_Ubiquitination':[]}
@@ -84,8 +86,9 @@ def showEnrich(request):
 		enrich_value_tf = []
 
 		for i in data:
-			gene = [set(i['pro_en'].split(',')), set(i['pro_de'].split(',')), set(i['cds_en'].split(',')), set(i['cds_de'].split(','))]
-			for g,t in zip(gene, [0, 1, 2, 3]):
+			gene = [set(i['pro_en'].split(',')), set(i['cds_en'].split(','))]
+			# gene = [set(i['pro_en'].split(',')), set(i['pro_de'].split(',')), set(i['cds_en'].split(',')), set(i['cds_de'].split(','))]
+			for g,t in zip(gene, [0, 2]):
 				T = len(g & geneset)
 				G = len(g)
 				# print(i['ID'])。
@@ -265,8 +268,8 @@ def Hypergeometric_pvalue(temp_enrich, enrich_value_tf=None):
 			F_G_S_T = F-G-S+T
 
 			if F_G_S_T <= 0:
-				temp_enrich_over[i]['pvalue'] = (math.inf,)
-				temp_enrich_under[i]['pvalue'] = (math.inf,)
+				temp_enrich_over[i]['pvalue'] = [math.inf,]
+				temp_enrich_under[i]['pvalue'] = [math.inf,]
 			else:
 				temp_enrich_over[i]['pvalue'] = [scipy.stats.fisher_exact( [ [T,G_T] , [S_T,F_G_S_T]] ,'greater')[1],0]
 				temp_enrich_under[i]['pvalue'] = [scipy.stats.fisher_exact( [ [T,G_T] , [S_T,F_G_S_T]] ,'less')[1],1]
@@ -281,7 +284,7 @@ def Hypergeometric_pvalue(temp_enrich, enrich_value_tf=None):
 			F_G_S_T = F-G-S+T
 
 			if F_G_S_T <= 0:
-				enrich_value_tf[i]['pvalue'] = (math.inf,)
+				enrich_value_tf[i]['pvalue'] = [math.inf,]
 			else:
 				enrich_value_tf[i]['pvalue'] = [scipy.stats.fisher_exact( [ [T,G_T] , [S_T,F_G_S_T]] ,'greater')[1],2]
 
@@ -300,6 +303,7 @@ def Correction(enrich_value, method='1', cutoff=2.0):
 		for ftype, fdata in enrich_value.items():
 			length = len(fdata)
 			temp = []
+			print(ftype, length)
 			for i,data in enumerate(fdata):
 				data['pvalue'][0] *= length
 				if data['pvalue'][0] < 10**(-cutoff):

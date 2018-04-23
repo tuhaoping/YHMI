@@ -649,3 +649,7 @@ hr {
 ::-webkit-scrollbar-thumb:hover {
     background: #0055b1; 
 }
+
+.step-title {
+  font-weight: bold;
+}

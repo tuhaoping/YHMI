@@ -13,7 +13,7 @@
     <div class="col-lg-3 col-md-3 col-12">
       <div class="card mb-3">
         <div id="step1header" class="card-header" style="height:;">
-          <span style="font-size: 1.3rem;"><i class="fa fa-search"></i> Step1. Input Your Gene List</span>
+          <span style="font-size: 1.3rem;"><i class="fa fa-search"></i> <span class="step-title">Step1. </span>Input Your Gene List</span>
           <a id="a-eg" data-toggle="collapse" data-target="#example-btn-div" href="#">(e.g.)</a>
         </div>
         
@@ -36,7 +36,7 @@
     <div class="col-lg-9 col-md-9 col-12">
       <div class="card mb-3">
         <div id="step2header" class="card-header" style="height:;">
-          <span style="font-size: 1.3rem;"><i class="fa fa-wrench"></i> Step2. Define Genes With Specific Histone Modifications &nbsp;</span>
+          <span style="font-size: 1.3rem;"><i class="fa fa-wrench"></i> <span class="step-title">Step2. </span>Define Genes With Specific Histone Modifications &nbsp;</span>
             <!--
             <label class="switch m-0">
               <input type="checkbox" id="switch">
@@ -142,33 +142,38 @@
   </div>
   <!-- ./Gene Input-->
 
-  <hr class="mt-0 mb-2">
-  <span style="font-size: 1.3rem; text-decoration:underline;">
-    <i class="fa fa-gear"></i> Step3. Specify P-value Cutoff for Mulitple Hypothese Testing
-  </span>
-  
-  <div class="row mt-1" id="div-corrected">
-    <div class="col-lg-8 col-6">
-      <label class="container"><span style="font-size:1.3rem;">Bonferroni-corrected p-value: cutoff=10<sup>-</sup></span>
-        <input type="radio" checked="checked" name="corrected" value="1">
-        <span class="checkmark"></span>
-        <input type="text" class="form-control d-inline" style="width:25px; position:relative; top:-8px;" value="2">
-      </label>
-      <label class="container"><span style="font-size:1.3rem;">FDR (False Discovery Rate): &alpha;=10<sup>-</sup></span>
-        <input type="radio" name="corrected" value="2">
-        <span class="checkmark"></span>
-        <input type="text" class="form-control d-inline" disabled style="width:25px; position:relative; top:-8px;" value="2">
-      </label>
+  <div class="card mb-3">
+    <div id="" class="card-header" style="height:;">
+      <span style="font-size: 1.3rem;">
+        <i class="fa fa-gear"></i> <span class="step-title">Step3. </span>Specify P-value Cutoff for Mulitple Hypothese Testing
+      </span>
     </div>
-    <div class="col-lg-4 col-6 text-right">
-      <div class="btn btn-primary w-10 mt-4" id="btn-reset">
-        Reset <i class="fa fa-fw fa-refresh"></i></div>
-      <div class="btn btn-primary w-10 mt-4" id="btn-send">
-        Submit <i class="fa fa-fw fa-paper-plane"></i></div>
+    
+    <div class="card-body" id="div-corrected">
+      <div class="col-lg-8 col-6">
+        <label class="container"><span style="font-size:1.3rem;">Bonferroni-corrected p-value: cutoff=10<sup>-</sup></span>
+          <input type="radio" checked="checked" name="corrected" value="1">
+          <span class="checkmark"></span>
+          <input type="text" class="form-control d-inline" style="width:25px; position:relative; top:-8px;" value="2">
+        </label>
+        <label class="container"><span style="font-size:1.3rem;">FDR (False Discovery Rate): &alpha;=10<sup>-</sup></span>
+          <input type="radio" name="corrected" value="2">
+          <span class="checkmark"></span>
+          <input type="text" class="form-control d-inline" disabled style="width:25px; position:relative; top:-8px;" value="2">
+        </label>
+      </div>
     </div>
   </div>
+  
+  <div class="text-center">
+    <div class="btn btn-primary w-10" id="btn-reset">
+      Reset <i class="fa fa-fw fa-refresh"></i></div>
+    <div class="btn btn-primary w-10" id="btn-send">
+      Submit <i class="fa fa-fw fa-paper-plane"></i></div>
+  </div>
+
   </form>
-  <hr class="mt-2 mb-5">
+  {# <hr class="mt-2 mb-5"> #}
 
 
 {% endblock content %}

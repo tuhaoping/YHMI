@@ -29,16 +29,19 @@
       <div id="{{ftype}}_tab" class="tab-pane fade" data-graph="{{ftype}}">
         {% if ftype != 'H2A_Variant_and_H2B_Ubiquitination' %}
           {% if ftype != 'TF' %}
+          <hr>
           <div class="histonetype-pill">
-            <ul class="nav nav-pills nav-justified histonetype-pill">
+            <ul class="nav nav-pills histonetype-pill">
               <li class="nav-item">
-                <a class="nav-link active" data-toggle="pill" href="#{{ftype}}_Promoter_nav_pill" data-histonetype="Promoter" data-graph="{{ftype}}">Promoter</a>
+                <a class="nav-link active" data-toggle="pill" href="#{{ftype}}_Promoter_nav_pill" data-histonetype="Promoter" data-graph="{{ftype}}">See result in Promoter</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" data-toggle="pill" href="#{{ftype}}_Coding_Region_nav_pill" data-histonetype="Coding_Region" data-graph="{{ftype}}">Coding Region</a>
+                <a class="nav-link" data-toggle="pill" href="#{{ftype}}_Coding_Region_nav_pill" data-histonetype="Coding_Region" data-graph="{{ftype}}">See result in Coding Region</a>
               </li>
             </ul>
           </div>
+          {% else %}
+          <hr style="border:1px solid transparent;">
           {% endif %}
           
           <div class="tab-content histoneType-content">
@@ -128,12 +131,12 @@
             <hr class="mt-1" style="border-width:5px;">
             
             <div class="histonetype-pill">
-              <ul class="nav nav-pills nav-justified histonetype-pill">
+              <ul class="nav nav-pills histonetype-pill">
                 <li class="nav-item">
-                  <a class="nav-link active" data-toggle="pill" href="#{{fftype}}_Promoter_nav_pill" data-histonetype="Promoter" data-graph="{{fftype}}">Promoter</a>
+                  <a class="nav-link active" data-toggle="pill" href="#{{fftype}}_Promoter_nav_pill" data-histonetype="Promoter" data-graph="{{fftype}}">See result in Promoter</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" data-toggle="pill" href="#{{fftype}}_Coding_Region_nav_pill" data-histonetype="Coding_Region" data-graph="{{fftype}}">Coding Region</a>
+                  <a class="nav-link" data-toggle="pill" href="#{{fftype}}_Coding_Region_nav_pill" data-histonetype="Coding_Region" data-graph="{{fftype}}">See result in Coding Region</a>
                 </li>
               </ul>
             </div>
