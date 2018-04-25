@@ -61,6 +61,15 @@ $(document).ready(function(){
 			success:function(res){
 				// let histoneID = 1
 				$("#userspecific").html(res);
+				$("#gene_specific_table").DataTable({
+					fixedHeader: true,
+					scrollY: "300px",
+					scrollCollapse: true,
+					paging: false,
+					info: false,
+					searching: false
+				});
+				$("#gene_specific_table_wrapper div.dataTables_scrollBody").css('border-bottom-color', '#a5a7a9')
 				$("#userspecific a.histone_gene_modal").click(function(){
 					var histone_gene_download_url = '/result/specific/histonegene?';
 					[histoneID, histoneType] = $(this).attr('href').slice(1).split("_");

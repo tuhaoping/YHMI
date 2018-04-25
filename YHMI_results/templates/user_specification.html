@@ -7,7 +7,7 @@
 <div>
   <table class="table table-bordered">
     <tr>
-      <td style="width:30%;">Input Genes</td>
+      <td style="width:27%;">Input Genes</td>
       <td>{{inputGene_length}}</td>
       {# <td><a href="#" data-toggle="modal" data-target="#geneInfo">{{inputGene_length}}</a></td> #}
     </tr>
@@ -19,7 +19,37 @@
     </tr>
     <tr>
       <td class="align-middle" style="height:200px;">Genes with Specific Histone Modifications</td>
-      <td class="p-0">
+      <td class="p-0" style="font-size:1rem;">
+        <div class="p-2">
+          <table class="table" id="gene_specific_table">
+            <thead>
+              <tr>
+                <th></th>
+                <th colspan="2" class="text-center">Promoter</th>
+                <th colspan="2" class="text-center">Coding Region</th>
+              </tr>
+              <tr>
+                <th>Histone</th>
+                <th># of Genes</th>
+                <th>Criteria</th>
+                <th># of Genes</th>
+                <th>Criteria</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for data in custom_data %}
+              <tr>
+                <td>{{ data.feature }}</td>
+                <td><a class="histone_gene_modal" href="#{{ data.enrichID }}_0" data-feature="{{ data.feature }}" data-toggle="modal" data-target="#HistoneGeneInfo">{{ data.pro_len }}</a></td>
+                <td>{{ data.criteria }} > {{ data.pro_criteria }}</td>
+                <td><a class="histone_gene_modal" href="#{{ data.enrichID }}_2" data-feature="{{ data.feature }}" data-toggle="modal" data-target="#HistoneGeneInfo">{{ data.cds_len }}</a></td>
+                <td>{{ data.criteria }} > {{ data.cds_criteria }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <!--
         <div class="p-2">
           <ul class="nav nav-pills" id="myTab" role="tablist">
             <li class="nav-item">
@@ -43,6 +73,7 @@
             </div>
           </div>
         </div>
+        -->
         <!--
         <div class="p-3" style="height:200px;overflow-y:scroll;">
         {% for data in custom_data %}
@@ -149,4 +180,30 @@
 
   #HistoneGeneInfo .orf_col, #HistoneGeneInfo .gene_col {width:15%!important;}
   #HistoneGeneInfo .alias_col{width:70%!important;}
+
+
+
+  .table-fixed tbody {
+   height: 200px;
+   overflow-y: auto;
+   width: 100%;
+  }
+  .table-fixed thead,
+  .table-fixed tbody,
+  .table-fixed tr,
+  .table-fixed td,
+  .table-fixed th {
+   display: block;
+  }
+  .table-fixed tr:after {
+   content: "";
+   display: block;
+   visibility: hidden;
+   clear: both;
+  }
+  .table-fixed tbody td,
+  .table-fixed thead > tr > th {
+   float: left;
+  }
+
 </style>

@@ -29,9 +29,9 @@
       <div id="{{ftype}}_tab" class="tab-pane fade" data-graph="{{ftype}}">
         {% if ftype != 'H2A_Variant_and_H2B_Ubiquitination' %}
           {% if ftype != 'TF' %}
-          <hr>
+          <hr class="mt-5">
           <div class="histonetype-pill">
-            <ul class="nav nav-pills histonetype-pill">
+            <ul class="nav nav-pills histonetype-pill justify-content-center">
               <li class="nav-item">
                 <a class="nav-link active" data-toggle="pill" href="#{{ftype}}_Promoter_nav_pill" data-histonetype="Promoter" data-graph="{{ftype}}">See result in Promoter</a>
               </li>
@@ -41,7 +41,7 @@
             </ul>
           </div>
           {% else %}
-          <hr style="border:1px solid transparent;">
+          <hr class="mt-4" style="border:1px solid transparent;">
           {% endif %}
           
           <div class="tab-content histoneType-content">
@@ -91,7 +91,8 @@
                       {% for value in fdata %}
                       <tr>
                         {% if ftype != 'TF' %}
-                        <td class="text-left">{{ value.feature }} {{ value.enrich_type|now_type}}</td>
+                        <td class="text-left">{{ value.feature }}</td>
+                        {# <td class="text-left">{{ value.feature }} {{ value.enrich_type|now_type}}</td> #}
                         {% else %}
                           <td class="text-left">{{ value.feature|TF_name_transfer }}</td>
                           <td class="text-left">{{ value.feature|TF_temperature }}</td>
@@ -131,7 +132,7 @@
             <hr class="mt-1" style="border-width:5px;">
             
             <div class="histonetype-pill">
-              <ul class="nav nav-pills histonetype-pill">
+              <ul class="nav nav-pills histonetype-pill justify-content-center">
                 <li class="nav-item">
                   <a class="nav-link active" data-toggle="pill" href="#{{fftype}}_Promoter_nav_pill" data-histonetype="Promoter" data-graph="{{fftype}}">See result in Promoter</a>
                 </li>

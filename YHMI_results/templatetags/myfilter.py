@@ -7,7 +7,7 @@ def now_type(count):
 
 @register.filter
 def pvalue_type(pType):
-	p = ["Over", "Under", '']
+	p = ["Enriched", "Depleted", '']
 	return p[pType]
 
 @register.filter

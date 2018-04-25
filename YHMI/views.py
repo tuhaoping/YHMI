@@ -17,14 +17,16 @@ def HomePage(request):
 	for ID, Feature, Criteria, mC, sC in cursor.fetchall():
 		if mC in filter_item:
 			if mC == 'TF':
-				filter_item[mC].append((ID,Feature,Criteria))
+				pass
+				# filter_item[mC].append((ID,Feature,Criteria))
 			elif sC in filter_item[mC]:
 				filter_item[mC][sC].append((ID,Feature,Criteria))
 			else:
 				filter_item[mC][sC] = [(ID,Feature,Criteria)]
 		else:
 			if mC == 'TF':
-				filter_item[mC] = [(ID,Feature,Criteria)]
+				pass
+				# filter_item[mC] = [(ID,Feature,Criteria)]
 			else:
 				filter_item[mC] = {sC:[(ID,Feature,Criteria)]}
 	######## ./get Papers and Features ########
