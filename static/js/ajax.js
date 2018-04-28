@@ -71,7 +71,7 @@ $(document).ready(function(){
 				});
 				$("#gene_specific_table_wrapper div.dataTables_scrollBody").css('border-bottom-color', '#a5a7a9')
 				$("#userspecific a.histone_gene_modal").click(function(){
-					var histone_gene_download_url = '/result/specific/histonegene?';
+					var histone_gene_download_url = rootURL + '/result/specific/histonegene?';
 					[histoneID, histoneType] = $(this).attr('href').slice(1).split("_");
 					$("#HistoneGeneInfo .modal-title").text("Genes with " + $(this).data('feature'));
 					console.log(histone_gene_download_url)
@@ -108,8 +108,8 @@ $(document).ready(function(){
 			success:function(res){
 				// $(".container-fluid.container-input").hide();
 				$(".container-fluid.container-results").show();
-				$("#leftAccordion .nav-link").removeClass("active");
-				$("#leftAccordion .nav-link").eq(2).addClass("active");
+				// $("#leftAccordion .nav-link").removeClass("active");
+				// $("#leftAccordion .nav-link").eq(2).addClass("active");
 
 				$("#result").html(res['template']);
 				$("#Acetylation_tab").addClass("active show");
@@ -126,18 +126,41 @@ $(document).ready(function(){
 				   #H2A_Variant_Coding_Region_enrich_table, \
 				   #H2BK123_Ubiquitination_Promoter_enrich_table, \
 				   #H2BK123_Ubiquitination_Coding_Region_enrich_table").DataTable({
-						'order': [[5, "asc"], [0, 'asc']],
+						'order': [[2, "asc"], [0, 'asc']],
+						"autoWidth": false,
+						'columnDefs':[
+							{"width":"15%", "targets":0},
+							{"width":"10%", "targets":1},
+							{"width":"17%", "targets":2},
+							{"width":"18%", "targets":3},
+							{"width":"20%", "targets":4},
+							{"width":"20%", "targets":5}
+
+						]
 					});
+				console.log("test");
 
 				$("#TF_Promoter_enrich_table").DataTable({
-					'order': [[1, 'asc'], [6, "asc"], [0, 'asc']],
-					// 'columnDefs':[
-					// 	{'targets':[0], 'orderData':[1,0,6]},
-					// 	{'targets':[1], 'orderData':[1,6,0]},
-					// 	{'targets':[6], 'orderData':[1,6,0]},
+					'order': [[1, 'asc'], [2, "asc"], [0, 'asc']],
+					"autoWidth": false,
+					'columnDefs':[
+						{"width":"15%", "targets":0},
+						{"width":"10%", "targets":1},
+						{"width":"17%", "targets":2},
+						{"width":"18%", "targets":3},
+						{"width":"20%", "targets":4},
+						{"width":"20%", "targets":5}
 
+					]
+					// "columns" : [
+					// 	{"width":"20%"},
+					// 	{"width":"10%"},
+					// 	{"width":"20%"},
+					// 	{"width":"10%"},
+					// 	{"width":"20%"},
+					// 	{"width":"20%"}
 					// ]
-				})
+				});
 				
 				var intersect_data = {};
 				$("#Acetylation_Promoter_enrich_table, \
@@ -149,7 +172,7 @@ $(document).ready(function(){
 				   #H2BK123_Ubiquitination_Promoter_enrich_table, \
 				   #H2BK123_Ubiquitination_Coding_Region_enrich_table, \
 				   #TF_Promoter_enrich_table").on('click', 'a.intersect', function(){
-						var intersect_download_url = '/intersect/download?';
+						var intersect_download_url = rootURL + '/intersect/download?';
 						$("#genemodal .modal-body .container-fluid").html("");
 						id = $(this).attr('href').slice(1);
 						$('#intersect_download_a').attr('href',intersect_download_url+'tableID=' + tableID + "&histone="+id);
@@ -189,7 +212,6 @@ $(document).ready(function(){
 		  //   		});
 
 				$("#input_gene_table").DataTable();
-
 				bar_data = res['data']
 				barplot("Acetylation", 'fold');
 				// $("#Acetylation_enrich_table_wrapper, #Methylation_enrich_table_wrapper, #others_enrich_table_wrapper, #TF_enrich_table_wrapper").css('padding', '10');
