@@ -62,12 +62,22 @@ $(document).ready(function(){
 				// let histoneID = 1
 				$("#userspecific").html(res);
 				$("#gene_specific_table").DataTable({
+					autoWidth:false,
 					fixedHeader: true,
 					scrollY: "300px",
 					scrollCollapse: true,
 					paging: false,
 					info: false,
-					searching: false
+					searching: false,
+					orderFixed: [ 0, 'asc' ],
+					columnDefs:[
+						{"width":"10%", "targets":0, "orderable": false},
+						{"width":"12%", "targets":1},
+						{"width":"9%", "targets":2},
+						{"width":"30%", "targets":3},
+						{"width":"9%", "targets":4},
+						{"width":"30%", "targets":5}
+					]
 				});
 				$("#gene_specific_table_wrapper div.dataTables_scrollBody").css('border-bottom-color', '#a5a7a9')
 				$("#userspecific a.histone_gene_modal").click(function(){
@@ -138,7 +148,6 @@ $(document).ready(function(){
 
 						]
 					});
-				console.log("test");
 
 				$("#TF_Promoter_enrich_table").DataTable({
 					'order': [[1, 'asc'], [2, "asc"], [0, 'asc']],

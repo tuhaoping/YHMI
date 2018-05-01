@@ -291,7 +291,7 @@ class YhmiEnrichmentTempTable():
 		finally:
 			con.close()
 
-	def getData(self, FeatureID=None, histoneType=None, criteria = False):
+	def getData(self, FeatureID=None, histoneType=None, criteria=False):
 		try:
 			con = MySQLdb.connect(*self.__db)
 			cursor = con.cursor()
@@ -299,8 +299,8 @@ class YhmiEnrichmentTempTable():
 				sqlCmd = "SELECT * FROM `{}` WHERE `ID`='{}'".format(
 							self.__temp_table + self.__tableID, FeatureID)
 			elif criteria:
-				temp_column = ['ID', 'Feature', 'Pro_en', 'Cds_en', 'Pro_criteria', 'Cds_criteria']
-				sqlCmd = '''SELECT `{temp}`.`{}`, `{temp}`.`{}`, `{temp}`.`{}`, `{temp}`.`{}`, `{temp}`.`{}`, `{temp}`.`{}`, `const_comparison_feature`.`Feature_Criteria`
+				temp_column = ['ID', 'Feature', 'Pro_en', 'Cds_en', 'HistoneType', 'Pro_criteria', 'Cds_criteria']
+				sqlCmd = '''SELECT `{temp}`.`{}`, `{temp}`.`{}`, `{temp}`.`{}`, `{temp}`.`{}`, `{temp}`.`{}`, `{temp}`.`{}`, `{temp}`.`{}`, `const_comparison_feature`.`Feature_Criteria`
 							FROM `{temp}`
 							JOIN `const_comparison_feature`
 							ON `const_comparison_feature`.`ID`=`{temp}`.`ID`
@@ -329,7 +329,7 @@ class YhmiEnrichmentTempTable():
 				yield {'feature':res[0][1], 'pro_en':res[0][2], 'pro_de':res[0][3], 'cds_en':res[0][4], 'cds_de':res[0][5]}
 		elif criteria:
 			for r in res:
-				yield {'ID':r[0], 'feature':r[1], 'pro_en':r[2], 'cds_en':r[3], 'pro_criteria':r[4], 'cds_criteria':r[5], 'feature_criteria':r[6]}
+				yield {'ID':r[0], 'feature':r[1], 'pro_en':r[2], 'cds_en':r[3], 'histoneType':r[4], 'pro_criteria':r[5], 'cds_criteria':r[6], 'feature_criteria':r[7]}
 		else:
 			for r in res:
 				yield {'ID':r[0], 'feature':r[1], 'pro_en':r[2], 'pro_de':r[3], 'cds_en':r[4], 'cds_de':r[5], 'histoneType':r[6],'paper':r[7]}

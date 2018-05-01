@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load myfilter %}
 
 {% block content %}
   <div class="mb-0 mt-4">
@@ -14,18 +15,18 @@
       <div class="card mb-3">
         <div id="step1header" class="card-header" style="height:;">
           <span style="font-size: 1.3rem;"><i class="fa fa-search"></i> <span class="step-title">Step1. </span>Input Your Gene List</span>
-          <a id="a-eg" data-toggle="collapse" data-target="#example-btn-div" href="#">(e.g.)</a>
+          <a id="a-eg" data-toggle="collapse" data-target="#example-btn-div" href="#">(sample)</a>
         </div>
         
         <div class="card-body" style="height:500px; position:relative;" id="div-genetext">
           <div class="collapse" id="example-btn-div">
             <div class="card card-body">
-              <div class="btn btn-sm" onclick="showExample(1)">0-1</div>
-              <div class="btn btn-sm" onclick="showExample(2)">1-4</div>
-              <div class="btn btn-sm" onclick="showExample(3)">4-16</div>
-              <div class="btn btn-sm" onclick="showExample(4)">16-50</div>
-              <div class="btn btn-sm" onclick="showExample(5)">50+</div>
-              <div class="btn btn-sm mt-1" onclick="showExample(6)">Esa1(25C)</div>
+              {# <div class="btn btn-sm" onclick="showExample(1)">0-1</div> #}
+              {# <div class="btn btn-sm" onclick="showExample(2)">1-4</div> #}
+              {# <div class="btn btn-sm" onclick="showExample(3)">4-16</div> #}
+              {# <div class="btn btn-sm" onclick="showExample(4)">16-50</div> #}
+              <div class="btn btn-sm w-100" onclick="showExample(5)">1. Highly Transcribed Genes (174 genes)</div><br>
+              <div class="btn btn-sm w-100 mt-1" onclick="showExample(6)">2. Promoters Bound by Esa1 (538 genes)</div>
             </div>
           </div>
           <textarea id="inputTextArea" class="form-control" style="height:100%; resize:none; overflow-x:hidden;"></textarea>
@@ -36,7 +37,7 @@
     <div class="col-lg-9 col-md-9 col-12">
       <div class="card mb-3">
         <div id="step2header" class="card-header" style="height:;">
-          <span style="font-size: 1.3rem;"><i class="fa fa-wrench"></i> <span class="step-title">Step2. </span>Define Genes With Specific Histone Modifications &nbsp;</span>
+          <span style="font-size: 1.3rem;"><i class="fa fa-wrench"></i> <span class="step-title">Step2. </span>Define Genes With Specific Histone Modifications in Promoters/Coding Regions&nbsp;</span>
             <!--
             <label class="switch m-0">
               <input type="checkbox" id="switch">
@@ -78,8 +79,8 @@
                               <tr>
                                 <th class="text-left" style="width:30%;">Histone</th>
                                 <th class="text-left" style="width:30%;">Criteria</th>
-                                <th colspan="1" style="width:20%;">Promoter</th>
-                                <th colspan="1" style="width:20%;">Coding Region</th>
+                                <th colspan="1" style="width:20%;">in Promoter</th>
+                                <th colspan="1" style="width:20%;">in Coding Region</th>
                               </tr>
                               <!--
                               <tr>
@@ -95,7 +96,7 @@
                             {% for id,f,criteria in Feature %}
                               <tr class="tr-custom-setting" id="fs{{ id }}">
                                 <td>{{ f }}</td>
-                                <td class="text-left">{{ criteria }}</td>
+                                <td class="text-left">{{ criteria|log2_sub }}</td>
                                 <td>
                                   <div>
                                     ≥ 

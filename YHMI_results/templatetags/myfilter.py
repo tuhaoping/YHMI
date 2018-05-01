@@ -1,5 +1,6 @@
 from django.template.defaulttags import register
-import re
+from django.utils.safestring import mark_safe
+
 @register.filter
 def now_type(count):
 	tlist = ['Enriched in Promoter', 'Depleted in Promoter', 'Enriched in Coding Region', 'Depleted in Coding Region', '']
@@ -32,8 +33,14 @@ def remove_underline(s):
 
 @register.filter
 def TF_name_transfer(s):
-	return re.sub(r'(?<=_(25|37))C', '℃', s)
+	return s[:-4]
 
 @register.filter
 def TF_temperature(s):
 	return s[-3:-1] + '℃'
+
+@register.filter()
+def log2_sub(s):
+	if 'log' in s:
+		s = s.replace('2','<sub>2</sub>', 1)
+	return mark_safe(s)

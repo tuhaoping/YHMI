@@ -233,6 +233,7 @@ def userSpecific(request, HistoneGene=False):
 			cont += 1
 			custom_data.append({
 				'enrichID':i["ID"],
+				'histoneType':i['histoneType'],
 				'feature':i['feature'],
 				'criteria':i['feature_criteria'],
 				'pro_len':i['pro_en'].count(",")+1 if i['pro_en'] else 0,
@@ -337,16 +338,15 @@ def produce_download_file(results_data, writer):
 			for regionType, innerdata in data.items():
 				if regionType == "Coding_Region":
 					regionType = "CDS"
-				df = pd.DataFrame(columns=['Name', 'Paper', 'Fold Enrichment', 'Intersects/# of input genes', 'Histone Modification / # of genes in the yeast genome', 'P-value', 'Side'])
+				df = pd.DataFrame(columns=['Name', 'Trend', 'P-value', 'Fold Enrichment', 'Intersects/# of input genes', 'Histone Modification / # of genes in the yeast genome'])
 				for d in innerdata:
 					df.loc[len(df)] = [
-						d['feature'] + enrichType[d['enrich_type']],
-						d['paper'],
+						d['feature'],
+						"Depleted" if d['pvalue'][1] else "Enriched",
+						d['pvalue'][0],
 						d['fold'],
 						"{}/{}({:0<.2f}%)".format(d['intersectOfgene'][0], d['intersectOfgene'][1], d['intersectOfgene'][0]/d['intersectOfgene'][1]*100),
 						"{}/6572({:0<.2f}%)".format(d['intersectOfgene'][2], d['intersectOfgene'][2]/6572*100),
-						d['pvalue'][0],
-						"Under" if d['pvalue'][1] else "Over"
 					]
 				df = df.sort_values(['P-value', 'Name'])
 				df.to_excel(writer,histoneType, startrow=prerow, index=False)
@@ -358,15 +358,15 @@ def produce_download_file(results_data, writer):
 			for regionType, innerdata in data.items():
 				if regionType == "Coding_Region":
 					regionType = "CDS"
-				df = pd.DataFrame(columns=['Name', 'Paper', 'Fold Enrichment', 'Intersects/# of input genes', 'Histone Modification / # of genes in the yeast genome', 'P-value',])
+				df = pd.DataFrame(columns=['Name', 'Temperature', 'P-value', 'Fold Enrichment', 'Intersects/# of input genes', 'Histone Modification / # of genes in the yeast genome'])
 				for d in innerdata:
 					df.loc[len(df)] = [
-						d['feature'] + enrichType[d['enrich_type']],
-						d['paper'],
+						d['feature'][:-4],
+						d['feature'][-3:-1] + '℃',
+						d['pvalue'][0],
 						d['fold'],
 						"{}/{}({:0<.2f}%)".format(d['intersectOfgene'][0], d['intersectOfgene'][1], d['intersectOfgene'][0]/d['intersectOfgene'][1]*100),
 						"{}/6572({:0<.2f}%)".format(d['intersectOfgene'][2], d['intersectOfgene'][0]/6572*100),
-						d['pvalue'][0],
 					]
 				df = df.sort_values(['P-value', 'Name'])
 				df.to_excel(writer,histoneType, startrow=prerow, index=False)
