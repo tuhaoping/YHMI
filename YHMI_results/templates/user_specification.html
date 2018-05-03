@@ -1,94 +1,99 @@
 {% load myfilter %}
 
-<div class="mb-0 mt-4">
-  <span class="block-title">
-    <i class="fa fa-file"></i> User's Specification 
-</div>
 
+<div class="mb-0 mt-5">
+  <span class="block-title"><i class="fa fa-file"></i> Searching Results</span>
+</div> 
 <hr class="mt-2">
-<div>
-  <table class="table table-bordered">
-    <tr>
-      <td style="width:27%;" class="font-weight-bold">Input Genes</td>
-      <td>{{inputGene_length}}</td>
-      {# <td><a href="#" data-toggle="modal" data-target="#geneInfo">{{inputGene_length}}</a></td> #}
-    </tr>
-    <tr>
-      <td class="font-weight-bold">
-        {% if corrected == '1' %}Bonferroni-corrected{% else %} FDR (False Discovery Rate){% endif %} corrected P-value cutoff
-      </td>
-      <td>10<sup>-{{ cutoff }}</sup></td>
-    </tr>
-    <tr>
-      <td class="align-middle font-weight-bold" style="height:200px;">Genes with Specific Histone Modifications</td>
-      <td class="p-0" style="font-size:1rem;">
-        <div class="p-2">
-          <table class="table" id="gene_specific_table">
-            <thead>
-              <tr>
-                <th colspan="2"></th>
-                <th colspan="2" class="text-center">in Promoter</th>
-                <th colspan="2" class="text-center">in Coding Region</th>
-              </tr>
-              <tr>
-                <th style="font-size:0.92rem;">Histone Type</th>
-                <th style="font-size:0.92rem;">Histone</th>
-                <th style="font-size:0.92rem;"># of Genes</th>
-                <th style="font-size:0.92rem;">Criteria</th>
-                <th style="font-size:0.92rem;"># of Genes</th>
-                <th style="font-size:0.92rem;">Criteria</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for data in custom_data %}
-              <tr>
-                <td style="font-size:0.9rem;">{{ data.histoneType }}</td>
-                <td style="font-size:0.9rem;">{{ data.feature }}</td>
-                <td style="font-size:0.9rem;"><a class="histone_gene_modal" href="#{{ data.enrichID }}_0" data-feature="{{ data.feature }}" data-toggle="modal" data-target="#HistoneGeneInfo">{{ data.pro_len }}</a></td>
-                <td style="font-size:0.9rem;">{{ data.criteria|log2_sub }} > {{ data.pro_criteria }}</td>
-                <td style="font-size:0.9rem;"><a class="histone_gene_modal" href="#{{ data.enrichID }}_2" data-feature="{{ data.feature }}" data-toggle="modal" data-target="#HistoneGeneInfo">{{ data.cds_len }}</a></td>
-                <td style="font-size:0.9rem;">{{ data.criteria|log2_sub }} > {{ data.cds_criteria }}</td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
-        <!--
-        <div class="p-2">
-          <ul class="nav nav-pills" id="myTab" role="tablist">
-            <li class="nav-item">
-              <a class="nav-link px-2 py-1 active" data-toggle="pill" href="#pro_histone" role="tab">Promoter</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link px-2 py-1" data-toggle="pill" href="#cds_histone" role="tab">Coding Region</a>
-            </li>
-          </ul>
-          <hr class="m-2">
-          <div class="tab-content" style="height:200px;overflow-y:scroll;">
-            <div class="tab-pane fade show active" id="pro_histone">
-              {% for data in custom_data %}
-                - {{ data.feature }} <a class="histone_gene_modal" href="#{{ data.enrichID }}_0" data-feature="{{ data.feature }}" data-toggle="modal" data-target="#HistoneGeneInfo">{{ data.pro_len }}</a> Genes {{ data.criteria }} > {{ data.pro_criteria }} <br>
-              {% endfor %}
+
+<div class="card">
+  <div class="card-header block-second-title"><i class="fa fa-info-circle"></i> User's Specification</div>
+  <div class="card-body">
+    <div>
+      <table class="table table-bordered">
+        <tr>
+          <td style="width:27%;" class="font-weight-bold">Input Genes</td>
+          <td>{{inputGene_length}}</td>
+          {# <td><a href="#" data-toggle="modal" data-target="#geneInfo">{{inputGene_length}}</a></td> #}
+        </tr>
+        <tr>
+          <td class="font-weight-bold">
+            {% if corrected == '1' %}Bonferroni-corrected{% else %} FDR (False Discovery Rate){% endif %} corrected P-value cutoff
+          </td>
+          <td>10<sup>-{{ cutoff }}</sup></td>
+        </tr>
+        <tr>
+          <td class="align-middle font-weight-bold" style="height:200px;">Genes with Specific Histone Modifications</td>
+          <td class="p-0" style="font-size:1rem;">
+            <div class="p-2">
+              <table class="table" id="gene_specific_table">
+                <thead>
+                  <tr>
+                    <th colspan="2"></th>
+                    <th colspan="2" class="text-center">in Promoter</th>
+                    <th colspan="2" class="text-center">in Coding Region</th>
+                  </tr>
+                  <tr>
+                    <th style="font-size:0.92rem;">Histone Type</th>
+                    <th style="font-size:0.92rem;">Histone</th>
+                    <th style="font-size:0.92rem;"># of Genes</th>
+                    <th style="font-size:0.92rem;">Criteria</th>
+                    <th style="font-size:0.92rem;"># of Genes</th>
+                    <th style="font-size:0.92rem;">Criteria</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for data in custom_data %}
+                  <tr>
+                    <td style="font-size:0.9rem;">{{ data.histoneType }}</td>
+                    <td style="font-size:0.9rem;">{{ data.feature }}</td>
+                    <td style="font-size:0.9rem;"><a class="histone_gene_modal" href="#{{ data.enrichID }}_0" data-feature="{{ data.feature }}" data-toggle="modal" data-target="#HistoneGeneInfo">{{ data.pro_len }}</a></td>
+                    <td style="font-size:0.9rem;">{{ data.criteria|log2_sub }} > {{ data.pro_criteria }}</td>
+                    <td style="font-size:0.9rem;"><a class="histone_gene_modal" href="#{{ data.enrichID }}_2" data-feature="{{ data.feature }}" data-toggle="modal" data-target="#HistoneGeneInfo">{{ data.cds_len }}</a></td>
+                    <td style="font-size:0.9rem;">{{ data.criteria|log2_sub }} > {{ data.cds_criteria }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
             </div>
-            <div class="tab-pane fade" id="cds_histone">
-              {% for data in custom_data %}
-                - {{ data.feature }} <a class="histone_gene_modal" href="#{{ data.enrichID }}_2" data-feature="{{ data.feature }}" data-toggle="modal" data-target="#HistoneGeneInfo">{{ data.cds_len }}</a> Genes {{ data.criteria }} > {{ data.pro_criteria }} <br>
-              {% endfor %}
+            <!--
+            <div class="p-2">
+              <ul class="nav nav-pills" id="myTab" role="tablist">
+                <li class="nav-item">
+                  <a class="nav-link px-2 py-1 active" data-toggle="pill" href="#pro_histone" role="tab">Promoter</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link px-2 py-1" data-toggle="pill" href="#cds_histone" role="tab">Coding Region</a>
+                </li>
+              </ul>
+              <hr class="m-2">
+              <div class="tab-content" style="height:200px;overflow-y:scroll;">
+                <div class="tab-pane fade show active" id="pro_histone">
+                  {% for data in custom_data %}
+                    - {{ data.feature }} <a class="histone_gene_modal" href="#{{ data.enrichID }}_0" data-feature="{{ data.feature }}" data-toggle="modal" data-target="#HistoneGeneInfo">{{ data.pro_len }}</a> Genes {{ data.criteria }} > {{ data.pro_criteria }} <br>
+                  {% endfor %}
+                </div>
+                <div class="tab-pane fade" id="cds_histone">
+                  {% for data in custom_data %}
+                    - {{ data.feature }} <a class="histone_gene_modal" href="#{{ data.enrichID }}_2" data-feature="{{ data.feature }}" data-toggle="modal" data-target="#HistoneGeneInfo">{{ data.cds_len }}</a> Genes {{ data.criteria }} > {{ data.pro_criteria }} <br>
+                  {% endfor %}
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-        -->
-        <!--
-        <div class="p-3" style="height:200px;overflow-y:scroll;">
-        {% for data in custom_data %}
-          - {{ data.feature }} (Promoter) <a class="histone_gene_modal" href="#{{ data.enrichID }}_0" data-feature="{{ data.feature }}" data-toggle="modal" data-target="#HistoneGeneInfo">{{ data.pro_len }}</a> Genes criteria > {{ data.pro_criteria }} <br>
-          - {{ data.feature }} (Coding Region) <a class="histone_gene_modal" href="#{{ data.enrichID }}_2" data-feature="{{ data.feature }}" data-toggle="modal" data-target="#HistoneGeneInfo">{{ data.cds_len }}</a> Genes criteria > {{ data.cds_criteria }} <br>
-        {% endfor %}
-        </div>
-      -->
-      </td>
-    </tr>
-  </table>
+            -->
+            <!--
+            <div class="p-3" style="height:200px;overflow-y:scroll;">
+            {% for data in custom_data %}
+              - {{ data.feature }} (Promoter) <a class="histone_gene_modal" href="#{{ data.enrichID }}_0" data-feature="{{ data.feature }}" data-toggle="modal" data-target="#HistoneGeneInfo">{{ data.pro_len }}</a> Genes criteria > {{ data.pro_criteria }} <br>
+              - {{ data.feature }} (Coding Region) <a class="histone_gene_modal" href="#{{ data.enrichID }}_2" data-feature="{{ data.feature }}" data-toggle="modal" data-target="#HistoneGeneInfo">{{ data.cds_len }}</a> Genes criteria > {{ data.cds_criteria }} <br>
+            {% endfor %}
+            </div>
+          -->
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
 </div>
 
 <!-- Modal #geneInfo -->

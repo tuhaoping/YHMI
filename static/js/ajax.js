@@ -84,7 +84,6 @@ $(document).ready(function(){
 					var histone_gene_download_url = rootURL + '/result/specific/histonegene?';
 					[histoneID, histoneType] = $(this).attr('href').slice(1).split("_");
 					$("#HistoneGeneInfo .modal-title").text("Genes with " + $(this).data('feature'));
-					console.log(histone_gene_download_url)
 					$("#HistoneGeneInfo a.download_a").attr('href',histone_gene_download_url+'tableID=' + tableID + "&histoneID="+histoneID + '&histoneType='+histoneType);
 					$("#HistoneGeneInfo_table").DataTable().destroy();
 					$("#HistoneGeneInfo_table").DataTable({

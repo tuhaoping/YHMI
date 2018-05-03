@@ -1,199 +1,116 @@
 {% load myfilter %} {# {% include "inputGene.html" %} #}
 {% load static %}
 
-<div class="mb-0 mt-4">
-  <span class="block-title"><i class="fa fa-file"></i> Results </span>
-  <span style="position:relative; top:-6px;">
-    <a class="download_a btn btn-sm btn-info" href="/result/download?tableID={{tableID}}&corrected={{corrected}}&cutoff={{cutoff}}" target="_blank">
-      <i class="fa fa-download" aria-hidden="true"></i> Download</a>
-  </span>
-</div>
 
-<hr class="mt-2">
+<div class="card mt-3 mx-0">
+  <div class="card-header">
+    <span class="block-second-title"><i class="fa fa-bar-chart"></i> The Identified Enriched / Depleted Histone Modifications </span>
+    <span style="position:relative; top:-5px; left:10px;">
+      <a class="download_a btn btn-sm btn-info" href="/result/download?tableID={{tableID}}&corrected={{corrected}}&cutoff={{cutoff}}" target="_blank">
+        <i class="fa fa-download" aria-hidden="true"></i> Download</a>
+    </span>
+  </div>
 
-<div>
-  <ul class="nav nav-tabs nav-fill" id="result-tabs">
-    {% for ftype in enrich_value.keys %}
-      <li class="nav-item">
-        {% if forloop.first %}
-          <a class="nav-link active mr-2" data-toggle="tab" href="#{{ ftype }}_tab" data-graph="{{ftype}}">{{ ftype|remove_underline }}</a>
-        {% else %}
-          <a class="nav-link mr-2" data-toggle="tab" href="#{{ ftype }}_tab" data-graph="{{ftype}}">{{ ftype|remove_underline }}</a>
-        {% endif %}
-      </li>
-    {% endfor %}
-  </ul>
-
-  <div class="tab-content pt-2 result-tabs-content">
-    {% for ftype,data in enrich_value.items %}
-      <div id="{{ftype}}_tab" class="tab-pane fade" data-graph="{{ftype}}">
-        {% if ftype != 'H2A_Variant_and_H2B_Ubiquitination' %}
-          {% if ftype != 'TF' %}
-          <hr class="mt-5">
-          <div class="histonetype-pill">
-            <ul class="nav nav-pills histonetype-pill justify-content-center">
-              <li class="nav-item">
-                <a class="nav-link active" data-toggle="pill" href="#{{ftype}}_Promoter_nav_pill" data-histonetype="Promoter" data-graph="{{ftype}}">See result in Promoter</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" data-toggle="pill" href="#{{ftype}}_Coding_Region_nav_pill" data-histonetype="Coding_Region" data-graph="{{ftype}}">See result in Coding Region</a>
-              </li>
-            </ul>
-          </div>
+  <div class="card-body">
+    <ul class="nav nav-tabs nav-fill" id="result-tabs">
+      {% for ftype in enrich_value.keys %}
+        <li class="nav-item">
+          {% if forloop.first %}
+            <a class="nav-link active mr-2" data-toggle="tab" href="#{{ ftype }}_tab" data-graph="{{ftype}}">{{ ftype|remove_underline }}</a>
           {% else %}
-          <hr class="mt-4" style="border:1px solid transparent;">
+            <a class="nav-link mr-2" data-toggle="tab" href="#{{ ftype }}_tab" data-graph="{{ftype}}">{{ ftype|remove_underline }}</a>
           {% endif %}
-          
-          <div class="tab-content histoneType-content">
-            
-          {% for regionType, fdata in data.items %}
-            <div class="tab-pane container-fluid fade" id="{{ftype}}_{{regionType}}_nav_pill">
-              <div class="card mb-3">
-                <div class="card-header font-weight-bold" style="font-size:1.1rem;">
-                  <i class="fa fa-fw fa-bar-chart"></i> Graphic View &nbsp;&nbsp;&nbsp;&nbsp;
+        </li>
+      {% endfor %}
+    </ul>
 
-                </div>
-                <div class="card-body">
-                  <div>
-                    <div id="{{ftype}}_{{regionType}}_fold_fig" class="text-center my-1 d-inline-block" style="height:450px; min-width:49%; max-width:49%;"></div>
-                    <div id="{{ftype}}_{{regionType}}_pvalue_fig" class="text-center my-1 d-inline-block" style="height:450px; min-width:49%; max-width:49%;"></div>
-                  </div>
-                </div>
-              </div>
-              <div class="card mb-3">
-                <div class="card-header font-weight-bold" style="font-size:1.1rem">
-                  <i class="fa fa-fw fa-table"></i> Table View
-                </div>
-                <div class="card-body">
-                  <table class='table p-1' id="{{ftype}}_{{regionType}}_enrich_table">
-                    <thead>
-                      {% if ftype == 'TF' %}
-                      <th class="text-left" style="width:15%;">Name</th>
-                      <th class="text-right" style="width:10%;">Temperature</th>
-                      {# <th class="text-left" style="width:10%;">Paper</th> #}
-                      {% else %}
-                      <th class="text-left" style="width:25%;">Name</th>
-                      {# <th class="text-left" style="width:10%;">Paper</th> #}
-                      {% endif%}
-
-                      {% if ftype == 'TF' %}
-                      <th class="text-right" style="width:20%;">P-value</th>
-                      {% else %}
-                      <th class="text-right" style="width:10%;">Trend</th>
-                      <th class="text-right" style="width:15%;">P-value</th>
-                      {% endif %}
-
-                      <th class="text-right" style="width:10%;">Fold enrichment</th>
-                      <th class="text-right" style="width:15%;">Intersects /
-                        <br># of input genes</th>
-                      <th class="text-right" style="width:20%;">Histone Modification /
-                        <br># of genes in the yeast genome</th>
-                      
-                    </thead>
-                    <tbody>
-                      {% for value in fdata %}
-                      <tr>
-                        {% if ftype != 'TF' %}
-                        <td class="text-left">{{ value.feature }}</td>
-                        {# <td class="text-left">{{ value.feature }} {{ value.enrich_type|now_type}}</td> #}
-                        {% else %}
-                          <td class="text-left">{{ value.feature|TF_name_transfer }}</td>
-                          <td class="text-right">{{ value.feature|TF_temperature }}</td>
-                        {% endif %}
-                        {% if ftype != 'TF' %}
-                        <td class="text-right">{{ value.pvalue.1|pvalue_type }}</td>
-                        {% endif %}
-                        <td class="text-right">{{ value.pvalue.0|format_pvalue }}</td>
-                        {# <td class="text-left">{{ value.paper }}</td> #}
-                        <td class="text-right">{{ value.fold|format_enrichment }}</td>
-                        <td class="text-right">
-                          <span style="display:none;">
-                            {{ value.intersectOfgene.0|format_calc_percent:value.intersectOfgene.1}}
-                          </span>
-                          <a class="intersect"  href="#{{ value.enrichID }}_{{ value.enrich_type }}" class="intersect" data-toggle="modal" data-target="#genemodal">
-                            {{ value.intersectOfgene.0 }}
-                          </a>/{{ value.intersectOfgene.1 }} ({{ value.intersectOfgene.0|calc_percent:value.intersectOfgene.1}})
-                        </td>
-                        <td class="text-right">
-                          <span style="display:none;">{{ value.intersectOfgene.2|format_calc_percent:6572}}</span>
-                          {{ value.intersectOfgene.2 }}/{{ 6572 }} ({{ value.intersectOfgene.2|calc_percent:6572 }})
-                        </td>
-                        
-                      </tr>
-                      {% endfor %}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          {% endfor %}
-          </div>
-
-        {% else %}
-          <!-- H2A_Variant_and_H2B_Ubiquitination -->
-          {% for fftype,data in enrich_value_others.items %} 
-            <div class="pt-2 mx-3" style="font-size:2rem;">{{fftype}}</div> <!-- Histone Modifications 種類 title-->
-            <hr class="mt-1" style="border-width:5px;">
-            
+    <div class="tab-content pt-2 result-tabs-content">
+      {% for ftype,data in enrich_value.items %}
+        <div id="{{ftype}}_tab" class="tab-pane fade" data-graph="{{ftype}}">
+          {% if ftype != 'H2A_Variant_and_H2B_Ubiquitination' %}
+            {% if ftype != 'TF' %}
+            <hr class="mt-5">
             <div class="histonetype-pill">
               <ul class="nav nav-pills histonetype-pill justify-content-center">
                 <li class="nav-item">
-                  <a class="nav-link active" data-toggle="pill" href="#{{fftype}}_Promoter_nav_pill" data-histonetype="Promoter" data-graph="{{fftype}}">See result in Promoter</a>
+                  <a class="nav-link active" data-toggle="pill" href="#{{ftype}}_Promoter_nav_pill" data-histonetype="Promoter" data-graph="{{ftype}}">See result in Promoter</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" data-toggle="pill" href="#{{fftype}}_Coding_Region_nav_pill" data-histonetype="Coding_Region" data-graph="{{fftype}}">See result in Coding Region</a>
+                  <a class="nav-link" data-toggle="pill" href="#{{ftype}}_Coding_Region_nav_pill" data-histonetype="Coding_Region" data-graph="{{ftype}}">See result in Coding Region</a>
                 </li>
               </ul>
             </div>
-            <!-- Promoter/CDS-->
+            {% else %}
+            <hr class="mt-4" style="border:1px solid transparent;">
+            {% endif %}
+            
             <div class="tab-content histoneType-content">
-            {% for regionType, ffdata in data.items %}
-              {# <div class="subtitle my-2 py-2">{{regionType|remove_underline}}</div> #}
-              <div class="tab-pane container-fluid fade" id="{{fftype}}_{{regionType}}_nav_pill">
-
-                <!-- Graphic View -->
+              
+            {% for regionType, fdata in data.items %}
+              <div class="tab-pane container-fluid fade" id="{{ftype}}_{{regionType}}_nav_pill">
                 <div class="card mb-3">
                   <div class="card-header font-weight-bold" style="font-size:1.1rem;">
                     <i class="fa fa-fw fa-bar-chart"></i> Graphic View &nbsp;&nbsp;&nbsp;&nbsp;
+
                   </div>
                   <div class="card-body">
-                    <div class="row">
-                      <div id="{{fftype}}_{{regionType}}_fold_fig" class="col-6 text-center my-1" style="height:450px; min-width:49%; max-width:49%;"></div>
-                      <div id="{{fftype}}_{{regionType}}_pvalue_fig" class="col-6 text-center my-1" style="height:450px; min-width:49%; max-width:49%;"></div>
+                    <div>
+                      <div id="{{ftype}}_{{regionType}}_fold_fig" class="text-center my-1 d-inline-block" style="height:450px; min-width:49%; max-width:49%;"></div>
+                      <div id="{{ftype}}_{{regionType}}_pvalue_fig" class="text-center my-1 d-inline-block" style="height:450px; min-width:49%; max-width:49%;"></div>
                     </div>
                   </div>
                 </div>
-                <!-- ./ Graphic View -->
-
-                <!-- Table View -->
                 <div class="card mb-3">
-                  <div class="card-header font-weight-bold" style="font-size:1.1rem;"><i class="fa fa-fw fa-table"></i> Table View</div>
+                  <div class="card-header font-weight-bold" style="font-size:1.1rem">
+                    <i class="fa fa-fw fa-table"></i> Table View
+                  </div>
                   <div class="card-body">
-                    <table class="table p-1" id="{{fftype}}_{{regionType}}_enrich_table">
+                    <table class='table p-1' id="{{ftype}}_{{regionType}}_enrich_table">
                       <thead>
+                        {% if ftype == 'TF' %}
+                        <th class="text-left" style="width:15%;">Name</th>
+                        <th class="text-right" style="width:10%;">Temperature</th>
+                        {# <th class="text-left" style="width:10%;">Paper</th> #}
+                        {% else %}
                         <th class="text-left" style="width:25%;">Name</th>
                         {# <th class="text-left" style="width:10%;">Paper</th> #}
-                        <th class="text-right" style="width:15%;">Trend</th>
+                        {% endif%}
+
+                        {% if ftype == 'TF' %}
+                        <th class="text-right" style="width:20%;">P-value</th>
+                        {% else %}
+                        <th class="text-right" style="width:10%;">Trend</th>
                         <th class="text-right" style="width:15%;">P-value</th>
+                        {% endif %}
+
                         <th class="text-right" style="width:10%;">Fold enrichment</th>
-                        <th class="text-right" style="width:20%;">Intersects /
+                        <th class="text-right" style="width:15%;">Intersects /
                           <br># of input genes</th>
-                        <th class="text-right" style="width:25%;">Histone Modification /
+                        <th class="text-right" style="width:20%;">Histone Modification /
                           <br># of genes in the yeast genome</th>
+                        
                       </thead>
                       <tbody>
-                        {% for value in ffdata %}
+                        {% for value in fdata %}
                         <tr>
+                          {% if ftype != 'TF' %}
                           <td class="text-left">{{ value.feature }}</td>
-                          {# <td class="text-left">{{ value.paper }}</td> #}
+                          {# <td class="text-left">{{ value.feature }} {{ value.enrich_type|now_type}}</td> #}
+                          {% else %}
+                            <td class="text-left">{{ value.feature|TF_name_transfer }}</td>
+                            <td class="text-right">{{ value.feature|TF_temperature }}</td>
+                          {% endif %}
+                          {% if ftype != 'TF' %}
                           <td class="text-right">{{ value.pvalue.1|pvalue_type }}</td>
+                          {% endif %}
                           <td class="text-right">{{ value.pvalue.0|format_pvalue }}</td>
+                          {# <td class="text-left">{{ value.paper }}</td> #}
                           <td class="text-right">{{ value.fold|format_enrichment }}</td>
                           <td class="text-right">
                             <span style="display:none;">
                               {{ value.intersectOfgene.0|format_calc_percent:value.intersectOfgene.1}}
                             </span>
-                            <a class="intersect" href="#{{ value.enrichID }}_{{ value.enrich_type }}" data-toggle="modal" data-target="#genemodal">
+                            <a class="intersect"  href="#{{ value.enrichID }}_{{ value.enrich_type }}" class="intersect" data-toggle="modal" data-target="#genemodal">
                               {{ value.intersectOfgene.0 }}
                             </a>/{{ value.intersectOfgene.1 }} ({{ value.intersectOfgene.0|calc_percent:value.intersectOfgene.1}})
                           </td>
@@ -201,25 +118,109 @@
                             <span style="display:none;">{{ value.intersectOfgene.2|format_calc_percent:6572}}</span>
                             {{ value.intersectOfgene.2 }}/{{ 6572 }} ({{ value.intersectOfgene.2|calc_percent:6572 }})
                           </td>
+                          
                         </tr>
                         {% endfor %}
                       </tbody>
                     </table>
                   </div>
                 </div>
-                <!-- ./ Table View -->
               </div>
-
             {% endfor %}
             </div>
-            <!-- ./ Promoter/CDS-->
 
-          {% endfor %}
-          <!-- ./ H2A_Variant_and_H2B_Ubiquitination -->
+          {% else %}
+            <!-- H2A_Variant_and_H2B_Ubiquitination -->
+            {% for fftype,data in enrich_value_others.items %} 
+              <div class="pt-2 mx-3" style="font-size:2rem;">{{fftype}}</div> <!-- Histone Modifications 種類 title-->
+              <hr class="mt-1" style="border-width:5px;">
+              
+              <div class="histonetype-pill">
+                <ul class="nav nav-pills histonetype-pill justify-content-center">
+                  <li class="nav-item">
+                    <a class="nav-link active" data-toggle="pill" href="#{{fftype}}_Promoter_nav_pill" data-histonetype="Promoter" data-graph="{{fftype}}">See result in Promoter</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" data-toggle="pill" href="#{{fftype}}_Coding_Region_nav_pill" data-histonetype="Coding_Region" data-graph="{{fftype}}">See result in Coding Region</a>
+                  </li>
+                </ul>
+              </div>
+              <!-- Promoter/CDS-->
+              <div class="tab-content histoneType-content">
+              {% for regionType, ffdata in data.items %}
+                {# <div class="subtitle my-2 py-2">{{regionType|remove_underline}}</div> #}
+                <div class="tab-pane container-fluid fade" id="{{fftype}}_{{regionType}}_nav_pill">
 
-        {% endif %}
-      </div>
-    {% endfor %}
+                  <!-- Graphic View -->
+                  <div class="card mb-3">
+                    <div class="card-header font-weight-bold" style="font-size:1.1rem;">
+                      <i class="fa fa-fw fa-bar-chart"></i> Graphic View &nbsp;&nbsp;&nbsp;&nbsp;
+                    </div>
+                    <div class="card-body">
+                      <div class="row">
+                        <div id="{{fftype}}_{{regionType}}_fold_fig" class="col-6 text-center my-1" style="height:450px; min-width:49%; max-width:49%;"></div>
+                        <div id="{{fftype}}_{{regionType}}_pvalue_fig" class="col-6 text-center my-1" style="height:450px; min-width:49%; max-width:49%;"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- ./ Graphic View -->
+
+                  <!-- Table View -->
+                  <div class="card mb-3">
+                    <div class="card-header font-weight-bold" style="font-size:1.1rem;"><i class="fa fa-fw fa-table"></i> Table View</div>
+                    <div class="card-body">
+                      <table class="table p-1" id="{{fftype}}_{{regionType}}_enrich_table">
+                        <thead>
+                          <th class="text-left" style="width:25%;">Name</th>
+                          {# <th class="text-left" style="width:10%;">Paper</th> #}
+                          <th class="text-right" style="width:15%;">Trend</th>
+                          <th class="text-right" style="width:15%;">P-value</th>
+                          <th class="text-right" style="width:10%;">Fold enrichment</th>
+                          <th class="text-right" style="width:20%;">Intersects /
+                            <br># of input genes</th>
+                          <th class="text-right" style="width:25%;">Histone Modification /
+                            <br># of genes in the yeast genome</th>
+                        </thead>
+                        <tbody>
+                          {% for value in ffdata %}
+                          <tr>
+                            <td class="text-left">{{ value.feature }}</td>
+                            {# <td class="text-left">{{ value.paper }}</td> #}
+                            <td class="text-right">{{ value.pvalue.1|pvalue_type }}</td>
+                            <td class="text-right">{{ value.pvalue.0|format_pvalue }}</td>
+                            <td class="text-right">{{ value.fold|format_enrichment }}</td>
+                            <td class="text-right">
+                              <span style="display:none;">
+                                {{ value.intersectOfgene.0|format_calc_percent:value.intersectOfgene.1}}
+                              </span>
+                              <a class="intersect" href="#{{ value.enrichID }}_{{ value.enrich_type }}" data-toggle="modal" data-target="#genemodal">
+                                {{ value.intersectOfgene.0 }}
+                              </a>/{{ value.intersectOfgene.1 }} ({{ value.intersectOfgene.0|calc_percent:value.intersectOfgene.1}})
+                            </td>
+                            <td class="text-right">
+                              <span style="display:none;">{{ value.intersectOfgene.2|format_calc_percent:6572}}</span>
+                              {{ value.intersectOfgene.2 }}/{{ 6572 }} ({{ value.intersectOfgene.2|calc_percent:6572 }})
+                            </td>
+                          </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <!-- ./ Table View -->
+                </div>
+
+              {% endfor %}
+              </div>
+              <!-- ./ Promoter/CDS-->
+
+            {% endfor %}
+            <!-- ./ H2A_Variant_and_H2B_Ubiquitination -->
+
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
   </div>
 </div>
 

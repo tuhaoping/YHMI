@@ -76,4 +76,25 @@ $(window).resize(function(){
   // calcCardBody_h();
   // calcSettingCardBody_h();
   equal_header();
+
+  $("#gene_specific_table").DataTable().destroy();
+  $("#gene_specific_table").DataTable({
+    autoWidth:false,
+    fixedHeader: true,
+    scrollY: "300px",
+    scrollCollapse: true,
+    paging: false,
+    info: false,
+    searching: false,
+    orderFixed: [ 0, 'asc' ],
+    columnDefs:[
+      {"width":"10%", "targets":0, "orderable": false},
+      {"width":"12%", "targets":1},
+      {"width":"9%", "targets":2},
+      {"width":"30%", "targets":3},
+      {"width":"9%", "targets":4},
+      {"width":"30%", "targets":5}
+    ]
+  });
+  $("#gene_specific_table_wrapper div.dataTables_scrollBody").css('border-bottom-color', '#a5a7a9')
 });
