@@ -112,11 +112,12 @@ class FilterResult(object):
 		return self.result_gene
 
 class YhmiInputTempTable():
-	__tableID = ''
 	__temp_input_table = 'yhmi_temporary_input'
-	__qualified_gene = ''
+	__qualified_gene = []
 	__results = ''
-	def __init__(self, tableID, inputGene=None):
+	__illegal = []
+
+	def __init__(self, tableID, inputGene=None, check_illegal=True):
 
 		self.__tableID = tableID
 		try:
@@ -124,9 +125,17 @@ class YhmiInputTempTable():
 			cursor = con.cursor()
 
 			if inputGene:
+				inputGene = list(filter(None,inputGene))
+				if check_illegal:
+					query = "SELECT `InputGene` FROM `const_comparison_orf`"
+					cursor.execute(query)
+					self.__all6572 = [g[0].upper() for g in cursor.fetchall()]
+					self.__illegal = [g for g in inputGene if g.upper() not in self.__all6572]
+
 				query = "SELECT DISTINCT `ORF` FROM `const_comparison_orf` WHERE `InputGene` IN('{}')".format("','".join(inputGene))
 				cursor.execute(query)
 				self.__qualified_gene = [g[0] for g in cursor.fetchall()]
+
 				query = "DELETE FROM `{}` WHERE `tempID`='{}'".format(self.__temp_input_table, self.__tableID)
 				cursor.execute(query)
 				query = "INSERT INTO `{}` VALUES(NULL,'{}','{}',NULL, NULL)".format(self.__temp_input_table, self.__tableID, ",".join(self.__qualified_gene))
@@ -147,6 +156,9 @@ class YhmiInputTempTable():
 
 	def get_qualified(self):
 		return self.__qualified_gene
+
+	def get_illegal(self):
+		return self.__illegal
 
 	def update_results(self, results_json):
 		try:

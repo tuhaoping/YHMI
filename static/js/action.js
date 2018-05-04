@@ -62,7 +62,7 @@ $(document).ready(function(){
 		// $("#div-setting input[type=text]").prop('disabled', true);
 		$("#div-setting .tr-custom-setting input[type=text]:odd").data('prevalue', '-1.0');
 		$("#div-setting .tr-custom-setting input[type=text]:even").data('prevalue', '1.0');
-		$(".container-fluid.container-results").hide();
+		$("#userspecific, #result").html('');
 		document.getElementById("inputForm").reset();
 		// document.getElementById("settingForm").reset();
 
@@ -110,6 +110,19 @@ $(document).ready(function(){
 	//============= ./SETTING FORM ============//
 
 
+
+	$("#btn-modify-send").click(function(){
+		$("#inputErr").modal('hide');
+		$("#inputTextArea").focus();
+		// console.log("modify");
+
+		// setTimeout(function(){$("#inputTextArea").focus();},1000)
+	});
+
+
+
+
+
 	//left Accordion set active
 	$("#leftAccordion .nav-link").click(function(){
 		$("#leftAccordion .nav-link").removeClass("active");
@@ -129,6 +142,8 @@ $(document).ready(function(){
 			$(this).val(2);
 	});
 	//============== ./CORRECTION RADIO =============//
+
+
 
 
 

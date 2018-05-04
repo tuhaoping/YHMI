@@ -64,7 +64,15 @@ def showIntersect(request):
 		return render(request, 'intersect_template.html', render_dict)
 
 def showEnrich(request):
-	input_gene = YhmiInputTempTable(request.POST['tableID'], json.loads(request.POST['InputGene']))
+	input_gene = YhmiInputTempTable(request.POST['tableID'], json.loads(request.POST['InputGene']), check_illegal=int(request.POST['illegal_check']))
+	# print(type(request.POST['illegal_check']))
+	if input_gene.get_illegal():
+		illegal_dict = {
+			'illegal':1,
+			'illegal_gene':input_gene.get_illegal()
+		}
+		return JsonResponse(illegal_dict)
+
 
 	if 'composition' in request.POST:
 		yhmi_filter = list(filter(None, json.loads(request.POST['InputGene'])))
@@ -164,7 +172,7 @@ def showEnrich(request):
 	}
 
 	template = render_to_string('enrich_template.html', render_dict)
-	return JsonResponse({"template":template, 'data':data_fold})
+	return JsonResponse({"template":template, 'data':data_fold, 'illegal':0})
 
 def result_download(request):
 	input_gene = YhmiInputTempTable(request.GET['tableID'])

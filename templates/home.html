@@ -178,6 +178,32 @@
   </form>
   {# <hr class="mt-2 mb-5"> #}
 
+  <!-- ./ Input Error Modal-->
+  <div class="modal fade" tabindex="-1" role="dialog" id="inputErr" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" style="color:red;">Warning</h4>
+        </div>
+        <div class="modal-body">
+          <h5>YHMI found out that there are some incorrect genes. You have two choices:</h5>
+          <h6>1. Correcting your gene list to ensure they are all right.</h6>
+          <h6>2. Pass & continue, YHMI will exclusion these incorrect genes automatically.</h6>
+          <hr>
+          <table class="table table-bordered table-hover m-0">
+            <thead>
+              <tr><th class="py-2">Illegal Genes</th></tr>
+            </thead>
+            <tbody id="illegal_gene"></tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="btn-modify-send" class="btn btn-primary">Modify Gene List</button>
+          <button type="button" id="btn-illegal-send" class="btn btn-secondary" data-dismiss="modal">Pass&Continue</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 {% endblock content %}
 

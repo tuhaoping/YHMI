@@ -21,6 +21,66 @@ var setting_data = [];
 var custom_save = false;
 var bar_data;
 
+
+function specific_block(jdata_gene){
+	$.ajax({
+		url: rootURL + '/result/specific',
+		type: "POST",
+		data:{
+			'tableID': tableID,
+			'InputGene': jdata_gene,
+			'corrected': $("#div-corrected input[name=corrected]:checked").val(),
+			'cutoff': $("#div-corrected input[type=text]:enabled").val()
+		},
+		success:function(res){
+			// let histoneID = 1
+			$("#userspecific").html(res);
+			$("#gene_specific_table").DataTable({
+				autoWidth:false,
+				fixedHeader: true,
+				scrollY: "300px",
+				scrollCollapse: true,
+				paging: false,
+				info: false,
+				searching: false,
+				orderFixed: [ 0, 'asc' ],
+				columnDefs:[
+					{"width":"10%", "targets":0, "orderable": false},
+					{"width":"12%", "targets":1},
+					{"width":"9%", "targets":2},
+					{"width":"30%", "targets":3},
+					{"width":"9%", "targets":4},
+					{"width":"30%", "targets":5}
+				]
+			});
+			$("#gene_specific_table_wrapper div.dataTables_scrollBody").css('border-bottom-color', '#a5a7a9')
+			$("#userspecific a.histone_gene_modal").click(function(){
+				var histone_gene_download_url = rootURL + '/result/specific/histonegene?';
+				[histoneID, histoneType] = $(this).attr('href').slice(1).split("_");
+				$("#HistoneGeneInfo .modal-title").text("Genes with " + $(this).data('feature'));
+				$("#HistoneGeneInfo a.download_a").attr('href',histone_gene_download_url+'tableID=' + tableID + "&histoneID="+histoneID + '&histoneType='+histoneType);
+				$("#HistoneGeneInfo_table").DataTable().destroy();
+				$("#HistoneGeneInfo_table").DataTable({
+					serverSide: true,
+					ajax: {
+						url: rootURL + '/result/specific/histonegene',
+						type: 'POST',
+						dataType: 'json',
+						data: {
+							'tableID': tableID,
+							'histoneID': histoneID,
+							'histoneType': histoneType
+						}
+					},
+				});
+			})
+		}
+	});
+	$('html, body').stop().animate({
+		scrollTop: ($('#userspecific').offset().top)-80
+	}, 1000, 'easeInOutExpo');
+}
+
 $(document).ready(function(){
 	// $.ajax({
 	// 	url:"/result/init/",
@@ -30,7 +90,7 @@ $(document).ready(function(){
 	// 	}
 	// });
 
-	$("#btn-send").click(function(){
+	$("#btn-send, #btn-illegal-send").click(function(){
 		let jdata_gene
 		let jdata_setting
 		// let composition
@@ -49,60 +109,12 @@ $(document).ready(function(){
 
 		jdata_gene = JSON.stringify($('#inputTextArea').val().split("\n"));
 
-		$.ajax({
-			url: rootURL + '/result/specific',
-			type: "POST",
-			data:{
-				'tableID': tableID,
-				'InputGene': jdata_gene,
-				'corrected': $("#div-corrected input[name=corrected]:checked").val(),
-				'cutoff': $("#div-corrected input[type=text]:enabled").val()
-			},
-			success:function(res){
-				// let histoneID = 1
-				$("#userspecific").html(res);
-				$("#gene_specific_table").DataTable({
-					autoWidth:false,
-					fixedHeader: true,
-					scrollY: "300px",
-					scrollCollapse: true,
-					paging: false,
-					info: false,
-					searching: false,
-					orderFixed: [ 0, 'asc' ],
-					columnDefs:[
-						{"width":"10%", "targets":0, "orderable": false},
-						{"width":"12%", "targets":1},
-						{"width":"9%", "targets":2},
-						{"width":"30%", "targets":3},
-						{"width":"9%", "targets":4},
-						{"width":"30%", "targets":5}
-					]
-				});
-				$("#gene_specific_table_wrapper div.dataTables_scrollBody").css('border-bottom-color', '#a5a7a9')
-				$("#userspecific a.histone_gene_modal").click(function(){
-					var histone_gene_download_url = rootURL + '/result/specific/histonegene?';
-					[histoneID, histoneType] = $(this).attr('href').slice(1).split("_");
-					$("#HistoneGeneInfo .modal-title").text("Genes with " + $(this).data('feature'));
-					$("#HistoneGeneInfo a.download_a").attr('href',histone_gene_download_url+'tableID=' + tableID + "&histoneID="+histoneID + '&histoneType='+histoneType);
-					$("#HistoneGeneInfo_table").DataTable().destroy();
-					$("#HistoneGeneInfo_table").DataTable({
-						serverSide: true,
-						ajax: {
-							url: rootURL + '/result/specific/histonegene',
-							type: 'POST',
-							dataType: 'json',
-							data: {
-								'tableID': tableID,
-								'histoneID': histoneID,
-								'histoneType': histoneType
-							}
-						},
-					});
-				})
-			}
-		});
 
+		console.log($(this).attr('id'));
+		var illegal_check = 1
+		if ($(this).attr('id')=='btn-illegal-send')
+			illegal_check = 0
+		
 		$.ajax({
 			url: rootURL + '/result',
 			type: 'POST',
@@ -112,10 +124,22 @@ $(document).ready(function(){
 				// 'composition': composition,
 				'corrected': $("#div-corrected input[name=corrected]:checked").val(),
 				'cutoff': $("#div-corrected input[type=text]:enabled").val(),
+				'illegal_check':illegal_check,
 			},
 			dataType:'json',
 			success:function(res){
 				// $(".container-fluid.container-input").hide();
+				if(res['illegal']){
+					$("#inputErr").modal('show');
+					$("#illegal_gene").html("");
+					res['illegal_gene'].forEach((g)=>{
+						$("#illegal_gene").append("<tr><td class='py-1'>" + g + "</td></tr>");
+					})
+					$("#userspecific, #result").html('');
+					return 0;
+				}
+				
+				specific_block(jdata_gene);
 				$(".container-fluid.container-results").show();
 				// $("#leftAccordion .nav-link").removeClass("active");
 				// $("#leftAccordion .nav-link").eq(2).addClass("active");
@@ -123,9 +147,7 @@ $(document).ready(function(){
 				$("#result").html(res['template']);
 				$("#Acetylation_tab").addClass("active show");
 
-				$('html, body').stop().animate({
-					scrollTop: ($('#userspecific').offset().top)-80
-				}, 1000, 'easeInOutExpo');
+				
 
 				$("#Acetylation_Promoter_enrich_table, \
 				   #Acetylation_Coding_Region_enrich_table, \
@@ -158,16 +180,7 @@ $(document).ready(function(){
 						{"width":"18%", "targets":3},
 						{"width":"20%", "targets":4},
 						{"width":"20%", "targets":5}
-
 					]
-					// "columns" : [
-					// 	{"width":"20%"},
-					// 	{"width":"10%"},
-					// 	{"width":"20%"},
-					// 	{"width":"10%"},
-					// 	{"width":"20%"},
-					// 	{"width":"20%"}
-					// ]
 				});
 				
 				var intersect_data = {};
