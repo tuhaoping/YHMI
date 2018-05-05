@@ -80,6 +80,7 @@ def showEnrich(request):
 	else:
 		geneset = set(filter(None, input_gene.get_qualified()))
 
+	print(geneset)
 
 	if geneset:
 		enrich_db = YhmiEnrichmentTempTable(request.POST['tableID'])
@@ -157,11 +158,15 @@ def showEnrich(request):
 			data_fold[ftype] = list(
 				map(lambda x:[x['feature'], x['fold'], x['pvalue'][0], x['enrich_type']], data))
 
+		input_gene.update_results(json.dumps({**enrich_value, **enrich_value_others}))
+		# print(data_fold['Acetylation'])
+		# print(enrich_value_others.keys())
 	else:
-		enrich_value_others = []
-		enrich_value = []
+		enrich_value = {ftype:{'Promoter':[], 'Coding_Region':[]} for ftype in ['Acetylation', 'Methylation', 'H2A_Variant_and_H2B_Ubiquitination', 'TF']}
+		enrich_value_others = {ftype:{'Promoter':[], 'Coding_Region':[]} for ftype in ['H2A_Variant','H2BK123_Ubiquitination']}
+		data_fold = {ftype:[] for ftype in ['Acetylation','Methylation','H2A_Variant_and_H2B_Ubiquitination','TF','H2A_Variant','H2BK123_Ubiquitination']}
+				
 
-	input_gene.update_results(json.dumps({**enrich_value, **enrich_value_others}))
 	render_dict = {
 		'inputGene_length':len(list(geneset)),
 		'enrich_value': enrich_value,
@@ -251,7 +256,7 @@ def userSpecific(request, HistoneGene=False):
 			})
 		render_dict = {
 			'inputGene':gene_name,
-			'inputGene_length':len(geneset),
+			'inputGene_length':gene_name.count(),
 			'corrected': request.POST['corrected'],
 			'cutoff': request.POST['cutoff'],
 			'custom_data':custom_data,

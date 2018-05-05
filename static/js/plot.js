@@ -36,10 +36,10 @@ function barplot(ftype) {
 				item[histoneType]['name'].push(e[0]);
 				// item[histoneType]['name'].push(e[0] + " " + enrich_type[Number(e[3])]);
 				item[histoneType]['fold'].push(Math.log2(Number(e[1])));
-				title = 'Fold enrichment (log2)';
-				barcolor_promoter = '#2679ff';
-				barcolor_cds = '#2679ff';
 			});
+			title = 'Fold enrichment (log2)';
+			barcolor_promoter = '#2679ff';
+			barcolor_cds = '#2679ff';
 		}
 		else{
 			plot_data.sort(function(a,b){return a[2]-b[2]})
@@ -49,10 +49,10 @@ function barplot(ftype) {
 				item[histoneType]['name'].push(e[0]);
 				// item[histoneType]['name'].push(e[0] + " " + enrich_type[Number(e[3])]);
 				item[histoneType]['pvalue'].push(-Math.log10(e[2]));
-				title = 'P-value (-log10)';
-				barcolor_promoter = '#ffff00';
-				barcolor_cds = '#ffff00';
 			});
+			title = 'P-value (-log10)';
+			barcolor_promoter = '#ffff00';
+			barcolor_cds = '#ffff00';
 
 		}
 

@@ -110,7 +110,6 @@ $(document).ready(function(){
 		jdata_gene = JSON.stringify($('#inputTextArea').val().split("\n"));
 
 
-		console.log($(this).attr('id'));
 		var illegal_check = 1
 		if ($(this).attr('id')=='btn-illegal-send')
 			illegal_check = 0
