@@ -342,7 +342,6 @@ def Correction(enrich_value, method='1', cutoff=2.0):
 
 
 def produce_download_file(results_data, writer):
-	enrichType = [' enriched in promoter', ' depleted in promoter', ' enriched in coding region', ' depleted in coding region', '']
 	for histoneType, data in results_data.items():
 		if histoneType == "H2A_Variant_and_H2B_Ubiquitination":
 			continue
@@ -363,9 +362,21 @@ def produce_download_file(results_data, writer):
 					]
 				df = df.sort_values(['P-value', 'Name'])
 				df.to_excel(writer,histoneType, startrow=prerow, index=False)
+
 				worksheet = writer.sheets[histoneType]
 				worksheet.write(prerow-1,0,regionType)
-				prerow = len(df)+4
+
+				if df.empty:
+					worksheet.write(prerow+1,0,'No Results!')
+					prerow = len(df)+5
+				else:
+					prerow = len(df)+4
+
+			worksheet.set_column('A:A',15)
+			worksheet.set_column('B:C',15)
+			worksheet.set_column('D:D',20)
+			worksheet.set_column('E:E',30)
+			worksheet.set_column('F:F',55)
 		elif histoneType == 'TF':
 			prerow = 1
 			for regionType, innerdata in data.items():
@@ -386,4 +397,9 @@ def produce_download_file(results_data, writer):
 				worksheet = writer.sheets[histoneType]
 				worksheet.write(prerow-1,0,regionType)
 				prerow = len(df)+4
+			worksheet.set_column('A:A',10)
+			worksheet.set_column('B:C',15)
+			worksheet.set_column('D:D',20)
+			worksheet.set_column('E:E',30)
+			worksheet.set_column('F:F',55)
 	return writer

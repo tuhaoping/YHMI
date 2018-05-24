@@ -37,7 +37,7 @@ function barplot(ftype) {
 				// item[histoneType]['name'].push(e[0] + " " + enrich_type[Number(e[3])]);
 				item[histoneType]['fold'].push(Math.log2(Number(e[1])));
 			});
-			title = 'Fold enrichment (log2)';
+			title = 'Fold enrichment (log<sub>2</sub>)';
 			barcolor_promoter = '#2679ff';
 			barcolor_cds = '#2679ff';
 		}
@@ -50,7 +50,7 @@ function barplot(ftype) {
 				// item[histoneType]['name'].push(e[0] + " " + enrich_type[Number(e[3])]);
 				item[histoneType]['pvalue'].push(-Math.log10(e[2]));
 			});
-			title = 'P-value (-log10)';
+			title = 'P-value (-log<sub>10</sub>)';
 			barcolor_promoter = '#ffff00';
 			barcolor_cds = '#ffff00';
 

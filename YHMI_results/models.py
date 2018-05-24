@@ -111,7 +111,7 @@ class FilterResult(object):
 
 		return self.result_gene
 
-class YhmiInputTempTable():
+class YhmiInputTempTable(object):
 	__temp_input_table = 'yhmi_temporary_input'
 	__qualified_gene = []
 	__results = ''
@@ -178,7 +178,7 @@ class YhmiInputTempTable():
 		return json.loads(self.__results)
 		
 
-class YhmiEnrichmentTempTable():
+class YhmiEnrichmentTempTable(object):
 	__db = ["localhost", 'haoping', 'a012345', 'YHMI_database']
 	__tableID = ''
 	__main_table = 'yhmi_enrichment'
