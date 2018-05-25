@@ -17,6 +17,7 @@
   <link rel="stylesheet" href="{% static 'css/index.css' %}" style="text/css">
   <link rel="stylesheet" href="{% static 'css/switch.css' %}" style="text/css">
   <link rel="stylesheet" href="{% static 'font-awesome/css/font-awesome.min.css' %}" style="text/css">
+  {% block style %}{% endblock style %}
 </head>
 
 <body class="fixed-nav" id='page-top'>
@@ -28,11 +29,14 @@
     
     <div class="collapse navbar-collapse" id="navbarResponsive">
       <ul class="navbar-nav ml-auto">
-        <li class="nav-item active">
-            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+        <li class="nav-item">
+            <a class="nav-link" href="#">Home</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">Tutorial</a>
+            <a class="nav-link" href="/home">Search</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/help">Help</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="#">Contact</a>
@@ -73,20 +77,8 @@
       <i class="fa fa-angle-up"></i>
     </a>
 
-    <script src="{% static 'bootstrap-v4/popper/popper.min.js' %}"></script>
-    <script src="{% static 'bootstrap-v4/js/bootstrap.min.js' %}"></script>
-    <script src="{% static 'jquery/jquery.easing.min.js' %}"></script>
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-
-    <script src="{% static 'js/index.js' %}"></script>
-    <script src="{% static 'js/ajax.js' %}"></script>
-    <script src="{% static 'js/plot.js' %}"></script>
-    <script src="{% static 'js/action.js' %}"></script>
-    <script src="{% static 'js/cookie.js' %}"></script>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/customRadio.css' %}">
-    {# <link rel="stylesheet" type="text/css" href="{% static 'css/plot.css' %}"> #}
-    <link rel="stylesheet" type="text/css" href="{% static 'DataTables/datatables.min.css' %}">
-    <script type="text/javascript" charset="utf8" src="{% static 'DataTables/datatables.min.js' %}"></script>
+    {% block script %}{% endblock script %}
+    
   </div>
   {# {% block customModal %}{% endblock customModal %} #}
 

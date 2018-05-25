@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'YHMI_results',
     'YHMI_api',
+    'YHMI_web_info',
 ]
 
 MIDDLEWARE = [

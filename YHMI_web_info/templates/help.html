@@ -1,0 +1,275 @@
+{% extends "base.html" %}
+{% block content %}
+	<div class="row mb-3">
+		<div class="col-9 mx-auto">
+			<div class="card-deck">
+				<div class="card">
+					<div class="card-header">About YHMI</div>
+					<div class="card-body">
+						<ul class="mb-0">
+							<li>Motivation of YHMI</li>
+							<li>What is YHMI?</li>
+						</ul>
+					</div>
+				</div>
+				<div class="card">
+					<div class="card-header">Usage of YHMI</div>
+					<div class="card-body">
+						<ul class="mb-0">
+							<li>The usage of YHMI</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-9 mx-auto">
+			<div class="card mb-3 ">
+				<div class="card-header">Construction of YHMI</div>
+				<div class="card-body">
+					<ul class="mb-0">
+						<li>Collection of ChIP-chip datasets of histone modifications, histone regulators and chromatin regulators</li>
+						<li>Defining genes whose promoters/coding regions contain a specific histone modification</li>
+						<li>Defining genes whose promoters are bound by histone/chromatin regulators</li>
+						<li>Identifying the enriched/depleted histone modifications and the enriched histone/chromatin regulators of the user's input genes</li>
+						<li>Implementation of the web interface of YHMI</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<hr class="col-9 mx-auto mb-3" style="border-width:.15rem">
+	<div class="col-9 mx-auto mb-2"><h2><i class="fa fa-check-circle"></i> About YHMI</h2></div>
+
+	<div class="row text-justify">
+		<div class="col-9 mx-auto mb-3">
+			<div class="card">
+				<div class="card-header">Motivation of YHMI</div>
+				<div class="card-body">
+					Post-translational modifications of histones (e.g. acetylation, methylation and ubiquitination) play crucial roles in regulating gene expression by altering chromatin structure and creating docking sites of specific histone/chromatin regulators. To study epigenetics, it is advantageous to have a tool for identifying enriched/depleted histone modifications in a gene list. Many ChIP-chip datasets of histone modifications and histone/chromatin regulators in yeast could be found in the literature. Knowing the needs and having the data motivate us to develop a web tool, called YHMI (Yeast Histone Modifications Identifier), which can identify enriched/depleted histone modifications and enriched histone/chromatin regulators for a list of yeast genes.
+				</div>
+			</div>
+		</div>
+		<div class="col-9 mx-auto mb-3">
+			<div class="card">
+				<div class="card-header">What is YHMI?</div>
+				<div class="card-body">
+					Here we develop a web tool called YHMI (Yeast Histone Modification Identifier). YHMI uses ChIP-chip datasets of 15 histone modifications (6 histone acetylation, 7 histone methylation, 1 histone ubiquitination and 1 histone variant) and 83 histone/chromatin regulators. When a user input a gene list, YHMI will identify the enriched/depleted histone modifications in the promoters/coding regions and enriched histone/chromatin regulators in the promoters of the genes in the input list.  The identification results are shown both in figures and tables.
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<hr class="col-9 mx-auto mb-3" style="border-width:.15rem">
+	<div class="col-9 mx-auto mb-2"><h2><i class="fa fa-check-circle"></i> Construction of YHMI</h2></div>
+
+	<div class="row text-justify">
+		<div class="col-9 mx-auto mb-3">
+			<div class="card">
+				<div class="card-header">Collection of ChIP-chip datasets of histone modifications, histone regulators and chromatin regulators</div>
+				<div class="card-body">
+					<p>Many ChIP-chip datasets of histone modifications, histone regulators and chromatin regulators in yeast could be found in the literature. Saccharomyces Genome Database (SGD) comprehensively collected these datasets. Therefore, we directly downloaded the ChIP-chip datasets of 15 histone modifications (Table 1) and 83 histone/chromatin regulators (<a href="#">Supplementary Table 1</a>) from SGD.</p>
+				
+					<p><span class="font-weight-bold">Table 1. </span>The detailed information of the collected ChIP-chip datasets of histone modifications (6 histone acetylation, 7 histone methylation, 1 histone ubiquitination and 1 histone variant).</p>
+					<table class="table table-bordered table-hover mt-0 mb-0">
+						<thead>
+							<tr>
+								<th>Types of Histone Modification</th>
+								<th>Data Value</th>
+								<th>Cell Growth Condition</th>
+								<th>Data Source</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Acetylation (H3K4ac)</td>
+								<td>log<sub>2</sub>(H3K4ac/H3)</td>
+								<td>YPD</td>
+								<td>Guillemette et al. 2011 (6)</td>
+							</tr>
+							<tr>
+								<td>Acetylation (H3K9ac)</td>
+								<td>log<sub>2</sub>(H3K9ac/H3)</td>
+								<td>YPD</td>
+								<td>Pokholok et al. 2005 (7)</td>
+							</tr>
+							<tr>
+								<td>Acetylation (H3K14ac)</td>
+								<td>log<sub>2</sub>(H3K14ac/H3)</td>
+								<td>YPD</td>
+								<td>Pokholok et al. 2005 (7)</td>
+							</tr>
+							<tr>
+								<td>Acetylation (H3K14ac)</td>
+								<td>log<sub>2</sub>(H3K14ac/H3)</td>
+								<td>YPD adding H<sub>2</sub>O<sub>2</sub></td>
+								<td>Pokholok et al. 2005 (7)</td>
+							</tr>
+							<tr>
+								<td>Acetylation (H4ac)</td>
+								<td>log<sub>2</sub>(H4ac/H3)</td>
+								<td>YPD</td>
+								<td>Pokholok et al. 2005 (7)</td>
+							</tr>
+							<tr>
+								<td>Acetylation (H4ac)</td>
+								<td>log<sub>2</sub>(H4ac/H3)</td>
+								<td>YPD adding H<sub>2</sub>O<sub>2</sub></td>
+								<td>Pokholok et al. 2005 (7)</td>
+							</tr>
+							<tr>
+								<td>Methylation (H3R2me2a)</td>
+								<td>log<sub>2</sub>(H3R2me2a/H3)a</td>
+								<td>YPD</td>
+								<td>Kirmizis et al. 2007 (8)</td>
+							</tr>
+							<tr>
+								<td>Methylation (H3K4me1)</td>
+								<td>log<sub>2</sub>(H3K4me1/H3)</td>
+								<td>YPD</td>
+								<td>Pokholok et al. 2005 (7)</td>
+							</tr>
+							<tr>
+								<td>Methylation (H3K4me2)</td>
+								<td>log<sub>2</sub>(H3K4me2/H3)</td>
+								<td>YPD</td>
+								<td>Pokholok et al. 2005 (7)</td>
+							</tr>
+							<tr>
+								<td>Methylation (H3K4me3)</td>
+								<td>log<sub>2</sub>(H3K4me3/H3)</td>
+								<td>YPD</td>
+								<td>Guillemette et al. 2005 (10)</td>
+							</tr>
+							<tr>
+								<td>Methylation (H3K36me3)</td>
+								<td>log<sub>2</sub>(H3K36me3/H3)</td>
+								<td>YPD</td>
+								<td>Pokholok et al. 2005 (7)</td>
+							</tr>
+							<tr>
+								<td>Methylation (H3K79me2)</td>
+								<td>MAT score (H3K79me2/Input genomic DNA)</td>
+								<td>YPD</td>
+								<td>Schulze et al. 2011 (9)</td>
+							</tr>
+							<tr>
+								<td>Methylation (H3K79me3)</td>
+								<td>MAT score (H3K79me2/Input genomic DNA)</td>
+								<td>YPD</td>
+								<td>Schulze et al. 2011 (9)</td>
+							</tr>
+							<tr>
+								<td>Ubiquitination (H2BK123ub)</td>
+								<td>MAT score (H2BK123ub/Input genomic DNA)</td>
+								<td>YPD</td>
+								<td>Schulze et al. 2011 (9)</td>
+							</tr>
+							<tr>
+								<td>Histone Variant (H2AZ)</td>
+								<td>log<sub>2</sub>(H2AZ/H2B)</td>
+								<td>YPD</td>
+								<td>Guillemette et al. 2005 (10)</td>
+							</tr>
+						</tbody>
+					</table>
+					<sup>a</sup>We used the ChIP-chip dataset mapped to the plus strand.
+				</div>
+			</div>
+		</div>
+		<div class="col-9 mx-auto mb-3">
+			<div class="card">
+				<div class="card-header">Defining genes whose promoters/coding regions contain a specific histone modification</div>
+				<div class="card-body">
+					<p>Following previous studies, a gene's promoter is defined as the region between 500 bp upstream and 100 bp downstream of the start codon. A gene's coding region is defined as the region between the start codon and the stop codon. The procedure of defining a set of genes whose promoters/coding regions contain a specific histone modification (e.g. H3K4ac) is as follows. First, for each of the 6572 genes in the yeast genome, we extracted the maximal data value (log<sub>2</sub>(H3K4ac/H3) in this case) in its promoter/coding region from the corresponding ChIP-chip dataset (see Table 1). Second, a gene whose promoter/coding region is said to contain H3K4ac if its promoter/coding region satisfies log<sub>2</sub>(H3K4ac/H3)≥threshold, where the threshold is set by the user. For example, 1656 genes' promoters and 977 gene's coding regions are said to contain H3K4ac when 1 is set as the threshold.</p>
+				</div>
+			</div>
+		</div>
+		<div class="col-9 mx-auto mb-3">
+			<div class="card">
+				<div class="card-header">Defining genes whose promoters are bound by histone/chromatin regulators</div>
+				<div class="card-body">
+					<p>Venter et al. identified high-confident (less than 5% FDR) interactions between a specific histone/chromatin regulator and genomic DNA (in the yeast genome) under normal (25℃) and acute heat-shock (37℃) conditions by ChIP-chip experiments. Using Venter et al.'s data (11) and based on the definition of a gene's promoter region (see last subsection), we can determine the genes whose promoters are bound by a histone/chromatin regulator. Supplementary Table 1 provides the number and the names of genes whose promoters are bound by the 83 histone/chromatin regulators under normal (25℃) and acute heat-shock (37℃) conditions.</p>
+				</div>
+			</div>
+		</div>
+		<div class="col-9 mx-auto mb-3">
+			<div class="card">
+				<div class="card-header">Identifying the enriched/depleted histone modifications and the enriched histone/chromatin regulators of the user's input genes</div>
+				<div class="card-body">
+					<p>The main functionality of YHMI is to identify the enriched/depleted histone modifications and the enriched histone/chromatin regulators for the user's input genes. The hypergeometric distribution is used to test the statistical significance of enrichment. The procedure for checking whether a specific histone modification (e.g. H3K4ac) is enriched/depleted in the promoters of the user's input genes is as follows. Let \(S\) be the set of genes whose promoters contain the histone modification H3K4ac (see the subsection before the last subsection for details), \(R\) be the set of the user's input genes, \(T=S∩R\) be the set of genes whose promoters contain H3K4ac and are also in the set of the user's input genes, and F be the set of all genes in the yeast genome. Then the \(p_{\_value}(enrichment)\) and \(p_{\_value}(depletion)\) for rejecting the null hypothesis (H<sub>0</sub>: H3K4ac is not enriched/depleted in the promoters of the user's input genes) are calculated as</p>
+
+					<p>$$ p_{\_value}(enrichment) = P(x≥|T|) = \sum^{min(|S|,|R|)}_{x=|T|} \frac{(\begin{matrix}|S|\\x\end{matrix})(\begin{matrix}|F|-|S|\\|R|-x\end{matrix})}{(\begin{matrix}|F|\\|R|\end{matrix})}\qquad$$</p>
+
+					<p>$$ p_{\_value}(depletion) = P(x≤|T|) = \sum^{min(|T|)}_{x=0} \frac{(\begin{matrix}|S|\\x\end{matrix})(\begin{matrix}|F|-|S|\\|R|-x\end{matrix})}{(\begin{matrix}|F|\\|R|\end{matrix})}\qquad$$</p>
+
+					<p>where \(|S|\) means the number of genes in set S. The \(p_{\_value}(enrichment)\) and \(p_{\_value}(depletion)\) are then corrected by the Bonferroni correction or the false discovery rate (FDR) to represent the true alpha level in the multiple hypotheses testing. Finally, H3K4ac is said to be enriched/depleted in the promoters of the user’s input genes if the corrected \(p_{\_value}(enrichment)\) and \(p_{\_value}(depletion)\) is less than the user-defined threshold.</p>
+
+					<p>The procedure for checking whether a specific histone modification is enriched/depleted in the coding regions of the user’s input genes is the same as mentioned above except for the definitions of two terms. Now S becomes the set of genes whose coding regions contain the histone modification H3K4ac and \(T=S∩R\) becomes the set of genes whose coding regions contain H3K4ac and are also in the set of the user’s input genes.</p>
+
+					<p>The procedure for checking whether a specific histone/chromatin regulator (e.g. Esa1) is enriched in the promoters of the user’s input genes is the same as mentioned above except for the definitions of two terms. Now S becomes the set of genes whose promoters are bound by Esa1 and  T=S∩R becomes the set of genes whose promoters are bound by Esa1 and are also in the set of the user’s input genes.</p>
+				</div>
+			</div>
+		</div>
+		<div class="col-9 mx-auto mb-3">
+			<div class="card">
+				<div class="card-header">Implementation of the web interface of YHMI</div>
+				<div class="card-body">
+					<p>The web interface of YHMI was constructed using the Python language with the Django MTV framework. The preprocessed histone modification data were deposited in MySQL. All tables and bar graphs were produced by the JavaSscript and feature-rich JavaScript libraries (jQuery, DataTables and Plotly.js) to visualize data on the webpage.</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<hr class="col-9 mx-auto mb-3" style="border-width:.15rem">
+	<div class="col-9 mx-auto mb-2"><h2><i class="fa fa-check-circle"></i> Usage of YHMI</h2></div>
+
+	<div class="row text-justify">
+		<div class="col-9 mx-auto mb-3">
+			<div class="card">
+				<div class="card-header">The usage of YHMI</div>
+				<div class="card-body">
+					<p>YHMI is a web tool for identifying enriched/depleted histone modifications and enriched histone/chromatin regulators in the input gene list. To use YHMI, users have to go through a three-step process.</p>
+					<ol>
+						<li>Users need to input a list of genes. Standard names, systematic names or aliases are all acceptable.</li>
+						<li>Users need to define the sets of genes containing specific histone modifications by choosing the thresholds. For example, by requiring log<sub>2</sub>(H3K4ac/H3)≥1 (i.e. threshold=1) in the promoters, a set of 1656 genes whose promoters contain H3K4ac could be defined.</li>
+						<li>Users have to select the method (Bonferroni correction or FDR) for multiple hypotheses correction and set the p-value threshold (0.01 is used as the default).</li>
+					</ol>
+					<div class="text-center"><img src="http://via.placeholder.com/350x150" alt=""></div>
+					<p>After submission, YHMI will return the identification results which can be divided into two parts.</p>
+					<ol>
+						<li>The information of the user’s settings is shown. Uniquely, we allow users to download all the sets of genes containing specific histone modifications defined by the users for further investigation. <div class="text-center"><img src="http://via.placeholder.com/350x150" alt=""></div></li>
+						<li>The identified enriched/depleted histone modifications (acetylation, methylation, ubiquitination and histone variant) in the promoters/coding regions of the input gene list are shown as figures and tables. <div class="text-center"><img src="http://via.placeholder.com/350x150" alt=""></div></li>
+					</ol>
+					<p>Moreover, the enriched histone/chromatin regulators in the promoters of the input gene list are provided.</p>
+					<div class="text-center"><img src="http://via.placeholder.com/350x150" alt=""></div>
+				</div>
+			</div>
+			
+		</div>
+	</div>
+{% endblock content %}
+
+{% block style %}
+	<style>
+		.content-wrapper .card-body p:last-of-type {
+			margin-bottom: 0px;
+		}
+		.MathJax {
+			font-size: .7rem;
+		}
+	</style>
+{% endblock style %}
+
+{% block script %}
+	<script type="text/javascript"
+	  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+	</script>
+  <script>
+    $(document).ready(function () {
+      $("#navbarResponsive li").eq(2).addClass('active');
+    });
+  </script> 
+{% endblock script %}
