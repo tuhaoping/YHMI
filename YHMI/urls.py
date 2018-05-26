@@ -15,14 +15,16 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from .views import HomePage
+from .views import search_page, home_page
 from YHMI_results.views import showEnrich, customSetting, showIntersect, userSpecific, result_download
 from YHMI_api.views import enrich_api
 from YHMI_web_info.views import help_page
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^home/$', HomePage),
+    url(r'^$', search_page),
+    url(r'^search/$', search_page),
+    url(r'^home/$', home_page),
 
     url(r'^result$', showEnrich),
     url(r'^result/download$', result_download),

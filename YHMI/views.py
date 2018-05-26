@@ -3,10 +3,10 @@ from django.views.decorators.csrf import csrf_exempt
 import MySQLdb
 
 # @ensure_csrf_cookie
-@csrf_exempt
-def HomePage(request):
+def home_page(request):
+	return render(request, 'home.html')
 
-	
+def search_page(request):
 	######## get Papers and Features #########
 	db = MySQLdb.connect('localhost', 'haoping', 'a012345', 'yhmi_database')
 	cursor = db.cursor()
@@ -35,4 +35,4 @@ def HomePage(request):
 	render_dict = {
 		'filter_data':filter_item,
 	}
-	return render(request, 'home.html', render_dict)
+	return render(request, 'search.html', render_dict)
