@@ -24,19 +24,43 @@
 {% endblock header %}
 
 {% block content %}
-<div class="container">
-  <div class="col-lg-10 col-md-12 mx-auto px-0">
+<div class="container-fluid">
+  <div class="col-lg-9 col-md-10 mx-auto px-0">
     <div class="card">
-      <div class="card-header pb-0"><h2>In YHMI, users can...</h2></div>
+      <div class="card-header pb-0"><h2>What is YHMI?</h2></div>
       <div class="card-body">
         <ul>
-          <li>Identifying the enriched/depleted histone modifications of a user's gene list</li>
-          <li>Identifying the enriched histone/chromatin regulators of a user's gene list</li>
+          <li><p>YHMI is a web tool to identify enriched/depleted histone modifications and enriched histone/chromatin regulators for a gene list.</p></li>
+          <li><p>YHMI uses ChIP-chip datasets of 15 histone modifications and 83 histone/chromatin regulators.</p>
+            <table class="table table-hover" style="border-color:black;">
+              <tr>
+                <td>6 histone acetylation</td>
+                <td>H3K4ac, H3K9ac, H3K14ac, H3K14ac (in H2O2), H4ac, H4ac (in H2O2)</td>
+              </tr>
+              <tr>
+                <td>7 histone methylation</td>
+                <td>H3R2me2a, H3K4me1, H3K4me2, H3K4me3, H3K36me3, H3K79me2, H3K79me3</td>
+              </tr>
+              <tr>
+                <td>1 histone ubiquitination</td>
+                <td>H2BK123ub</td>
+              </tr>
+              <tr>
+                <td>1 histone variant</td>
+                <td>H2AZ</td>
+              </tr>
+              <tr>
+                <td>83 histone/chromatin regulators (in 25C and 37C)</td>
+                <td>Esa1, Gcn5, etc.</td>
+              </tr>
+            </table>
+          </li>
+          <li><p>The identification results are shown both in figures and tables.</p></li>
         </ul>
       </div>
     </div>
   </div>
-  <div class="col-lg-10 col-md-12 mt-5 mx-auto px-0">
+  <div class="col-lg-9 col-md-10 mt-5 mx-auto px-0">
     <div class="card">
       <div class="card-header pb-0"><h2>Update History</h2></div>
       <div class="card-body">
@@ -58,7 +82,10 @@
 {% block style %}
   <link rel="stylesheet" type="text/css" href="{% static 'css/homepage.css' %}">
   <style>
-  	.card {
+  table tr td {
+    border:1px solid gray!important;
+  }
+	.card {
     border: 1px solid rgba(0, 0, 0, 0.75);
 	}
 

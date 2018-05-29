@@ -40,6 +40,7 @@ function barplot(ftype) {
 			title = 'Fold enrichment (log<sub>2</sub>)';
 			barcolor_promoter = '#2679ff';
 			barcolor_cds = '#2679ff';
+			plot_title = '<b>Fold Enrichment Plot</b>';
 		}
 		else{
 			plot_data.sort(function(a,b){return a[2]-b[2]})
@@ -53,7 +54,7 @@ function barplot(ftype) {
 			title = 'P-value (-log<sub>10</sub>)';
 			barcolor_promoter = '#ffff00';
 			barcolor_cds = '#ffff00';
-
+			plot_title = '<b>P-value Plot</b>';
 		}
 
 		var trace1 = {
@@ -89,9 +90,13 @@ function barplot(ftype) {
 			bargap1 = 1-item['Promoter']['name'].length*0.1
 
 		var layout1 = {
+			title: plot_title,
 			bargap:bargap1,
 			yaxis:{
 				title: title,
+			},
+			titlefont: {
+		 	   "size": 16
 			},
 		}
 
@@ -100,9 +105,13 @@ function barplot(ftype) {
 			bargap2 = 1-item['Coding_Region']['name'].length*0.1
 
 		var layout2 = {
+			title: plot_title,
 			bargap:bargap2,
 			yaxis:{
 				title: title,
+			},
+			titlefont: {
+		 	   "size": 16
 			},
 		}
 

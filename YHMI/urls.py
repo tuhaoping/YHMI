@@ -18,13 +18,13 @@ from django.contrib import admin
 from .views import search_page, home_page
 from YHMI_results.views import showEnrich, customSetting, showIntersect, userSpecific, result_download
 from YHMI_api.views import enrich_api
-from YHMI_web_info.views import help_page
+from YHMI_web_info.views import help_page, contact_page
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$', search_page),
-    url(r'^search/$', search_page),
+    url(r'^$', home_page),
     url(r'^home/$', home_page),
+    url(r'^tool/$', search_page),
 
     url(r'^result$', showEnrich),
     url(r'^result/download$', result_download),
@@ -39,4 +39,5 @@ urlpatterns = [
     url(r'^api/enrich$', enrich_api),
 
     url(r'^help$', help_page),
+    url(r'^contact$', contact_page),
 ]

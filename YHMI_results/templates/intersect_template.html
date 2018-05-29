@@ -3,15 +3,19 @@
 	<table class="table table-hover" id="intersect_datatable">
 		<thead>
 			<tr>
-				<th class="intersect_gene">Input ({{ input_length }})</th>
-				<th class="intersect_input text-center">intersect of {{histone_name}} ({{ intersect_length }})</th>
+				<th class="intersect_gene">{{ input_length }} input genes</th>
+				<th class="intersect_input text-center">{{ intersect_length }} input genes whose promoters have {{histone_name}}</th>
 				{# <th class="intersect_histone text-center">{{ histone_name }} ({{ histone_length }})</th> #}
 			</tr>
 		</thead>
 		<tbody>
 			{% for gene in all_gene %}
 			<tr>
-				<td>{{ gene.input }}</td>
+				{% if gene.genename %}
+					<td>{{ gene.genename }}</td>
+				{% else %}
+					<td>{{ gene.orf }}</td>
+				{% endif %}
 				{% if gene.intersect %}
 					<td class="text-center align-middle"><span style="display:none;">V</span><img class="border-0" width="20px" src="{% static '/image/check.png' %}" alt=""></td>
 				{% else %}

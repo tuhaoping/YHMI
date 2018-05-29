@@ -55,10 +55,14 @@ function specific_block(jdata_gene){
 			});
 			$("#gene_specific_table_wrapper div.dataTables_scrollBody").css('border-bottom-color', '#a5a7a9')
 			$("#userspecific a.histone_gene_modal").click(function(){
+				var gene_number = $(this).text();
+				var region = $(this).data('region');
+				var criteria = $(this).data('criteria');
 				var histone_gene_download_url = rootURL + '/result/specific/histonegene?';
 				[histoneID, histoneType] = $(this).attr('href').slice(1).split("_");
-				$("#HistoneGeneInfo .modal-title").text("Genes with " + $(this).data('feature'));
-				$("#HistoneGeneInfo a.download_a").attr('href',histone_gene_download_url+'tableID=' + tableID + "&histoneID="+histoneID + '&histoneType='+histoneType);
+				$("#HistoneGeneInfo .modal-title").html(gene_number + " genes whose " + region + " have " + $(this).data('feature') + " [" + criteria.replace('2', '<sub>2</sub>') +"]");
+				$("#HistoneGeneInfo a.download_a").attr('href',histone_gene_download_url +
+					'tableID='+tableID + "&histoneID="+histoneID + '&histoneType='+histoneType + "&region="+region + "&criteria="+criteria + "&histone");
 				$("#HistoneGeneInfo_table").DataTable().destroy();
 				$("#HistoneGeneInfo_table").DataTable({
 					serverSide: true,
@@ -137,7 +141,6 @@ $(document).ready(function(){
 					$("#userspecific, #result").html('');
 					return 0;
 				}
-				
 				specific_block(jdata_gene);
 				$(".container-fluid.container-results").show();
 				// $("#leftAccordion .nav-link").removeClass("active");
@@ -163,8 +166,8 @@ $(document).ready(function(){
 							{"width":"10%", "targets":1},
 							{"width":"17%", "targets":2},
 							{"width":"18%", "targets":3},
-							{"width":"20%", "targets":4},
-							{"width":"20%", "targets":5}
+							{"width":"18%", "targets":4},
+							{"width":"22%", "targets":5}
 
 						]
 					});
@@ -197,12 +200,17 @@ $(document).ready(function(){
 						id = $(this).attr('href').slice(1);
 						$('#intersect_download_a').attr('href',intersect_download_url+'tableID=' + tableID + "&histone="+id);
 						if(id in intersect_data){
-							$("#genemodal .modal-body .container-fluid").html(intersect_data[$(this).attr('href')]);
+							$("#genemodal .modal-body .container-fluid").html(intersect_data[id]);
 								$("#intersect_datatable").DataTable({
 									'order': [[1, "asc"], [0, 'asc']],
 									"searching": false,
 									"paging": false,
 									"info": false,
+									"autoWidth": false,
+									'columnDefs':[
+										{"width":"25%", "targets":0},
+										{"width":"75%", "targets":1},
+									]
 								});
 						}
 						else {
@@ -220,21 +228,35 @@ $(document).ready(function(){
 										"searching": false,
 										"paging": false,
 										"info": false,
+										"autoWidth": false,
+										'columnDefs':[
+											{"width":"25%", "targets":0},
+											{"width":"75%", "targets":1},
+										]
 									});
 									intersect_data[id] = res
 								}
 							});
 						};
 					});
-					
-				// $("#TF_enrich_table").DataTable({
-		  //   			'order': [[5, "asc"], [0, 'asc']],
-		  //   		});
+				// $("#Acetylation_Promoter_enrich_table, \
+				//    #Acetylation_Coding_Region_enrich_table, \
+				//    #Methylation_Promoter_enrich_table, \
+				//    #Methylation_Coding_Region_enrich_table, \
+				//    #H2A_Variant_Promoter_enrich_table, \
+				//    #H2A_Variant_Coding_Region_enrich_table, \
+				//    #H2BK123_Ubiquitination_Promoter_enrich_table, \
+				//    #H2BK123_Ubiquitination_Coding_Region_enrich_table, \
+				//    #TF_Promoter_enrich_table").on('click', 'a.histone_Gene', function(){
 
+				// })
 				$("#input_gene_table").DataTable();
 				bar_data = res['data']
 				barplot("Acetylation", 'fold');
 				// $("#Acetylation_enrich_table_wrapper, #Methylation_enrich_table_wrapper, #others_enrich_table_wrapper, #TF_enrich_table_wrapper").css('padding', '10');
+			},
+			complete:function(){
+				MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
 			}
 		});
 	});

@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 {% block content %}
-	<div class="row mb-3">
+	<div class="row mb-3 block_href">
 		<div class="col-9 mx-auto">
 			<div class="card-deck">
 				<div class="card">
 					<div class="card-header">About YHMI</div>
 					<div class="card-body">
 						<ul class="mb-0">
-							<li>Motivation of YHMI</li>
-							<li>What is YHMI?</li>
+							<li><a href="#motivation">Motivation of YHMI</a></li>
+							<li><a href="#whatisyhmi">What is YHMI?</a></li>
 						</ul>
 					</div>
 				</div>
@@ -16,24 +16,24 @@
 					<div class="card-header">Usage of YHMI</div>
 					<div class="card-body">
 						<ul class="mb-0">
-							<li>The usage of YHMI</li>
+							<li><a href="#usage_of_yhmi">The usage of YHMI</a></li>
 						</ul>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-	<div class="row">
+	<div class="row block_href">
 		<div class="col-9 mx-auto">
 			<div class="card mb-3 ">
 				<div class="card-header">Construction of YHMI</div>
 				<div class="card-body">
 					<ul class="mb-0">
-						<li>Collection of ChIP-chip datasets of histone modifications, histone regulators and chromatin regulators</li>
-						<li>Defining genes whose promoters/coding regions contain a specific histone modification</li>
-						<li>Defining genes whose promoters are bound by histone/chromatin regulators</li>
-						<li>Identifying the enriched/depleted histone modifications and the enriched histone/chromatin regulators of the user's input genes</li>
-						<li>Implementation of the web interface of YHMI</li>
+						<li><a href="#collect_chipchip">Collection of ChIP-chip datasets of histone modifications, histone regulators and chromatin regulators</a></li>
+						<li><a href="#difine_histone">Defining genes whose promoters/coding regions contain a specific histone modification</a></li>
+						<li><a href="#difine_regulator">Defining genes whose promoters are bound by histone/chromatin regulators</a></li>
+						<li><a href="#identify">Identifying the enriched/depleted histone modifications and the enriched histone/chromatin regulators of the user's input genes</a></li>
+						<li><a href="#implement">Implementation of the web interface of YHMI</a></li>
 					</ul>
 				</div>
 			</div>
@@ -45,7 +45,7 @@
 
 	<div class="row text-justify">
 		<div class="col-9 mx-auto mb-3">
-			<div class="card">
+			<div class="card" id="motivation">
 				<div class="card-header">Motivation of YHMI</div>
 				<div class="card-body">
 					Post-translational modifications of histones (e.g. acetylation, methylation and ubiquitination) play crucial roles in regulating gene expression by altering chromatin structure and creating docking sites of specific histone/chromatin regulators. To study epigenetics, it is advantageous to have a tool for identifying enriched/depleted histone modifications in a gene list. Many ChIP-chip datasets of histone modifications and histone/chromatin regulators in yeast could be found in the literature. Knowing the needs and having the data motivate us to develop a web tool, called YHMI (Yeast Histone Modifications Identifier), which can identify enriched/depleted histone modifications and enriched histone/chromatin regulators for a list of yeast genes.
@@ -53,7 +53,7 @@
 			</div>
 		</div>
 		<div class="col-9 mx-auto mb-3">
-			<div class="card">
+			<div class="card" id="whatisyhmi">
 				<div class="card-header">What is YHMI?</div>
 				<div class="card-body">
 					Here we develop a web tool called YHMI (Yeast Histone Modification Identifier). YHMI uses ChIP-chip datasets of 15 histone modifications (6 histone acetylation, 7 histone methylation, 1 histone ubiquitination and 1 histone variant) and 83 histone/chromatin regulators. When a user input a gene list, YHMI will identify the enriched/depleted histone modifications in the promoters/coding regions and enriched histone/chromatin regulators in the promoters of the genes in the input list.  The identification results are shown both in figures and tables.
@@ -67,7 +67,7 @@
 
 	<div class="row text-justify">
 		<div class="col-9 mx-auto mb-3">
-			<div class="card">
+			<div class="card" id="collect_chipchip">
 				<div class="card-header">Collection of ChIP-chip datasets of histone modifications, histone regulators and chromatin regulators</div>
 				<div class="card-body">
 					<p>Many ChIP-chip datasets of histone modifications, histone regulators and chromatin regulators in yeast could be found in the literature. Saccharomyces Genome Database (SGD) comprehensively collected these datasets. Therefore, we directly downloaded the ChIP-chip datasets of 15 histone modifications (Table 1) and 83 histone/chromatin regulators (<a href="#">Supplementary Table 1</a>) from SGD.</p>
@@ -180,7 +180,7 @@
 			</div>
 		</div>
 		<div class="col-9 mx-auto mb-3">
-			<div class="card">
+			<div class="card" id="difine_histone">
 				<div class="card-header">Defining genes whose promoters/coding regions contain a specific histone modification</div>
 				<div class="card-body">
 					<p>Following previous studies, a gene's promoter is defined as the region between 500 bp upstream and 100 bp downstream of the start codon. A gene's coding region is defined as the region between the start codon and the stop codon. The procedure of defining a set of genes whose promoters/coding regions contain a specific histone modification (e.g. H3K4ac) is as follows. First, for each of the 6572 genes in the yeast genome, we extracted the maximal data value (log<sub>2</sub>(H3K4ac/H3) in this case) in its promoter/coding region from the corresponding ChIP-chip dataset (see Table 1). Second, a gene whose promoter/coding region is said to contain H3K4ac if its promoter/coding region satisfies log<sub>2</sub>(H3K4ac/H3)≥threshold, where the threshold is set by the user. For example, 1656 genes' promoters and 977 gene's coding regions are said to contain H3K4ac when 1 is set as the threshold.</p>
@@ -188,7 +188,7 @@
 			</div>
 		</div>
 		<div class="col-9 mx-auto mb-3">
-			<div class="card">
+			<div class="card" id="difine_regulator">
 				<div class="card-header">Defining genes whose promoters are bound by histone/chromatin regulators</div>
 				<div class="card-body">
 					<p>Venter et al. identified high-confident (less than 5% FDR) interactions between a specific histone/chromatin regulator and genomic DNA (in the yeast genome) under normal (25℃) and acute heat-shock (37℃) conditions by ChIP-chip experiments. Using Venter et al.'s data (11) and based on the definition of a gene's promoter region (see last subsection), we can determine the genes whose promoters are bound by a histone/chromatin regulator. Supplementary Table 1 provides the number and the names of genes whose promoters are bound by the 83 histone/chromatin regulators under normal (25℃) and acute heat-shock (37℃) conditions.</p>
@@ -196,7 +196,7 @@
 			</div>
 		</div>
 		<div class="col-9 mx-auto mb-3">
-			<div class="card">
+			<div class="card" id="identify">
 				<div class="card-header">Identifying the enriched/depleted histone modifications and the enriched histone/chromatin regulators of the user's input genes</div>
 				<div class="card-body">
 					<p>The main functionality of YHMI is to identify the enriched/depleted histone modifications and the enriched histone/chromatin regulators for the user's input genes. The hypergeometric distribution is used to test the statistical significance of enrichment. The procedure for checking whether a specific histone modification (e.g. H3K4ac) is enriched/depleted in the promoters of the user's input genes is as follows. Let \(S\) be the set of genes whose promoters contain the histone modification H3K4ac (see the subsection before the last subsection for details), \(R\) be the set of the user's input genes, \(T=S∩R\) be the set of genes whose promoters contain H3K4ac and are also in the set of the user's input genes, and F be the set of all genes in the yeast genome. Then the \(p_{\_value}(enrichment)\) and \(p_{\_value}(depletion)\) for rejecting the null hypothesis (H<sub>0</sub>: H3K4ac is not enriched/depleted in the promoters of the user's input genes) are calculated as</p>
@@ -214,7 +214,7 @@
 			</div>
 		</div>
 		<div class="col-9 mx-auto mb-3">
-			<div class="card">
+			<div class="card" id="implement">
 				<div class="card-header">Implementation of the web interface of YHMI</div>
 				<div class="card-body">
 					<p>The web interface of YHMI was constructed using the Python language with the Django MTV framework. The preprocessed histone modification data were deposited in MySQL. All tables and bar graphs were produced by the JavaSscript and feature-rich JavaScript libraries (jQuery, DataTables and Plotly.js) to visualize data on the webpage.</p>
@@ -228,7 +228,7 @@
 
 	<div class="row text-justify">
 		<div class="col-9 mx-auto mb-3">
-			<div class="card">
+			<div class="card" id="usage_of_yhmi">
 				<div class="card-header">The usage of YHMI</div>
 				<div class="card-body">
 					<p>YHMI is a web tool for identifying enriched/depleted histone modifications and enriched histone/chromatin regulators in the input gene list. To use YHMI, users have to go through a three-step process.</p>
@@ -257,6 +257,21 @@
 		.content-wrapper .card-body p:last-of-type {
 			margin-bottom: 0px;
 		}
+		.card {
+	    border: 1px solid rgba(0, 0, 0, 0.75);
+		}
+
+		.card-header {
+			font-size: 1.3rem;
+			font-weight: 600;
+		    background-color: rgba(0, 0, 0, 0.12);
+		    border-bottom: 1px solid rgba(0,0,0,.5);
+		}
+
+		.card-footer {
+		    background-color: rgba(0, 0, 0, 0.12);
+		    border-top: 1px solid rgba(0,0,0,.5);
+		}
 		.MathJax {
 			font-size: .7rem;
 		}
@@ -264,12 +279,20 @@
 {% endblock style %}
 
 {% block script %}
-	<script type="text/javascript"
-	  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-	</script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+
   <script>
     $(document).ready(function () {
       $("#navbarResponsive li").eq(2).addClass('active');
+      $(".block_href a").click(function(){
+    	var anchor = $(this);
+    	console.log(anchor)
+  		$('html, body').stop().animate({
+			scrollTop: ($(anchor.attr('href')).offset().top-100)
+		}, 800, 'easeInOutExpo');
+    	event.preventDefault();
+
+      });
     });
   </script> 
 {% endblock script %}

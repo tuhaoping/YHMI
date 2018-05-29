@@ -38,7 +38,7 @@
   $(document).on('click', 'a.scroll-to-top', function(event) {
     var $anchor = $(this);
     $('html, body').stop().animate({
-      scrollTop: ($($anchor.attr('href')).offset().top)
+      scrollTop: ($($anchor.attr('href')).offset().top+80)
     }, 1000, 'easeInOutExpo');
     event.preventDefault();
   });

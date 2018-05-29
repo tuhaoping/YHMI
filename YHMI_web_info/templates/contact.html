@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %} 
+  <div class="container-fluid">
+    <div class="col-9 mx-auto">
+      <h2><i class="fa fa-envelope"></i> Contact</h2>
+      <hr class="page-title-under">
+    </div>
+    <div class="col-8 mx-auto px-0">
+      {% for info in contact %}
+      <div class="card mb-3" style="border-color:#6c757deb;">
+        <div class="card-body">
+          <h5 class="card-title">{{ info.name }}<h5>
+          <p>
+            <ul>
+              <li>{{ info.title }}
+                {% if info.website %}
+                [ <a href="{{ info.website }}" target="_blank">Homepage</a> ]
+                {% endif %}
+              </li>
+              {% if info.work %}
+                <li>{{ info.work}}</li>
+              {% endif %}
+              <li>E-mail: <a href="mailto:{{ info.mail }}">{{ info.mail }}</a></li>
+            </ul>
+          </p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock content %}
+
+
+{% block script %}
+  <script>
+    $(document).ready(function () {
+      $("#head-navbar li").eq(4).addClass('active');
+    });
+  </script> 
+{% endblock script %}

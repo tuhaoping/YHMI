@@ -34,23 +34,24 @@ def showIntersect(request):
 		histone_data = YhmiEnrichmentTf.objects.get(pk=featureID)
 		histone_data = {'feature':histone_data.feature, 'genes':set(histone_data.pro.split(","))}
 
-	all_gene = [{'input':gene} for gene in sorted(input_gene.get_qualified())]
+	all_gene = [{'orf':gene.orf, 'genename':gene.standard, 'alias':gene.alias} 
+		for gene in ConstYeastName.objects.filter(orf__in=input_gene.get_qualified())]
 	intersect_length = len(set(input_gene.get_qualified())&histone_data['genes'])
 
 
 	for i,gene in enumerate(all_gene):
-		all_gene[i]['intersect'] = True if gene['input'].strip() in histone_data['genes'] else False
+		all_gene[i]['intersect'] = True if gene['orf'].strip() in histone_data['genes'] else False
 
-	all_gene.sort(key=lambda x: (~x['intersect'], x['input']))
+	all_gene.sort(key=lambda x: (~x['intersect'], x['orf']))
 
 	if request.method == "GET":
 		response = HttpResponse(content_type='text/csv')
 		response['Content-Disposition'] = 'attachment; filename="intersect of {}.csv"'.format(histone_data['feature'])
 
 		writer = csv.writer(response)
-		writer.writerow(['Input', 'Intersect of Histone Modification'])
+		writer.writerow(['Systematic Name', 'Standard Name', 'Alias (seperate by \" | \")', 'Intersect of Histone Modification'])
 		for gene in all_gene:
-			writer.writerow([gene['input'], "V" if gene['intersect'] else "X"])
+			writer.writerow([gene['orf'], gene['genename'], gene['alias'], "V" if gene['intersect'] else "X"])
 
 		return response
 
@@ -80,14 +81,12 @@ def showEnrich(request):
 	else:
 		geneset = set(filter(None, input_gene.get_qualified()))
 
-	print(geneset)
-
 	if geneset:
 		enrich_db = YhmiEnrichmentTempTable(request.POST['tableID'])
 		data_tf = YhmiEnrichmentTf.objects.all()
 		data = enrich_db.getData()
-		data = list(data)
-		print(len(data))
+		# data = list(data)
+		# print(len(data))
 
 		S = len(geneset)
 		enrich_value = {'Acetylation':[], 'Methylation':[], 'H2A_Variant_and_H2B_Ubiquitination':[]}
@@ -223,11 +222,17 @@ def userSpecific(request, HistoneGene=False):
 			enrich_db = YhmiEnrichmentTempTable(request.GET['tableID'])
 			histone_data = list(enrich_db.getData(request.GET['histoneID'], request.GET['histoneType']))[0]
 			data = ConstYeastName.objects.filter(orf__in=histone_data['genes'])
-			
+			region = request.GET['region']
+			criteria = request.GET['criteria']
+
+			# print(region, criteria)
 			response = HttpResponse(content_type='text/csv')
-			response['Content-Disposition'] = 'attachment; filename="Gene with {}.csv"'.format(histone_data['feature'])
+			response['Content-Disposition'] = 'attachment; filename="{} in {}.csv"'.format(histone_data['feature'], region)
 
 			writer = csv.writer(response)
+			writer.writerow(["{} genes whose {} have {}".format(data.count(), region, histone_data['feature'])])
+			writer.writerow(["Criteria: {}".format(criteria).replace("≥", ">=")])
+			writer.writerow([])
 			writer.writerow(['Feature Name', 'Standard Name', 'Alias'])
 			for gene in data:
 				writer.writerow([gene.orf, gene.standard, gene.alias])
@@ -317,7 +322,7 @@ def Correction(enrich_value, method='1', cutoff=2.0):
 		for ftype, fdata in enrich_value.items():
 			length = len(fdata)
 			temp = []
-			print(ftype, length)
+			# print(ftype, length)
 			for i,data in enumerate(fdata):
 				data['pvalue'][0] *= length
 				if data['pvalue'][0] < 10**(-cutoff):

@@ -1,7 +1,8 @@
 {% load myfilter %}
 
 
-<div class="mb-0 mt-5">
+<hr style="border-width:.5rem; margin-top:10rem;">
+<div class="mb-0">
   <span class="block-title"><i class="fa fa-file"></i> Searching Results</span>
 </div> 
 <hr class="mt-2">
@@ -34,8 +35,8 @@
                     <th colspan="2" class="text-center">in Coding Region</th>
                   </tr>
                   <tr>
-                    <th style="font-size:0.92rem;">Histone Type</th>
-                    <th style="font-size:0.92rem;">Histone</th>
+                    <th style="font-size:0.92rem;">Histone Modification</th>
+                    <th style="font-size:0.92rem;">Histone Position</th>
                     <th style="font-size:0.92rem;"># of Genes</th>
                     <th style="font-size:0.92rem;">Criteria</th>
                     <th style="font-size:0.92rem;"># of Genes</th>
@@ -47,10 +48,10 @@
                   <tr>
                     <td style="font-size:0.9rem;">{{ data.histoneType }}</td>
                     <td style="font-size:0.9rem;">{{ data.feature }}</td>
-                    <td style="font-size:0.9rem;"><a class="histone_gene_modal" href="#{{ data.enrichID }}_0" data-feature="{{ data.feature }}" data-toggle="modal" data-target="#HistoneGeneInfo">{{ data.pro_len }}</a></td>
-                    <td style="font-size:0.9rem;">{{ data.criteria|log2_sub }} > {{ data.pro_criteria }}</td>
-                    <td style="font-size:0.9rem;"><a class="histone_gene_modal" href="#{{ data.enrichID }}_2" data-feature="{{ data.feature }}" data-toggle="modal" data-target="#HistoneGeneInfo">{{ data.cds_len }}</a></td>
-                    <td style="font-size:0.9rem;">{{ data.criteria|log2_sub }} > {{ data.cds_criteria }}</td>
+                    <td style="font-size:0.9rem;"><a class="histone_gene_modal" href="#{{ data.enrichID }}_0" data-feature="{{ data.feature }}" data-region="promoter" data-criteria="{{ data.criteria }} ≥ {{ data.pro_criteria }}" data-toggle="modal" data-target="#HistoneGeneInfo">{{ data.pro_len }}</a></td>
+                    <td style="font-size:0.9rem;">{{ data.criteria|log2_sub }} ≥ {{ data.pro_criteria }}</td>
+                    <td style="font-size:0.9rem;"><a class="histone_gene_modal" href="#{{ data.enrichID }}_2" data-feature="{{ data.feature }}" data-region="CDS" data-criteria="{{ data.criteria }} ≥ {{ data.pro_criteria }}" data-toggle="modal" data-target="#HistoneGeneInfo">{{ data.cds_len }}</a></td>
+                    <td style="font-size:0.9rem;">{{ data.criteria|log2_sub }} ≥ {{ data.cds_criteria }}</td>
                   </tr>
                   {% endfor %}
                 </tbody>
