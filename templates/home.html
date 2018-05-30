@@ -34,8 +34,8 @@
           <li><p>YHMI uses ChIP-chip datasets of 15 histone modifications and 83 histone/chromatin regulators.</p>
             <table class="table table-hover" style="border-color:black;">
               <tr>
-                <td>6 histone acetylation</td>
-                <td>H3K4ac, H3K9ac, H3K14ac, H3K14ac (in H2O2), H4ac, H4ac (in H2O2)</td>
+                <td style="width:35%;">6 histone acetylation</td>
+                <td style="width:65%;">H3K4ac, H3K9ac, H3K14ac, H3K14ac (in H2O2), H4ac, H4ac (in H2O2)</td>
               </tr>
               <tr>
                 <td>7 histone methylation</td>
@@ -51,7 +51,7 @@
               </tr>
               <tr>
                 <td>83 histone/chromatin regulators (in 25C and 37C)</td>
-                <td>Esa1, Gcn5, etc.</td>
+                <td><span id="83TF">Ada2, Brn1, Esa1, Gcn5, Rsc4, Rxt2, Snf1, Swc1, Yaf9, ... </span><a href="#" data-action="1" id="TFseemore">See more.</a></td>
               </tr>
             </table>
           </li>
@@ -65,8 +65,8 @@
       <div class="card-header pb-0"><h2>Update History</h2></div>
       <div class="card-body">
         <ul>
-          <li>2018 Apr: Release YHMI.</li>
-          <li>2017 Dec: Collect 15 histone modification(6 histone acetylation, 7 histone methylation, 1 histone ubiquitination and 1 histone variant) and 83 histone/chromatin regulators from five experimental studies in the literature.</li>
+          <li>2018 Apr. : Release YHMI.</li>
+          <li>2017 Dec. : Collect 15 histone modifications and 83 histone/chromatin regulators from the literature.</li>
           <li>2017 July: Start YHMI project.</li>
         </ul>
       </div>
@@ -100,3 +100,24 @@
 	}
   </style>
 {% endblock style %}
+{% block script %}
+  <script>
+    $(document).ready(function () {
+      $("#navbarResponsive li").eq(0).addClass('active');
+
+      $("#TFseemore").click(function(){
+        if($(this).data('action')){
+          $("#83TF").text("Ada2, Ahc1, Aor1, Arp6, Asf1, Bre1, Bre2, Brn1, Chd1, Chz1, Cyc8, Dot1, Eaf3, Epl1, Esa1, Gcn5, Hda1, Hho1, Hht1, Hht2, Hif1, Hos1, Hos2, Hos3, Hpa3, Hta2, Htb1, Htb2, Htz1, Ino80, Ioc2, Ioc3, Ioc4, Irc20, Irr1, Isw1, Isw2, Itc1, Jhd1, Jhd2, Nap1, Nhp6a, Otu1, Rad6, Rpd3, Rph1, Rpt1, Rpt6, Rsc1, Rsc2, Rsc4, Rsc8, Rsc9, Rtt109, Rvb1, Rvb2, Rxt1, Rxt2, Sas4, Set1, Set2, Sif2, Sin3, Sir2, Sir3, Snf1, Snf2, Snf4, Snf5, Snf7, Spt2, Spt21, Swc1, Swi3, Swi5, Swr1, Tup1, Ubp8, Vps72, Yaf9, Ycg1, Ycs4, Yng1 ");
+          $(this).data('action',0);
+          $(this).text('See less.');
+        }
+        else {
+          $("#83TF").text("Ada2, Brn1, Esa1, Gcn5, Rsc4, Rxt2, Snf1, Swc1, Yaf9, ... ")
+          $(this).data('action',1);
+          $(this).text('See more.');
+        }
+        event.preventDefault();
+      });
+    });
+  </script>
+{% endblock script %}

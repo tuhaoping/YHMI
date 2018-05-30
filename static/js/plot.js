@@ -37,7 +37,7 @@ function barplot(ftype) {
 				// item[histoneType]['name'].push(e[0] + " " + enrich_type[Number(e[3])]);
 				item[histoneType]['fold'].push(Math.log2(Number(e[1])));
 			});
-			title = 'Fold enrichment (log<sub>2</sub>)';
+			title = 'Fold Enrichment (log<sub>2</sub>)';
 			barcolor_promoter = '#2679ff';
 			barcolor_cds = '#2679ff';
 			plot_title = '<b>Fold Enrichment Plot</b>';

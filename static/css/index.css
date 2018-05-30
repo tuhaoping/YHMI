@@ -661,3 +661,8 @@ hr {
 .step-title {
   font-weight: bold;
 }
+
+
+#navbarResponsive a{
+  font-size: 1.2rem;
+}

@@ -4,7 +4,7 @@
 
 <div class="card mt-3 mx-0">
   <div class="card-header">
-    <span class="block-second-title"><i class="fa fa-bar-chart"></i> The Identified Enriched / Depleted Histone Modifications </span>
+    <span class="block-second-title"><i class="fa fa-bar-chart"></i> The Identified Enriched/Depleted Histone Modifications and Enriched Histone/Chromatin Regulators </span>
     <span style="position:relative; top:-5px; left:10px;">
       <a class="download_a btn btn-sm btn-info" href="/result/download?tableID={{tableID}}&corrected={{corrected}}&cutoff={{cutoff}}" target="_blank">
         <i class="fa fa-download" aria-hidden="true"></i> Download</a>
@@ -37,10 +37,10 @@
             <div class="histonetype-pill">
               <ul class="nav nav-pills histonetype-pill justify-content-center">
                 <li class="nav-item">
-                  <a class="nav-link active" data-toggle="pill" href="#{{ftype}}_Promoter_nav_pill" data-histonetype="Promoter" data-graph="{{ftype}}">See result in Promoter</a>
+                  <a class="nav-link active" data-toggle="pill" href="#{{ftype}}_Promoter_nav_pill" data-histonetype="Promoter" data-graph="{{ftype}}">See Result in Promoter</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" data-toggle="pill" href="#{{ftype}}_Coding_Region_nav_pill" data-histonetype="Coding_Region" data-graph="{{ftype}}">See result in Coding Region</a>
+                  <a class="nav-link" data-toggle="pill" href="#{{ftype}}_Coding_Region_nav_pill" data-histonetype="Coding_Region" data-graph="{{ftype}}">See Result in Coding Region</a>
                 </li>
               </ul>
             </div>
@@ -73,7 +73,9 @@
                     A: # of input genes with this histone modification <br>
                     B: # of input genes <br>
                     C: # of genes (in the genome) with this histone modification <br>
-                    D: # of genes in the genome = 6572 </p>
+                    D: # of genes in the genome = 6572 <br>
+                    Fold Enrichment: \(\frac{Observed Ratio}{Expected Ratio}\)
+                    </p>
 
                     <table class='table p-1' id="{{ftype}}_{{regionType}}_enrich_table">
                       <thead>
@@ -93,9 +95,9 @@
                         <th class="text-right" style="width:15%;">P-value</th>
                         {% endif %}
 
-                        <th class="text-right" style="width:10%;">Fold enrichment (\(\frac{A/B}{C/D}\))&nbsp;</th>
-                        <th class="text-right" style="width:15%;">Observed Ratio (\(\frac{A}{B}\))</th>
-                        <th class="text-right" style="width:20%;">Expected Ratio (\(\frac{C}{D}\))&nbsp;</th>
+                        <th class="text-right" style="width:10%;">Fold Enrichment</th>
+                        <th class="text-right" style="width:15%;">Observed Ratio (A/B)</th>
+                        <th class="text-right" style="width:20%;">Expected Ratio (C/D)</th>
                         
                       </thead>
                       <tbody>
@@ -145,10 +147,10 @@
               <div class="histonetype-pill">
                 <ul class="nav nav-pills histonetype-pill justify-content-center">
                   <li class="nav-item">
-                    <a class="nav-link active" data-toggle="pill" href="#{{fftype}}_Promoter_nav_pill" data-histonetype="Promoter" data-graph="{{fftype}}">See result in Promoter</a>
+                    <a class="nav-link active" data-toggle="pill" href="#{{fftype}}_Promoter_nav_pill" data-histonetype="Promoter" data-graph="{{fftype}}">See Result in Promoter</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" data-toggle="pill" href="#{{fftype}}_Coding_Region_nav_pill" data-histonetype="Coding_Region" data-graph="{{fftype}}">See result in Coding Region</a>
+                    <a class="nav-link" data-toggle="pill" href="#{{fftype}}_Coding_Region_nav_pill" data-histonetype="Coding_Region" data-graph="{{fftype}}">See Result in Coding Region</a>
                   </li>
                 </ul>
               </div>
@@ -180,7 +182,8 @@
                         A: # of input genes with this histone modification <br>
                         B: # of input genes <br>
                         C: # of genes (in the genome) with this histone modification <br>
-                        D: # of genes in the genome = 6572
+                        D: # of genes in the genome = 6572 <br>
+                        Fold Enrichment: \(\frac{Observed Ratio}{Expected Ratio}\)
                       </p>
                       <table class="table p-1" id="{{fftype}}_{{regionType}}_enrich_table">
                         <thead>
@@ -188,9 +191,9 @@
                           {# <th class="text-left" style="width:10%;">Paper</th> #}
                           <th class="text-right" style="width:15%;">Trend</th>
                           <th class="text-right" style="width:15%;">P-value</th>
-                          <th class="text-right" style="width:10%;">Fold enrichment (\(\frac{A/B}{C/D}\))</th>
-                          <th class="text-right" style="width:20%;">Observed Ratio (\(\frac{A}{B}\))&nbsp;</th>
-                          <th class="text-right" style="width:25%;">Expected Ratio (\(\frac{C}{D}\))&nbsp;</th>
+                          <th class="text-right" style="width:10%;">Fold enrichment</th>
+                          <th class="text-right" style="width:20%;">Observed Ratio(A/B)</th>
+                          <th class="text-right" style="width:25%;">Expected Ratio (C/D)</th>
                         </thead>
                         <tbody>
                           {% for value in ffdata %}

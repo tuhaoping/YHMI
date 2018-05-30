@@ -60,7 +60,7 @@ function specific_block(jdata_gene){
 				var criteria = $(this).data('criteria');
 				var histone_gene_download_url = rootURL + '/result/specific/histonegene?';
 				[histoneID, histoneType] = $(this).attr('href').slice(1).split("_");
-				$("#HistoneGeneInfo .modal-title").html(gene_number + " genes whose " + region + " have " + $(this).data('feature') + " [" + criteria.replace('2', '<sub>2</sub>') +"]");
+				$("#HistoneGeneInfo .modal-title").html(gene_number + " genes whose " + region + " have " + $(this).data('feature') + " [Criteria: " + criteria.replace('2', '<sub>2</sub>') +"]");
 				$("#HistoneGeneInfo a.download_a").attr('href',histone_gene_download_url +
 					'tableID='+tableID + "&histoneID="+histoneID + '&histoneType='+histoneType + "&region="+region + "&criteria="+criteria + "&histone");
 				$("#HistoneGeneInfo_table").DataTable().destroy();
