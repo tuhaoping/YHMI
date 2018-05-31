@@ -15,13 +15,14 @@
         <tr>
           <td style="width:27%;" class="font-weight-bold"># of Input Genes</td>
           {# <td>{{inputGene_length}}</td> #}
-          <td><a href="#" data-toggle="modal" data-target="#geneInfo">{{inputGene_length}}</a></td>
+          <td>{{inputGene_length}}</td>
+          {# <td><a href="#" data-toggle="modal" data-target="#geneInfo">{{inputGene_length}}</a></td> #}
         </tr>
         <tr>
           <td class="font-weight-bold">
-            {% if corrected == '1' %}Bonferroni-corrected{% else %} FDR (False Discovery Rate){% endif %} corrected P-value cutoff
+            {% if corrected == '1' %}Bonferroni-corrected{% else %} FDR (False Discovery Rate){% endif %} P-value cutoff
           </td>
-          <td>10<sup>-{{ cutoff }}</sup></td>
+          <td>10<sup>{{ cutoff }}</sup></td>
         </tr>
         <tr>
           <td class="align-middle font-weight-bold" style="height:200px;">Genes with Specific Histone Modifications</td>

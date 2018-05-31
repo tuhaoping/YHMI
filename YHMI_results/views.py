@@ -60,7 +60,8 @@ def showIntersect(request):
 			 'all_gene': all_gene,
 			 'input_length': len(input_gene.get_qualified()),
 			 'intersect_length': intersect_length,
-			 'histone_name': histone_data['feature']
+			 'histone_name': histone_data['feature'],
+			 'histone_region':'coding regions' if histoneType == '2' else 'promoters'
 		}
 		return render(request, 'intersect_template.html', render_dict)
 
@@ -313,7 +314,7 @@ def Hypergeometric_pvalue(temp_enrich, enrich_value_tf=None):
 	return temp
 
 
-def Correction(enrich_value, method='1', cutoff=2.0):
+def Correction(enrich_value, method='1', cutoff=-2.0):
 	'''
 	Correction P-value
 	method:'1' Bonferroni, '2' FDR
@@ -325,7 +326,7 @@ def Correction(enrich_value, method='1', cutoff=2.0):
 			# print(ftype, length)
 			for i,data in enumerate(fdata):
 				data['pvalue'][0] *= length
-				if data['pvalue'][0] < 10**(-cutoff):
+				if data['pvalue'][0] < 10**(cutoff):
 					temp.append(data)
 			enrich_value[ftype] = temp
 
@@ -337,7 +338,7 @@ def Correction(enrich_value, method='1', cutoff=2.0):
 
 			for i,t in reversed(list(enumerate(fdata, 1))):
 				fdata[i-1]['pvalue'][0] = t['pvalue'][0] = t['pvalue'][0]*length/i
-				if pass_flag and (t['pvalue'][0] < 10**(-cutoff)):
+				if pass_flag and (t['pvalue'][0] < 10**(cutoff)):
 					pass_range = i
 					pass_flag = False
 

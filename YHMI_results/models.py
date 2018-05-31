@@ -125,7 +125,7 @@ class YhmiInputTempTable(object):
 			cursor = con.cursor()
 
 			if inputGene:
-				inputGene = list(filter(None,inputGene))
+				inputGene = [i.strip() for i in filter(None,inputGene)]
 				if check_illegal:
 					query = "SELECT `InputGene` FROM `const_comparison_orf`"
 					cursor.execute(query)

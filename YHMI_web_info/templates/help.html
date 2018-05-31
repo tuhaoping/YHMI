@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% block content %}
 	<div class="row mb-3 block_href">
 		<div class="col-9 mx-auto">
@@ -70,7 +71,7 @@
 			<div class="card" id="collect_chipchip">
 				<div class="card-header">Collection of ChIP-chip datasets of histone modifications, histone regulators and chromatin regulators</div>
 				<div class="card-body">
-					<p>Many ChIP-chip datasets of histone modifications, histone regulators and chromatin regulators in yeast could be found in the literature. Saccharomyces Genome Database (SGD) comprehensively collected these datasets. Therefore, we directly downloaded the ChIP-chip datasets of 15 histone modifications (Table 1) and 83 histone/chromatin regulators (<a href="#">Supplementary Table 1</a>) from SGD.</p>
+					<p>Many ChIP-chip datasets of histone modifications, histone regulators and chromatin regulators in yeast could be found in the literature. Saccharomyces Genome Database (SGD) comprehensively collected these datasets. Therefore, we directly downloaded the ChIP-chip datasets of 15 histone modifications (Table 1) and 83 histone/chromatin regulators (<a href="/supplementary" target="_blank">Supplementary Table 1</a>) from SGD.</p>
 				
 					<p><span class="font-weight-bold">Table 1. </span>The detailed information of the collected ChIP-chip datasets of histone modifications (6 histone acetylation, 7 histone methylation, 1 histone ubiquitination and 1 histone variant).</p>
 					<table class="table table-bordered table-hover mt-0 mb-0">
@@ -141,7 +142,7 @@
 								<td>Methylation (H3K4me3)</td>
 								<td>log<sub>2</sub>(H3K4me3/H3)</td>
 								<td>YPD</td>
-								<td><a href="https://www.ncbi.nlm.nih.gov/pubmed/21483810" target="_blank">Guillemette et al., 2005</a></td>
+								<td><a href="https://www.ncbi.nlm.nih.gov/pubmed/21483810" target="_blank">Guillemette et al., 2011</a></td>
 							</tr>
 							<tr>
 								<td>Methylation (H3K36me3)</td>
@@ -171,7 +172,7 @@
 								<td>Histone Variant (H2AZ)</td>
 								<td>log<sub>2</sub>(H2AZ/H2B)</td>
 								<td>YPD</td>
-								<td><a href="https://www.ncbi.nlm.nih.gov/pubmed/21483810" target="_blank">Guillemette et al., 2005</a></td>
+								<td><a href="https://www.ncbi.nlm.nih.gov/pubmed/16248679" target="_blank">Guillemette et al., 2005</a></td>
 							</tr>
 						</tbody>
 					</table>
@@ -195,7 +196,7 @@
 			<div class="card" id="difine_regulator">
 				<div class="card-header">Defining genes whose promoters are bound by histone/chromatin regulators</div>
 				<div class="card-body">
-					<p><a href="https://www.ncbi.nlm.nih.gov/pubmed/21329885" target="_blank">Venters et al.</a> identified high-confident (less than 5% FDR) interactions between a specific histone/chromatin regulator and genomic DNA (in the yeast genome) under normal (25℃) and acute heat-shock (37℃) conditions by ChIP-chip experiments. Using Venter et al.'s results and based on the definition of a gene's promoter region, we can determine the genes whose promoters are bound by a histone/chromatin regulator. <a href="#">Supplementary Table 1</a> provides the number and the names of genes whose promoters are bound by the 83 histone/chromatin regulators under normal (25℃) and acute heat-shock (37℃) conditions.</p>
+					<p><a href="https://www.ncbi.nlm.nih.gov/pubmed/21329885" target="_blank">Venters et al.</a> identified high-confident (less than 5% FDR) interactions between a specific histone/chromatin regulator and genomic DNA (in the yeast genome) under normal (25℃) and acute heat-shock (37℃) conditions by ChIP-chip experiments. Using Venter et al.'s results and based on the definition of a gene's promoter region, we can determine the genes whose promoters are bound by a histone/chromatin regulator. <a href="/supplementary" target="_blank">Supplementary Table 1</a> provides the number and the names of genes whose promoters are bound by the 83 histone/chromatin regulators under normal (25℃) and acute heat-shock (37℃) conditions.</p>
 				</div>
 			</div>
 		</div>
@@ -244,14 +245,14 @@
 						<li>Users need to define the sets of genes containing specific histone modifications by choosing the thresholds. For example, by requiring log<sub>2</sub>(H3K4ac/H3)≥1 (i.e. threshold=1) in the promoters, a set of 1656 genes whose promoters contain H3K4ac could be defined.</li>
 						<li>Users have to select the method (Bonferroni correction or FDR) for multiple hypotheses correction and set the p-value threshold (0.01 is used as the default).</li>
 					</ol>
-					<div class="text-center"><img src="http://via.placeholder.com/350x150" alt=""></div>
+					<div class="text-center"><img src="{% static 'image/corrected.jpg' %}" style="max-width:70%; border:1px solid black;"></div>
 					<p>After submission, YHMI will return the identification results which can be divided into two parts.</p>
 					<ol>
-						<li>The information of the user's settings is shown. Uniquely, we allow users to download all the sets of genes containing specific histone modifications defined by the users for further investigation. <div class="text-center"><img src="http://via.placeholder.com/350x150" alt=""></div></li>
-						<li>The identified enriched/depleted histone modifications (acetylation, methylation, ubiquitination and histone variant) in the promoters/coding regions of the input gene list are shown as figures and tables. <div class="text-center"><img src="http://via.placeholder.com/350x150" alt=""></div></li>
+						<li>The information of the user's settings is shown. Uniquely, we allow users to download all the sets of genes containing specific histone modifications defined by the users for further investigation. <div class="text-center"><img src="{% static 'image/user_info.jpg' %}" style="max-width:80%; border:1px solid black;"></div></li>
+						<li>The identified enriched/depleted histone modifications (acetylation, methylation, ubiquitination and histone variant) in the promoters/coding regions of the input gene list are shown as figures and tables. <div class="text-center"><img src="{% static 'image/homepage_figure_table.png' %}" style="max-width:90%;"></div></li>
 					</ol>
 					<p>Moreover, the enriched histone/chromatin regulators in the promoters of the input gene list are provided.</p>
-					<div class="text-center"><img src="http://via.placeholder.com/350x150" alt=""></div>
+					<div class="text-center"><img src="{% static 'image/enriched_regulators.jpg' %}" style="max-width:80%; border:1px solid black;"></div>
 				</div>
 			</div>
 			

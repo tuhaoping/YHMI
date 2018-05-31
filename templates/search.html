@@ -162,15 +162,15 @@
     
     <div class="card-body" id="div-corrected">
       <div class="col-lg-8 col-6">
-        <label class="container"><span style="font-size:1.3rem;">Bonferroni-corrected p-value: cutoff=10<sup>-</sup></span>
+        <label class="container"><span style="font-size:1.3rem;">Bonferroni-corrected p-value: cutoff=10</span>
           <input type="radio" checked="checked" name="corrected" value="1">
           <span class="checkmark"></span>
-          <input type="text" class="form-control d-inline" style="width:25px; position:relative; top:-8px;" value="2">
+          <input type="text" class="form-control d-inline" style="width:25px; position:relative; top:-8px;" value="-2">
         </label>
-        <label class="container"><span style="font-size:1.3rem;">FDR (False Discovery Rate): &alpha;=10<sup>-</sup></span>
+        <label class="container"><span style="font-size:1.3rem;">FDR (False Discovery Rate): &alpha;=10</span>
           <input type="radio" name="corrected" value="2">
           <span class="checkmark"></span>
-          <input type="text" class="form-control d-inline" disabled style="width:25px; position:relative; top:-8px;" value="2">
+          <input type="text" class="form-control d-inline" disabled style="width:25px; position:relative; top:-8px;" value="-2">
         </label>
       </div>
     </div>
@@ -194,20 +194,20 @@
           <h4 class="modal-title" style="color:red;">Warning</h4>
         </div>
         <div class="modal-body">
-          <h5>YHMI found out that there are some incorrect genes. You have two choices:</h5>
-          <h6>1. Correcting your gene list to ensure they are all right.</h6>
-          <h6>2. Pass & continue, YHMI will exclusion these incorrect genes automatically.</h6>
+          <h5>Input genes contain unknown names. You have two choices:</h5>
+          <h6>1. Return and modify your input gene list.</h6>
+          <h6>2. Continue without the unknown names.</h6>
           <hr>
           <table class="table table-bordered table-hover m-0">
             <thead>
-              <tr><th class="py-2">Illegal Genes</th></tr>
+              <tr><th class="py-2">Unknown name(s)</th></tr>
             </thead>
             <tbody id="illegal_gene"></tbody>
           </table>
         </div>
         <div class="modal-footer">
-          <button type="button" id="btn-modify-send" class="btn btn-primary">Modify Gene List</button>
-          <button type="button" id="btn-illegal-send" class="btn btn-secondary" data-dismiss="modal">Pass&Continue</button>
+          <button type="button" id="btn-modify-send" class="btn btn-primary">Modify</button>
+          <button type="button" id="btn-illegal-send" class="btn btn-secondary" data-dismiss="modal">Continue</button>
         </div>
       </div>
     </div>

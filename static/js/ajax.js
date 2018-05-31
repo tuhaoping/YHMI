@@ -212,6 +212,7 @@ $(document).ready(function(){
 										{"width":"75%", "targets":1},
 									]
 								});
+							$("#modelTitleId").text($("#intersect_datatable > thead > tr > th.intersect_input").text());
 						}
 						else {
 							$.ajax({
@@ -234,7 +235,10 @@ $(document).ready(function(){
 											{"width":"75%", "targets":1},
 										]
 									});
-									intersect_data[id] = res
+									intersect_data[id] = res;
+								},
+								complete:function(){
+									$("#modelTitleId").text($("#intersect_datatable > thead > tr > th.intersect_input").text());
 								}
 							});
 						};

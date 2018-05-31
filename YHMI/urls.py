@@ -18,7 +18,7 @@ from django.contrib import admin
 from .views import search_page, home_page
 from YHMI_results.views import showEnrich, customSetting, showIntersect, userSpecific, result_download
 from YHMI_api.views import enrich_api
-from YHMI_web_info.views import help_page, contact_page
+from YHMI_web_info.views import help_page, contact_page, supplementary_download
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -40,4 +40,5 @@ urlpatterns = [
 
     url(r'^help$', help_page),
     url(r'^contact$', contact_page),
+    url(r'supplementary', supplementary_download)
 ]
